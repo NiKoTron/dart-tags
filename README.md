@@ -1,10 +1,10 @@
 # Dart Tags
 A library for Dart developers.
 
-##License
+## License
 project under MIT [license][license]
 
-##Changelogs
+## Changelogs
 
 [full changelog][changelog]
 
