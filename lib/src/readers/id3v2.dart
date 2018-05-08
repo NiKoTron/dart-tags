@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dart_tags/src/model/attached_picture.dart';
 import 'package:dart_tags/src/readers/reader.dart';
 
 class ID3V2Reader extends Reader {
@@ -188,11 +189,11 @@ class ID3V2Reader extends Reader {
   get version => '$version_o1.$version_o2.$version_o3';
 
   @override
-  Future<Map<String, String>> parseValues(Future<List<int>> bytes) async {
+  Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes) async {
     var sBytes = await bytes;
     assert(utf8.decode(sBytes.sublist(0, 3)) == 'ID3');
 
-    Map<String, String> tags = {};
+    Map<String, dynamic> tags = {};
 
     version_o2 = sBytes[3];
     version_o3 = sBytes[4];
@@ -262,7 +263,7 @@ class ID3V2Reader extends Reader {
 
   _parsePicture(List<int> sublist, Encoding enc) {
     var itr = sublist.iterator;
-    var buff = [];
+    var buff = new List<int>();
     
     var dt = new AttachedPicture();
 
@@ -271,8 +272,7 @@ class ID3V2Reader extends Reader {
     while (itr.moveNext() && cont < 4) {
       final crnt = itr.current;
       if (crnt == 0x00 && cont < 3) {
-        if(cont == 1) //get first byte to img type, other to description;
-        {
+        if(cont == 1) {
           dt.imageType = buff[0];
           cont++;
           dt.description = enc.decode(buff.sublist(1));
@@ -290,43 +290,6 @@ class ID3V2Reader extends Reader {
 
     return dt;
   }
-}
-
-class AttachedPicture {
-  static final _picturesType = [
-		"Other",
-		"32x32 pixels 'file icon' (PNG only)",
-		"Other file icon",
-		"Cover (front)",
-		"Cover (back)",
-		"Leaflet page",
-		"Media (e.g. lable side of CD)",
-		"Lead artist/lead performer/soloist",
-		"Artist/performer",
-		"Conductor",
-		"Band/Orchestra",
-		"Composer",
-		"Lyricist/text writer",
-		"Recording Location",
-		"During recording",
-		"During performance",
-		"Movie/video screen capture",
-		"A bright coloured fish",
-		"Illustration",
-		"Band/artist logotype",
-		"Publisher/Studio logotype",
-  ];
-
-  List<int> imageData;
-  String description;
-  int imageType;
-  String mime;
-
- @override
-  String toString() {
-    return "AttachedPicture[($mime) $description, bytes[0..${imageData.length}]]";
-  }
-
 }
 
 class UTF16 extends Encoding {

@@ -21,5 +21,5 @@ abstract class Reader {
   get version => _version;
   get type => _type;
 
-  Future<Map<String, String>> parseValues(Future<List<int>> bytes);
+  Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes);
 }
