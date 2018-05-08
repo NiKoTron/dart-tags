@@ -8,8 +8,8 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-- v 0.0.1
-    initial version
+- v 0.0.2
+    basic support of ID3 v2.4 tags
 
 ## Usage
 
