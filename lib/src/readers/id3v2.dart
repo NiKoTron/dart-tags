@@ -169,31 +169,6 @@ class ID3V2Reader extends Reader {
     "WXX": "WXXX",
   };
 
-
-  final _picturesType = [
-		"Other",
-		"32x32 pixels 'file icon' (PNG only)",
-		"Other file icon",
-		"Cover (front)",
-		"Cover (back)",
-		"Leaflet page",
-		"Media (e.g. lable side of CD)",
-		"Lead artist/lead performer/soloist",
-		"Artist/performer",
-		"Conductor",
-		"Band/Orchestra",
-		"Composer",
-		"Lyricist/text writer",
-		"Recording Location",
-		"During recording",
-		"During performance",
-		"Movie/video screen capture",
-		"A bright coloured fish",
-		"Illustration",
-		"Band/artist logotype",
-		"Publisher/Studio logotype",
-  ];
-
   static const ISO_8859_1 = 0x00; // [ISO-8859-1]. Terminated with $00.
   static const UTF_16 =
       0x01; // [UTF-16] encoded Unicode [UNICODE] with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00.
@@ -297,7 +272,7 @@ class ID3V2Reader extends Reader {
     var itr = sublist.iterator;
     var buff = [];
     
-    var dt = {};
+    var dt = new AttachedPicture();
 
     var cont = 0;
   
@@ -306,11 +281,11 @@ class ID3V2Reader extends Reader {
       if (crnt == 0x00 && cont < 3) {
         if(cont == 1) //get first byte to img type, other to description;
         {
-          dt[_fields[cont]] = _picturesType[buff[0]];
+          dt.imageType = buff[0];
           cont++;
-          dt[_fields[cont]] = enc.decode(buff.sublist(1));
+          dt.description = enc.decode(buff.sublist(1));
         } else {
-          dt[_fields[cont]] = enc.decode(buff);
+          dt.mime = enc.decode(buff);
         }
         buff = [];
         cont++;
@@ -319,10 +294,47 @@ class ID3V2Reader extends Reader {
       buff.add(crnt);
     }
 
-    dt[_fields[cont]] = buff;
+    dt.imageData = buff;
 
     return dt;
   }
+}
+
+class AttachedPicture {
+  static final _picturesType = [
+		"Other",
+		"32x32 pixels 'file icon' (PNG only)",
+		"Other file icon",
+		"Cover (front)",
+		"Cover (back)",
+		"Leaflet page",
+		"Media (e.g. lable side of CD)",
+		"Lead artist/lead performer/soloist",
+		"Artist/performer",
+		"Conductor",
+		"Band/Orchestra",
+		"Composer",
+		"Lyricist/text writer",
+		"Recording Location",
+		"During recording",
+		"During performance",
+		"Movie/video screen capture",
+		"A bright coloured fish",
+		"Illustration",
+		"Band/artist logotype",
+		"Publisher/Studio logotype",
+  ];
+
+  List<int> imageData;
+  String description;
+  int imageType;
+  String mime;
+
+ @override
+  String toString() {
+    return "AttachedPicture[($mime) $description, bytes[0..${imageData.length}]]";
+  }
+
 }
 
 class UTF16 extends Encoding {

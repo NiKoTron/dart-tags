@@ -1,7 +1,7 @@
 class Tag {
   String type;
   String version;
-  Map<String, String> tags;
+  Map<String, dynamic> tags;
 
   @override
   String toString() {
