@@ -1,11 +1,10 @@
-class Tag{
+class Tag {
   String type;
   String version;
-  Map<String, String> tags;
-
+  Map<String, dynamic> tags;
 
   @override
-    String toString() {
-      return "TAG: $type v$version\n$tags";
-    }
+  String toString() {
+    return "TAG: $type v$version\n$tags";
+  }
 }
