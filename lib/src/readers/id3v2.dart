@@ -260,14 +260,6 @@ class ID3V2Reader extends Reader {
     return _frames.containsKey(tag);
   }
 
-
-  final _fields = [
-    "mime",
-    "image_type",
-    "description",
-    "data"
-  ];
-
   _parsePicture(List<int> sublist, Encoding enc) {
     var itr = sublist.iterator;
     var buff = [];
