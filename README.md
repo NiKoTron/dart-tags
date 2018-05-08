@@ -1,6 +1,8 @@
 # Dart Tags
 A library for Dart developers.
 
+_This library under active development! At this time it's [ALPHA quality software][alpha_quality_wiki]._
+
 You can found sample app written with flutter framework [here][flutter_app].
 
 ## License
@@ -38,3 +40,4 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [changelog]: CHANGELOG.md
 [license]: LICENSE
 [flutter_app]: https://github.com/NiKoTron/flug-tag
+[alpha_quality_wiki]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha

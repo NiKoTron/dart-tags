@@ -5,4 +5,8 @@
 
 ## 0.0.2
 
-- basic support of ID3 v2.4 tags
+- Basic support of ID3 v2.4 tags
+    - support main frames include APIC
+- TagProcessor now can get tags from file and from ByteData
+- You can select which type of tag do you want to get
+- Small fix in id3 v1 parser

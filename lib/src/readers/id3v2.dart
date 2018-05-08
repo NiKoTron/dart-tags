@@ -215,10 +215,14 @@ class ID3V2Reader extends Reader {
       if (len > 0 && _isValidTag(tag)) {
         switch (tag) {
           case 'APIC':
-            tags[tag] = _parsePicture(sBytes.sublist(offset + HEADER_LEN + 1, offset + HEADER_LEN + len), encoding);
+            tags[tag] = _parsePicture(
+                sBytes.sublist(
+                    offset + HEADER_LEN + 1, offset + HEADER_LEN + len),
+                encoding);
             break;
           default:
-            tags[_getTag(tag)] = encoding.decode(sBytes.sublist(offset + HEADER_LEN + 1, offset + HEADER_LEN + len - 1));
+            tags[_getTag(tag)] = encoding.decode(sBytes.sublist(
+                offset + HEADER_LEN + 1, offset + HEADER_LEN + len - 1));
         }
       }
 
@@ -264,15 +268,15 @@ class ID3V2Reader extends Reader {
   _parsePicture(List<int> sublist, Encoding enc) {
     var itr = sublist.iterator;
     var buff = new List<int>();
-    
+
     var dt = new AttachedPicture();
 
     var cont = 0;
-  
+
     while (itr.moveNext() && cont < 4) {
       final crnt = itr.current;
       if (crnt == 0x00 && cont < 3) {
-        if(cont == 1) {
+        if (cont == 1) {
           dt.imageType = buff[0];
           cont++;
           dt.description = enc.decode(buff.sublist(1));
