@@ -1,6 +1,8 @@
 # Dart Tags
 A library for Dart developers.
 
+You can found sample app written with flutter framework [here][flutter_app].
+
 ## License
 project under MIT [license][license]
 
@@ -35,3 +37,4 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [tracker]: https://github.com/NiKoTron/dart-tags/issues
 [changelog]: CHANGELOG.md
 [license]: LICENSE
+[flutter_app]: https://github.com/NiKoTron/flug-tag
