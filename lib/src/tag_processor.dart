@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dart_tags/src/model/tag.dart';
@@ -15,10 +14,8 @@ class TagProcessor {
     TagType.id3v2: new ID3V2Reader(),
   };
 
-  Future<List<Tag>> getTagsFromFile(File file, [List<TagType> types]) async {
-    assert(file.existsSync());
-    assert(file.statSync().type == FileSystemEntityType.FILE);
-
+  /// Returns the tags from the byte array
+  Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes, [List<TagType> types]) async {
     List<Tag> tags = [];
 
     if (types == null || types.length == 0) {
@@ -26,14 +23,15 @@ class TagProcessor {
     }
 
     for (var t in types) {
-      var r = await _readers[t].read(file.readAsBytes());
+      var r = await _readers[t].read(bytes);
       tags.add(r);
     }
 
     return tags;
   }
 
-  Future<List<Tag>> getTagsFromBytes(ByteData bytes,
+  /// Returns the tags from the [ByteData]
+  Future<List<Tag>> getTagsFromByteData(ByteData bytes,
       [List<TagType> types]) async {
     List<Tag> tags = [];
     var list = bytes.buffer.asUint8List().toList();

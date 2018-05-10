@@ -10,3 +10,8 @@
 - TagProcessor now can get tags from file and from ByteData
 - You can select which type of tag do you want to get
 - Small fix in id3 v1 parser
+
+## 0.0.3
+
+- Removed dependency from [dart:io]
+- Some API changes 

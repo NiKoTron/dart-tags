@@ -1,5 +1,5 @@
 name: dart_tags
-description: A dart library for work with id3 tags.
+description: A dart library for work with music tags like ID3.
 version: 0.0.2
 homepage: https://github.com/NiKoTron/dart-tags
 author: NiKoTron <nickolay.simonov@gmail.com>
