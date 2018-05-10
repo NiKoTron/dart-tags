@@ -1,3 +1,4 @@
+/// Class describes attached picture from ID3 v2.x tags
 class AttachedPicture {
   static final _picturesType = [
     "Other",
@@ -23,10 +24,21 @@ class AttachedPicture {
     "Publisher/Studio logotype",
   ];
 
+  /// The byte array of image data
   List<int> imageData;
+  /// The description for artwork ussualy filename
   String description;
+  /// The image type represents as byte. To get a [String] representation call [getImageType()].
   int imageType;
+  /// MIME type of image
   String mime;
+
+  /// Returns [String] representation of image type.
+  /// 
+  /// eg. 'Band/Orchestra' or 'Cover (front)' etc...
+  String getImageType(){
+    return _picturesType[imageType];
+  }
 
   @override
   String toString() {

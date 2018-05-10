@@ -12,8 +12,8 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-- v 0.0.2
-    basic support of ID3 v2.4 tags
+- v 0.0.3
+    some API changes
 
 ## Usage
 
@@ -27,8 +27,8 @@ main(List<String> args) {
   TagProcessor tp = new TagProcessor();
 
   File f = new File(args[0]);
-
-  tp.getTags(f).then((l) => l.forEach((f) => print(f)));
+  
+  tp.getTagsFromByteArray(f.readAsBytes()).then((l) => l.forEach((f) => print(f)));
 }
 ```
 
