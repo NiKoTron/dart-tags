@@ -14,4 +14,8 @@
 ## 0.0.3
 
 - Removed dependency from [dart:io]
-- Some API changes 
+- Some API changes
+
+## 0.0.4
+
+- Formating sources
