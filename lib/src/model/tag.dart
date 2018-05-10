@@ -1,6 +1,5 @@
 /// Class describes tag
 class Tag {
-  
   /// Type of tag. At this time supports 'id3'
   String type;
 

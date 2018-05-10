@@ -15,7 +15,8 @@ class TagProcessor {
   };
 
   /// Returns the tags from the byte array
-  Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes, [List<TagType> types]) async {
+  Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
+      [List<TagType> types]) async {
     List<Tag> tags = [];
 
     if (types == null || types.length == 0) {

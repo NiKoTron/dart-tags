@@ -310,7 +310,7 @@ class UTF16 extends Encoding {
 class _UTF16Decoder extends Converter<List<int>, String> {
   @override
   String convert(List<int> input) {
-    String.fromCharCodes(input);
+    return String.fromCharCodes(input);
   }
 }
 

@@ -26,17 +26,20 @@ class AttachedPicture {
 
   /// The byte array of image data
   List<int> imageData;
+
   /// The description for artwork ussualy filename
   String description;
+
   /// The image type represents as byte. To get a [String] representation call [getImageType()].
   int imageType;
+
   /// MIME type of image
   String mime;
 
   /// Returns [String] representation of image type.
-  /// 
+  ///
   /// eg. 'Band/Orchestra' or 'Cover (front)' etc...
-  String getImageType(){
+  String getImageType() {
     return _picturesType[imageType];
   }
 
