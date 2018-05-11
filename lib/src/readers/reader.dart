@@ -9,17 +9,16 @@ abstract class Reader {
   Reader(this._type, this._version);
 
   Future<Tag> read(Future<List<int>> bytes) async {
-    var tag = new Tag();
-    tag.tags = await parseValues(bytes);
-
-    tag.type = type;
-    tag.version = version;
+    final tag = new Tag()
+      ..tags = await parseValues(bytes)
+      ..type = type
+      ..version = version;
 
     return tag;
   }
 
-  get version => _version;
-  get type => _type;
+  String get version => _version;
+  String get type => _type;
 
   Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes);
 }

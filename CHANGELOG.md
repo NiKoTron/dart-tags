@@ -19,3 +19,8 @@
 ## 0.0.4
 
 - Formating sources
+
+## 0.0.5
+
+- Update static analyzer rules
+- API Changes: AttachedPicture.imageType now returns String value .imageTypeCode return byte value
