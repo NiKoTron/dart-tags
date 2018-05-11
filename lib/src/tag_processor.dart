@@ -9,43 +9,44 @@ import 'package:dart_tags/src/readers/reader.dart';
 enum TagType { id3v1, id3v2 }
 
 class TagProcessor {
-  Map<TagType, Reader> _readers = {
+  final Map<TagType, Reader> _readers = {
     TagType.id3v1: new ID3V1Reader(),
     TagType.id3v2: new ID3V2Reader(),
   };
 
   /// Returns the tags from the byte array
-  Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes, [List<TagType> types]) async {
-    List<Tag> tags = [];
+  Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
+      [List<TagType> types]) async {
+    final tags = new List<Tag>();
 
-    if (types == null || types.length == 0) {
+    if (types == null || types.isEmpty) {
       types = _readers.keys.toList();
     }
 
     for (var t in types) {
-      var r = await _readers[t].read(bytes);
-      tags.add(r);
+      final tag = await _readers[t].read(bytes);
+      tags.add(tag);
     }
 
     return tags;
   }
 
-  /// Returns the tags from the [ByteData]
+  /// Returns the tags from the ByteData
   Future<List<Tag>> getTagsFromByteData(ByteData bytes,
       [List<TagType> types]) async {
-    List<Tag> tags = [];
-    var list = bytes.buffer.asUint8List().toList();
-    Completer<List<int>> c = new Completer.sync()..complete(list);
+    final tags = List<Tag>();
+    final list = bytes.buffer.asUint8List().toList();
+    final c = Completer<List<int>>.sync()..complete(list);
 
-    Future<List<int>> futura = c.future;
+    final futura = c.future;
 
-    if (types == null || types.length == 0) {
+    if (types == null || types.isEmpty) {
       types = _readers.keys.toList();
     }
 
     for (var t in types) {
-      var r = await _readers[t].read(futura);
-      tags.add(r);
+      final tag = await _readers[t].read(futura);
+      tags.add(tag);
     }
 
     return tags;

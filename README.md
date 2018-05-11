@@ -12,8 +12,18 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-- v 0.0.3
-    some API changes
+- v0.0.5
+    Update static analyzer rules
+    API Changes: AttachedPicture.imageType now returns String value .imageTypeCode return byte value
+
+## Instalation
+
+add dependency in pubsec.yaml
+
+```yaml
+dependencies:
+  dart_tags: ^0.0.5
+```
 
 ## Usage
 
