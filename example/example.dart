@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
 
-main(List<String> args) {
-  TagProcessor tp = new TagProcessor();
+void main(List<String> args) {
+  final tp = new TagProcessor();
 
-  File f = new File(args[0]);
+  final f = new File(args[0]);
 
   tp
       .getTagsFromByteArray(f.readAsBytes())
