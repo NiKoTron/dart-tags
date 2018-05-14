@@ -138,13 +138,15 @@ class ID3V1Reader extends Reader {
   @override
   Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes) async {
     var sBytes = await bytes;
-    assert(sBytes.length >= 128);
+    final tagMap = <String, String>{};
+
+    if (sBytes.length < 128) {
+      return tagMap;
+    }
 
     sBytes = sBytes.sublist(sBytes.length - 128);
 
     if (latin1.decode(sBytes.sublist(0, 3)) == 'TAG') {
-      final tagMap = <String, String>{};
-
       tagMap['title'] = latin1.decode(_clearZeros(sBytes.sublist(3, 33)));
       tagMap['artist'] = latin1.decode(_clearZeros(sBytes.sublist(33, 63)));
       tagMap['album'] = latin1.decode(_clearZeros(sBytes.sublist(63, 93)));
@@ -158,11 +160,10 @@ class ID3V1Reader extends Reader {
       }
 
       final id = sBytes[127];
-      tagMap['genre'] = id > 127 ? '' : _id3v1generes[id];
-
-      return tagMap;
+      tagMap['genre'] = id > _id3v1generes.length - 1 ? '' : _id3v1generes[id];
     }
-    return null;
+
+    return tagMap;
   }
 
   List<int> _clearZeros(List<int> zeros) {
