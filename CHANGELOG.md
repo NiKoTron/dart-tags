@@ -25,6 +25,12 @@
 - Update static analyzer rules
 - API Changes: AttachedPicture.imageType now returns String value .imageTypeCode return byte value
 
-## 0.0.5
+## 0.0.6
 
-- Fixed issue with compile time crash
+- Fixed compile-time issue
+
+## 0.0.7
+
+- Removed assertion in parser
+- Fixed some crashes.
+- Added clearing from null bytes in id3v2

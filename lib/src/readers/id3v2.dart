@@ -190,8 +190,8 @@ class ID3V2Reader extends Reader {
   static const _headerLength = 10;
 
   int version_o1 = 2;
-  int version_o2;
-  int version_o3;
+  int version_o2 = 0;
+  int version_o3 = 0;
 
   ID3V2Reader() : super('ID3', '2.');
 
@@ -201,9 +201,12 @@ class ID3V2Reader extends Reader {
   @override
   Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes) async {
     final sBytes = await bytes;
-    assert(utf8.decode(sBytes.sublist(0, 3)) == 'ID3');
-
     final tags = <String, dynamic>{};
+
+    if (new Utf8Codec(allowMalformed: true).decode(sBytes.sublist(0, 3)) !=
+        'ID3') {
+      return tags;
+    }
 
     version_o2 = sBytes[3];
     version_o3 = sBytes[4];
@@ -233,8 +236,11 @@ class ID3V2Reader extends Reader {
                 encoding);
             break;
           default:
-            tags[_getTag(tag)] = encoding.decode(sBytes.sublist(
-                offset + _headerLength + 1, offset + _headerLength + len - 1));
+            tags[_getTag(tag)] = encoding.decode(sBytes
+                .sublist(
+                    offset + _headerLength + 1, offset + _headerLength + len)
+                .where((i) => i != 0)
+                .toList());
         }
       }
 
@@ -261,7 +267,7 @@ class ID3V2Reader extends Reader {
       case _latin1:
         return latin1;
       case _utf8:
-        return utf8;
+        return new Utf8Codec(allowMalformed: true);
       default:
         return new UTF16();
     }
@@ -288,7 +294,7 @@ class ID3V2Reader extends Reader {
     while (iterator.moveNext() && cont < 4) {
       final crnt = iterator.current;
       if (crnt == 0x00 && cont < 3) {
-        if (cont == 1) {
+        if (cont == 1 && buff.isNotEmpty) {
           attachedPicture.imageTypeCode = buff[0];
           cont++;
           attachedPicture.description = enc.decode(buff.sublist(1));
