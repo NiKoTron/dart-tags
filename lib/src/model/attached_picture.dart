@@ -1,6 +1,6 @@
 /// Class describes attached picture from ID3 v2.x tags
 class AttachedPicture {
-  static final _picturesType = [
+  static final _picturesType = const [
     'Other',
     '32x32 pixels "file icon" (PNG only)',
     'Other file icon',
