@@ -6,7 +6,7 @@ import 'package:dart_tags/src/readers/reader.dart';
 
 class ID3V2Reader extends Reader {
   // v2.3+ frames
-  static const _frames = {
+  static final _frames = const <String, String>{
     'AENC': 'Audio encryption',
     'APIC': 'Attached picture',
     'COMM': 'Comments',
@@ -83,7 +83,7 @@ class ID3V2Reader extends Reader {
     'WXXX': 'User defined URL link frame',
   };
 
-  static const _frameShortcutsID3V2_3 = {
+  static final _frameShortcutsID3V2_3 = const <String, String>{
     'TIT2': 'title',
     'TPE1': 'artist',
     'TALB': 'album',
@@ -97,7 +97,7 @@ class ID3V2Reader extends Reader {
 
   // todo support v2.2
   // ignore: unused_field
-  static const _frameShortcutsID3V2_2 = {
+  static final _frameShortcutsID3V2_2 = const <String, String>{
     'TT2': 'title',
     'TP1': 'artist',
     'TAL': 'album',
@@ -111,7 +111,7 @@ class ID3V2Reader extends Reader {
 
   // todo support v2.2
   // ignore: unused_field
-  static const _frameLegacy = {
+  static final _frameLegacy = const <String, String>{
     'BUF': 'RBUF',
     'COM': 'COMM',
     'CRA': 'AENC',
@@ -203,7 +203,7 @@ class ID3V2Reader extends Reader {
     final sBytes = await bytes;
     assert(utf8.decode(sBytes.sublist(0, 3)) == 'ID3');
 
-    final tags = new Map<String, dynamic>();
+    final tags = <String, dynamic>{};
 
     version_o2 = sBytes[3];
     version_o3 = sBytes[4];
@@ -279,7 +279,7 @@ class ID3V2Reader extends Reader {
 
   AttachedPicture _parsePicture(List<int> sublist, Encoding enc) {
     final iterator = sublist.iterator;
-    var buff = new List<int>();
+    var buff = <int>[];
 
     final attachedPicture = new AttachedPicture();
 

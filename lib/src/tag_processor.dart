@@ -17,7 +17,7 @@ class TagProcessor {
   /// Returns the tags from the byte array
   Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
       [List<TagType> types]) async {
-    final tags = new List<Tag>();
+    final tags = <Tag>[];
 
     if (types == null || types.isEmpty) {
       types = _readers.keys.toList();

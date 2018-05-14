@@ -6,7 +6,7 @@ import 'package:dart_tags/src/readers/reader.dart';
 class ID3V1Reader extends Reader {
   ID3V1Reader() : super('ID3', '1.1');
 
-  static const _id3v1generes = [
+  static final _id3v1generes = const <String>[
     'Blues',
     'Classic Rock',
     'Country',
@@ -143,7 +143,7 @@ class ID3V1Reader extends Reader {
     sBytes = sBytes.sublist(sBytes.length - 128);
 
     if (latin1.decode(sBytes.sublist(0, 3)) == 'TAG') {
-      final tagMap = new Map<String, String>();
+      final tagMap = <String, String>{};
 
       tagMap['title'] = latin1.decode(_clearZeros(sBytes.sublist(3, 33)));
       tagMap['artist'] = latin1.decode(_clearZeros(sBytes.sublist(33, 63)));
