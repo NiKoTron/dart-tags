@@ -33,4 +33,6 @@
 
 - Removed assertion in parser
 - Fixed some crashes.
-- Added clearing from null bytes in id3v2
+- Added clearing from null bytes in id3v2 and unsync bytes
+- UTF16 crash fixed
+- Improve stability
