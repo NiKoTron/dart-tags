@@ -12,16 +12,22 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-- v0.0.6
-    Fixed compile-time issue
+- v0.0.7
+  - Removed assertion in parser
+  - Fixed some crashes.
+  - Added clearing from null bytes in id3v2 and unsync bytes
+  - UTF16 crash fixed
+  - Improve stability
 
 ## Instalation
 
 add dependency in pubsec.yaml
 
-```yaml
+```yaml  - Removed assertion in parser
+  - Fixed some crashes.
+  - Added clearing from null bytes in id3v2
 dependencies:
-  dart_tags: ^0.0.6
+  dart_tags: ^0.0.7
 ```
 
 ## Usage
