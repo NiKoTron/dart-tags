@@ -24,8 +24,6 @@ project under MIT [license][license]
 add dependency in pubsec.yaml
 
 ```yaml  - Removed assertion in parser
-  - Fixed some crashes.
-  - Added clearing from null bytes in id3v2
 dependencies:
   dart_tags: ^0.0.7
 ```
