@@ -1,4 +1,7 @@
 # Dart Tags
+
+[![pub package](https://img.shields.io/pub/v/dart_tags.svg)](https://pub.dartlang.org/packages/dart_tags)
+
 A library for Dart developers.
 
 _This library under active development! At this time it's [ALPHA quality software][alpha_quality_wiki]._
@@ -23,7 +26,7 @@ project under MIT [license][license]
 
 add dependency in pubsec.yaml
 
-```yaml  - Removed assertion in parser
+```yaml
 dependencies:
   dart_tags: ^0.0.7
 ```
