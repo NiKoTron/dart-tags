@@ -8,7 +8,10 @@
             "name": "Dart",
             "program": "${workspaceFolder}/example/example.dart",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+				"/home/NiKoTron/Music/-Splatune 2- Splatoon 2 ORIGINAL SOUNDTRACK/Disc 1/12-Shipwreckin'.mp3"
+			]
         }
     ]
 }
