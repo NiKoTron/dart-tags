@@ -28,6 +28,9 @@ void _proceedArg(String path) {
         printFileInfo(path);
       }
       break;
+    case FileSystemEntityType.notFound:
+      print('file not found');
+      break;
     default:
       print('sorry dude I don`t know what I must to do with that...\n');
   }

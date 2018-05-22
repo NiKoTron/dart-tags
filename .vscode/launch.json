@@ -3,14 +3,14 @@
     // Hover to view descriptions of existing attributes.
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
-    "configurations": [
+    "configurations": [      
         {
             "name": "Dart",
             "program": "${workspaceFolder}/example/example.dart",
             "request": "launch",
             "type": "dart",
             "args": [
-				"/home/NiKoTron/Music/-Splatune 2- Splatoon 2 ORIGINAL SOUNDTRACK/Disc 1/12-Shipwreckin'.mp3"
+				"$HOME/Music"
 			]
         }
     ]
