@@ -1,7 +1,10 @@
 # Dart Tags
-A library for Dart developers.
 
-_This library under active development! At this time it's [ALPHA quality software][alpha_quality_wiki]._
+[![pub package](https://img.shields.io/pub/v/dart_tags.svg)](https://pub.dartlang.org/packages/dart_tags)
+
+The library for parsing ID3 tags, written in pure Dart.
+
+_This library under active development! With all the consequences._
 
 You can found sample app written with flutter framework [here][flutter_app].
 
@@ -12,22 +15,19 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-- v0.0.7
-  - Removed assertion in parser
-  - Fixed some crashes.
-  - Added clearing from null bytes in id3v2 and unsync bytes
-  - UTF16 crash fixed
-  - Improve stability
+- v0.0.8
+  - added BASE64 for imageData in attached pictures
+  - .toString() now returns JSON
+  - small changes in example
+  - fix README formating
 
 ## Instalation
 
 add dependency in pubsec.yaml
 
-```yaml  - Removed assertion in parser
-  - Fixed some crashes.
-  - Added clearing from null bytes in id3v2
+```yaml
 dependencies:
-  dart_tags: ^0.0.7
+  dart_tags: ^0.0.8
 ```
 
 ## Usage
@@ -55,4 +55,3 @@ Please file feature requests and bugs at the [issue tracker][tracker].
 [changelog]: CHANGELOG.md
 [license]: LICENSE
 [flutter_app]: https://github.com/NiKoTron/flug-tag
-[alpha_quality_wiki]: https://en.wikipedia.org/wiki/Software_release_life_cycle#Alpha

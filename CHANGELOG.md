@@ -36,3 +36,9 @@
 - Added clearing from null bytes in id3v2 and unsync bytes
 - UTF16 crash fixed
 - Improve stability
+
+## 0.0.8
+
+- added BASE64 for imageData in attached pictures
+- small changes in example
+- fix README formating

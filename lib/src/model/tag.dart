@@ -11,6 +11,6 @@ class Tag {
 
   @override
   String toString() {
-    return 'TAG: $type v$version\n$tags';
+    return '{tag: $type, version: v$version tags:$tags}';
   }
 }

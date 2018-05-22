@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 /// Class describes attached picture from ID3 v2.x tags
 class AttachedPicture {
   static final _picturesType = const [
@@ -27,6 +29,13 @@ class AttachedPicture {
   /// The byte array of image data
   List<int> imageData;
 
+  /// Returns image data as BASE64 string
+  String get imageData64 => base64.encode(imageData);
+
+  /// Write image data from BASE64 string
+  void set imageData64(String imageDataString) =>
+      imageData = base64.decode(imageDataString);
+
   /// The description for artwork ussualy filename
   String description;
 
@@ -45,6 +54,6 @@ class AttachedPicture {
 
   @override
   String toString() {
-    return 'AttachedPicture[($mime) $description, bytes[0..${imageData.length}]]';
+    return '{mime:$mime, description:$description, bitmap: ${imageData64}}';
   }
 }
