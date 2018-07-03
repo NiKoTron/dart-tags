@@ -5,6 +5,7 @@ import 'package:dart_tags/src/model/tag.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/readers/reader.dart';
+import 'package:dart_tags/src/writers/writer.dart';
 
 enum TagType { id3v1, id3v2 }
 
@@ -12,6 +13,10 @@ class TagProcessor {
   final Map<TagType, Reader> _readers = {
     TagType.id3v1: new ID3V1Reader(),
     TagType.id3v2: new ID3V2Reader(),
+  };
+
+  final Map<TagType, Writer> _writers = {
+
   };
 
   /// Returns the tags from the byte array
@@ -24,7 +29,7 @@ class TagProcessor {
     }
 
     for (var t in types) {
-      final tag = await _readers[t].read(bytes);
+      final tag = await _benchmarkDecorator(() => _readers[t].read(bytes));
       tags.add(tag);
     }
 
@@ -45,10 +50,22 @@ class TagProcessor {
     }
 
     for (var t in types) {
-      final tag = await _readers[t].read(futura);
+      final tag = await _benchmarkDecorator(() => _readers[t].read(futura));
       tags.add(tag);
     }
 
     return tags;
   }
+
+  Future<Tag> _benchmarkDecorator (Future<Tag> Function() f) async {
+    final stopwatch = new Stopwatch()
+      ..start();
+
+    final tag = await f();
+
+    print('parse ${tag.type} ${tag.version} executed in ${stopwatch.elapsed}');
+
+    return tag;
+  }
+
 }

@@ -200,6 +200,7 @@ class ID3V2Reader extends Reader {
 
   @override
   Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes) async {
+
     final sBytes = await bytes;
     final tags = <String, dynamic>{};
 
