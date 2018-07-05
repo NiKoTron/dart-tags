@@ -137,7 +137,6 @@ class ID3V1Reader extends Reader {
 
   @override
   Future<Map<String, dynamic>> parseValues(Future<List<int>> bytes) async {
-
     var sBytes = await bytes;
     final tagMap = <String, String>{};
 

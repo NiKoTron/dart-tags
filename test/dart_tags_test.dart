@@ -1,26 +1,50 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('A group of tests', () {
+  File file1;
+  File file2;
+
+  group('Some kind of tests', () {
     setUp(() {
-      var fn = "/home/NiKoTron/Music/13033b03.mp3";
+      file1 = new File("test/test_assets/id3v1.mp3");
+      file2 = new File("test/test_assets/id3v24.mp3");
     });
 
-    void printFileInfo(String fileName) async {
-      final file = new File(fileName);
-      new TagProcessor().getTagsFromByteArray(file.readAsBytes()).then((l) {
-        print('FILE: $fileName');
-        l.forEach((f) => print(f));
-        print('\n');
-      });
-    }
+    test('Test with file 1.1', () async {
+      final foo = await new TagProcessor()
+          .getTagsFromByteArray(file1.readAsBytes(), [TagType.id3v1]);
 
-    test('First Test', () {
-      printFileInfo("/home/NiKoTron/Music/13033b03.mp3");
-      expect(true, isTrue);
+      expect(foo.length, equals(1));
+
+      expect(foo[0].type, equals("ID3"));
+      expect(foo[0].version, equals("1.1"));
+    });
+
+    test('Test with file 2.4', () async {
+      final foo = await new TagProcessor()
+          .getTagsFromByteArray(file2.readAsBytes(), [TagType.id3v2]);
+
+      expect(foo.length, equals(1));
+
+      expect(foo[0].type, equals("ID3"));
+      expect(foo[0].version, equals("2.4.0"));
+    });
+
+    test('Test on Failure', () async {
+      expect(
+          () async => await new TagProcessor().getTagsFromByteArray(null),
+          throwsA(predicate((e) =>
+              e is ParsingException &&
+              e.cause == ParsingException.byteArrayNull)));
+      expect(
+          () async => await new TagProcessor().getTagsFromByteData(null),
+          throwsA(predicate((e) =>
+              e is ParsingException &&
+              e.cause == ParsingException.byteDataNull)));
     });
   });
 }

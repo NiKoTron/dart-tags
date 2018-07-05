@@ -10,7 +10,6 @@ abstract class Writer {
   Writer(this._type, this._version);
 
   void write(List<Tag> tags) async {
-
     Stream<int> s;
 
     return;

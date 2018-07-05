@@ -9,19 +9,29 @@ import 'package:dart_tags/src/writers/writer.dart';
 
 enum TagType { id3v1, id3v2 }
 
+class ParsingException implements Exception {
+  static const byteDataNull = "Byte data can't be null";
+  static const byteArrayNull = "Byte array can't be null";
+
+  String cause;
+  ParsingException(this.cause);
+}
+
 class TagProcessor {
   final Map<TagType, Reader> _readers = {
     TagType.id3v1: new ID3V1Reader(),
     TagType.id3v2: new ID3V2Reader(),
   };
 
-  final Map<TagType, Writer> _writers = {
-
-  };
+  final Map<TagType, Writer> _writers = {};
 
   /// Returns the tags from the byte array
   Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
       [List<TagType> types]) async {
+    if (bytes == null) {
+      throw new ParsingException(ParsingException.byteArrayNull);
+    }
+
     final tags = <Tag>[];
 
     if (types == null || types.isEmpty) {
@@ -29,8 +39,7 @@ class TagProcessor {
     }
 
     for (var t in types) {
-      final tag = await _benchmarkDecorator(() => _readers[t].read(bytes));
-      tags.add(tag);
+      tags.add(await _readers[t].read(bytes));
     }
 
     return tags;
@@ -39,33 +48,22 @@ class TagProcessor {
   /// Returns the tags from the ByteData
   Future<List<Tag>> getTagsFromByteData(ByteData bytes,
       [List<TagType> types]) async {
-    final tags = List<Tag>();
-    final list = bytes.buffer.asUint8List().toList();
-    final c = Completer<List<int>>.sync()..complete(list);
+    if (bytes == null) {
+      throw new ParsingException(ParsingException.byteDataNull);
+    }
 
-    final futura = c.future;
+    final tags = List<Tag>();
+    final c = Completer<List<int>>.sync()
+      ..complete(bytes.buffer.asUint8List().toList());
 
     if (types == null || types.isEmpty) {
       types = _readers.keys.toList();
     }
 
     for (var t in types) {
-      final tag = await _benchmarkDecorator(() => _readers[t].read(futura));
-      tags.add(tag);
+      tags.add(await _readers[t].read(c.future));
     }
 
     return tags;
   }
-
-  Future<Tag> _benchmarkDecorator (Future<Tag> Function() f) async {
-    final stopwatch = new Stopwatch()
-      ..start();
-
-    final tag = await f();
-
-    print('parse ${tag.type} ${tag.version} executed in ${stopwatch.elapsed}');
-
-    return tag;
-  }
-
 }
