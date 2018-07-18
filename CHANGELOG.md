@@ -42,3 +42,10 @@
 - added BASE64 for imageData in attached pictures
 - small changes in example
 - fix README formating
+
+## 0.0.9
+
+- added ParsingException class
+- up sdk dependency in pubsec.yaml to <=3.0.0
+- wrote some tests
+- added stub mp3s for tests

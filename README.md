@@ -15,11 +15,11 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-- v0.0.8
-  - added BASE64 for imageData in attached pictures
-  - .toString() now returns JSON
-  - small changes in example
-  - fix README formating
+## 0.0.9
+- added ParsingException class
+- up sdk dependency in pubsec.yaml to <=3.0.0
+- wrote some tests
+- added stub mp3s for tests
 
 ## Instalation
 
@@ -27,7 +27,7 @@ add dependency in pubsec.yaml
 
 ```yaml
 dependencies:
-  dart_tags: ^0.0.8
+  dart_tags: ^0.0.9
 ```
 
 ## Usage
