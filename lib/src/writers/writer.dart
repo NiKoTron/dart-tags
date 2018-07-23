@@ -9,14 +9,18 @@ abstract class Writer {
 
   Writer(this._type, this._version);
 
-  void write(List<Tag> tags) async {
-    Stream<int> s;
-
-    return;
+  Future<List<int>> write(List<int> source, Tag tag) async {
+    return combine(await removeExistingTag(source), await prepareTag(tag));
   }
 
   String get version => _version;
   String get type => _type;
 
+  //TODO: make abstract
+  List<int> combine(List<int> source, List<int> tags) {
+    return List<int>.from(source)..addAll(tags);
+  }
+
   Future<List<int>> prepareTag(Tag tag);
+  Future<List<int>> removeExistingTag(List<int> bytes);
 }

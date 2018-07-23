@@ -5,6 +5,7 @@ import 'package:dart_tags/src/model/tag.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/readers/reader.dart';
+import 'package:dart_tags/src/writers/id3v1.dart';
 import 'package:dart_tags/src/writers/writer.dart';
 
 enum TagType { id3v1, id3v2 }
@@ -23,7 +24,9 @@ class TagProcessor {
     TagType.id3v2: new ID3V2Reader(),
   };
 
-  final Map<TagType, Writer> _writers = {};
+  final Map<TagType, Writer> _writers = {
+    TagType.id3v1: new ID3V1Writer(),
+  };
 
   /// Returns the tags from the byte array
   Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
