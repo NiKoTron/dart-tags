@@ -1,12 +1,15 @@
 language: dart
+
 dart:
   - dev
+
 dart_task:
   - test: --platform vm
   - dartanalyzer: --fatal-warnings lib
-  - dartfmt
 
 branches:
-  only:
-    - master
-    - /^feature.*$/
+  only: [master, /feature\..*/]
+
+cache:
+ directories:
+   - $HOME/.pub-cache
