@@ -12,7 +12,7 @@ void main() {
   group('Writer Tests', () {
     test('generate tag block v1.1', () async {
       File f1 = new File('test/test_assets/id3v1.mp3');
-      File f1m = new File('test/test_assets/id3v1-m.mp3');
+      File f1m = new File('test/test_assets/id3v1-result.tmp');
 
       final tag = new Tag()
         ..tags = {
