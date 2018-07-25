@@ -2,6 +2,8 @@
 
 [![pub package](https://img.shields.io/pub/v/dart_tags.svg)](https://pub.dartlang.org/packages/dart_tags)
 
+[![Build Status](https://travis-ci.org/NiKoTron/dart-tags.svg?branch=master)](https://travis-ci.org/NiKoTron/dart-tags)
+
 The library for parsing ID3 tags, written in pure Dart.
 
 _This library under active development! With all the consequences._
