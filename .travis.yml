@@ -2,8 +2,6 @@ language: dart
 dart:
   - dev
 
-sudo: required
-
 # Build stages: https://docs.travis-ci.com/user/build-stages/.
 stages:
   - analyze_and_format
@@ -12,10 +10,10 @@ stages:
 jobs:
   include:
     - stage: analyze_and_format
-      script: ./tool/dartfmt_and_analyze.sh
+      script: ./tool/travis/turn_my_swag_on.sh
 
     - stage: testing
-      script: ./tool/travis/task.sh vm_test
+      script: pub run test
 
 branches:
   only: [master, /feature\..*/]
