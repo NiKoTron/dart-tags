@@ -1,15 +1,26 @@
 language: dart
-
 dart:
   - dev
 
-dart_task:
-  - test: --platform vm
-  - dartanalyzer: --fatal-warnings lib
+sudo: required
+
+# Build stages: https://docs.travis-ci.com/user/build-stages/.
+stages:
+  - analyze_and_format
+  - testing
+
+jobs:
+  include:
+    - stage: analyze_and_format
+      script: ./tool/dartfmt_and_analyze.sh
+
+    - stage: testing
+      script: ./tool/travis/task.sh vm_test
 
 branches:
   only: [master, /feature\..*/]
 
+# Incremental pub cache and builds.
 cache:
- directories:
-   - $HOME/.pub-cache
+  directories:
+    - $HOME/.pub-cache
