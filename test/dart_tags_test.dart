@@ -1,3 +1,5 @@
+@TestOn('vm')
+
 import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
