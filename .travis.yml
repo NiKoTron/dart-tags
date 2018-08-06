@@ -10,7 +10,7 @@ stages:
 jobs:
   include:
     - stage: analyze_and_format
-      script: ./tool/travis/turn_my_swag_on.sh
+      script: ./tools/travis/turn_my_swag_on.sh
 
     - stage: testing
       script: pub run test
