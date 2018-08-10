@@ -9,11 +9,13 @@ void main() {
   File file1;
   File file2;
 
+  setUp(() {
+    file1 = new File('test/test_assets/id3v1.mp3');
+    file2 = new File('test/test_assets/id3v24.mp3');
+  });
+
   group('Writer Tests', () {
     test('generate tag block v1.1', () async {
-      File f1 = new File('test/test_assets/id3v1.mp3');
-      File f1m = new File('test/test_assets/id3v1-result.tmp');
-
       final tag = new Tag()
         ..tags = {
           'title': 'foo',
@@ -28,27 +30,17 @@ void main() {
         ..version = '1.1';
 
       final writer = new ID3V1Writer();
-      // var pt = await writer.prepareTag(tag);
 
-      // expect(pt.length, equals(128));
-
-      final blocks = writer.write(await f1.readAsBytes(), tag);
+      final blocks = writer.write(await file1.readAsBytes(), tag);
 
       final r = new ID3V1Reader();
       final f = await r.read(blocks);
 
       expect(f, equals(tag));
-
-      f1m.writeAsBytesSync(await blocks);
     });
   });
 
   group('Reader Tests', () {
-    setUp(() {
-      file1 = new File('test/test_assets/id3v1.mp3');
-      file2 = new File('test/test_assets/id3v24.mp3');
-    });
-
     test('Test with file 1.1', () async {
       final foo = await new TagProcessor()
           .getTagsFromByteArray(file1.readAsBytes(), [TagType.id3v1]);

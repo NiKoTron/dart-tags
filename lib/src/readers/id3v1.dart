@@ -167,6 +167,6 @@ class ID3V1Reader extends Reader {
   }
 
   List<int> _clearZeros(List<int> zeros) {
-    return zeros.where((i) => i != 0 && i != 32).toList();
+    return zeros.where((i) => i != 0).toList();
   }
 }

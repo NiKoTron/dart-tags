@@ -10,6 +10,24 @@ class Tag {
   Map<String, dynamic> tags;
 
   @override
+  bool operator ==(other) {
+    if (type != other.type) {
+      return false;
+    }
+    if (version != other.version) {
+      return false;
+    }
+    if (tags.length != other.tags.length) {
+      return false;
+    }
+    return tags.keys.every((key) =>
+        other.tags.containsKey(key) && this.tags[key] == other.tags[key]);
+  }
+
+  @override
+  int get hashCode => super.hashCode;
+
+  @override
   String toString() {
     return '{tag: $type, version: v$version tags:$tags}';
   }
