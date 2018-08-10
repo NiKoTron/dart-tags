@@ -6,7 +6,7 @@ import 'package:dart_tags/src/readers/reader.dart';
 class ID3V1Reader extends Reader {
   ID3V1Reader() : super('ID3', '1.1');
 
-  static final _id3v1generes = const <String>[
+  static final id3v1generes = const <String>[
     'Blues',
     'Classic Rock',
     'Country',
@@ -160,13 +160,13 @@ class ID3V1Reader extends Reader {
       }
 
       final id = sBytes[127];
-      tagMap['genre'] = id > _id3v1generes.length - 1 ? '' : _id3v1generes[id];
+      tagMap['genre'] = id > id3v1generes.length - 1 ? '' : id3v1generes[id];
     }
 
     return tagMap;
   }
 
   List<int> _clearZeros(List<int> zeros) {
-    return zeros.where((i) => i != 0 && i != 32).toList();
+    return zeros.where((i) => i != 0).toList();
   }
 }
