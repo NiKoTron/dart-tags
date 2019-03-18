@@ -240,6 +240,24 @@ class ID3V2Reader extends Reader {
                     offset + _headerLength + 1, offset + _headerLength + len),
                 encoding);
             break;
+          case 'TXXX':
+            final frame = sBytes.sublist(
+                offset + _headerLength + 1, offset + _headerLength + len);
+            final splitIndex = frame.indexOf(0);
+            tags[splitIndex == 0
+                    ? tag
+                    : encoding.decode(frame.sublist(0, splitIndex))] =
+                encoding.decode(frame.sublist(splitIndex + 1));
+            break;
+          case 'WXXX':
+            final frame = sBytes.sublist(
+                offset + _headerLength + 1, offset + _headerLength + len);
+            final splitIndex = frame.indexOf(0);
+            tags[splitIndex == 0
+                    ? tag
+                    : encoding.decode(frame.sublist(0, splitIndex))] =
+                latin1.decode(frame.sublist(splitIndex + 1));
+            break;
           default:
             tags[_getTag(tag)] = encoding.decode(_clearFrameData(sBytes.sublist(
                 offset + _headerLength + 1, offset + _headerLength + len)));
