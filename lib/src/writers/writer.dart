@@ -16,10 +16,7 @@ abstract class Writer {
   String get version => _version;
   String get type => _type;
 
-  //TODO: make abstract
-  List<int> combine(List<int> source, List<int> tags) {
-    return List<int>.from(source)..addAll(tags);
-  }
+  List<int> combine(List<int> source, List<int> tags);
 
   Future<List<int>> prepareTag(Tag tag);
   Future<List<int>> removeExistingTag(List<int> bytes);

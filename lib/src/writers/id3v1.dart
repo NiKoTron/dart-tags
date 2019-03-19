@@ -51,4 +51,9 @@ class ID3V1Writer extends Writer {
 
     return c.future;
   }
+
+  @override
+  List<int> combine(List<int> source, List<int> tags) {
+    return List<int>.from(source)..addAll(tags);
+  }
 }

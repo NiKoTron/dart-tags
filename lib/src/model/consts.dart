@@ -217,6 +217,18 @@ final frameHeaderShortcutsID3V2_3 = const <String, String>{
   'USLT': 'lyrics',
 };
 
+final frameHeaderShortcutsID3V2_3_Rev = const <String, String>{
+  'title': 'TIT2',
+  'artist': 'TPE1',
+  'album': 'TALB',
+  'year': 'TYER',
+  'comment': 'COMM',
+  'track': 'TRCK',
+  'genre': 'TCON',
+  'picture': 'APIC',
+  'lyrics': 'USLT',
+};
+
 // todo support v2.2
 // ignore: unused_field
 final frameHeaderShortcutsID3V2_2 = const <String, String>{
