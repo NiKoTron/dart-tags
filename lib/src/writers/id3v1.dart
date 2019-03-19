@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dart_tags/src/model/consts.dart' as consts;
 import 'package:dart_tags/src/model/tag.dart';
-import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/writers/writer.dart';
 
 class ID3V1Writer extends Writer {
@@ -24,7 +24,7 @@ class ID3V1Writer extends Writer {
           tag.tags.containsKey('comment') ? tag.tags['comment'] : '', 28))
       ..add(0)
       ..add(int.parse(tag.tags['track']))
-      ..add(ID3V1Reader.id3v1generes.indexOf(tag.tags['genre']));
+      ..add(consts.id3v1generes.indexOf(tag.tags['genre']));
 
     final c = Completer<List<int>>.sync()..complete(b);
 

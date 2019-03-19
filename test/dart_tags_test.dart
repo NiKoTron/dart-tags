@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dart_tags/dart_tags.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/writers/id3v1.dart';
+import 'package:dart_tags/src/writers/id3v2.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -16,6 +17,15 @@ void main() {
   });
 
   group('Writer Tests', () {
+    
+    test('remove existing v2', () async {
+      final writer = new ID3V2Writer();
+      final bytes = await file2.readAsBytes();
+      print(bytes.length);
+      final blocks = await writer.removeExistingTag(bytes);
+      expect(blocks.length, lessThan(bytes.length));
+    });
+
     test('generate tag block v1.1', () async {
       final tag = new Tag()
         ..tags = {

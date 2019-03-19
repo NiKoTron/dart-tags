@@ -6,7 +6,6 @@ import 'package:dart_tags/src/model/attached_picture.dart';
 import 'package:dart_tags/src/readers/reader.dart';
 
 class ID3V2Reader extends Reader {
-
   // [ISO-8859-1]. Terminated with $00.
   static const _latin1 = 0x00;
 
