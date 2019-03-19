@@ -8,7 +8,15 @@ class ID3V2Writer extends Writer {
   ID3V2Writer() : super('ID3', '2.4');
 
   @override
-  Future<List<int>> prepareTag(Tag tag) {}
+  Future<List<int>> prepareTag(Tag tag) {
+        final b = new List<int>()
+      ..addAll(utf8.encode('TAG'));
+
+
+    final c = Completer<List<int>>.sync()..complete(b);
+
+    return c.future;
+  }
 
   @override
   Future<List<int>> removeExistingTag(List<int> bytes) {
