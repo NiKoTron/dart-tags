@@ -57,4 +57,4 @@ linter:
 
     - prefer_single_quotes
     - package_api_docs
-    - slash_for_doc_comments
+    
