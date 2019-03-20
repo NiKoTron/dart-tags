@@ -6,7 +6,7 @@
 ## 0.0.2
 
 - Basic support of ID3 v2.4 tags
-    - support main frames include APIC
+- support main frames include APIC
 - TagProcessor now can get tags from file and from ByteData
 - You can select which type of tag do you want to get
 - Small fix in id3 v1 parser
@@ -49,3 +49,9 @@
 - up sdk dependency in pubsec.yaml to <=3.0.0
 - wrote some tests
 - added stub mp3s for tests
+
+## 0.1.0
+
+- added writers (currently v2 writer not fully implemented)
+- fixed custom tags (TXXX / WXXX) reading
+- wrote some rough tests for writers

@@ -39,7 +39,7 @@ void main() {
       final r = new ID3V2Reader();
       final f = await r.read(blocks);
 
-      expect(f, equals(tag));
+      expect(f.tags, equals(tag.tags));
     });
 
     test('generate tag block v1.1', () async {
@@ -64,6 +64,50 @@ void main() {
       final f = await r.read(blocks);
 
       expect(f, equals(tag));
+    });
+
+    test('put blocks', () async {
+      final tag1 = new Tag()
+        ..tags = {
+          'title': 'foo',
+          'artist': 'bar',
+          'album': 'baz',
+          'year': '2010',
+          'comment': 'lol it is a comment',
+          'track': '6',
+          'genre': 'Dream'
+        }
+        ..type = 'ID3'
+        ..version = '1.1';
+
+      final tag2 = new Tag()
+        ..tags = {
+          'title': 'foo',
+          'artist': 'bar',
+          'album': 'baz',
+          'year': '2010',
+          'comment': 'lol it is a comment',
+          'track': '6',
+          'genre': 'Dream'
+        }
+        ..type = 'ID3'
+        ..version = '2.4';
+
+      final _av = () async =>
+          [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+
+      final foo =
+          await new TagProcessor().putTagsToByteArray(_av(), [tag1, tag2]);
+
+      final _fr = () async => foo;
+
+      final rdr1 = ID3V1Reader();
+      final t1 = await rdr1.read(_fr());
+      expect(t1.tags, equals(tag1.tags));
+
+      final rdr2 = ID3V2Reader();
+      final t2 = await rdr2.read(_fr());
+      expect(t2.tags, equals(tag2.tags));
     });
   });
 

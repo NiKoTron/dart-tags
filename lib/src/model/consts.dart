@@ -1,3 +1,4 @@
+/// Generes constants from id3v1.1 specification
 final id3v1generes = const <String>[
   'Blues',
   'Classic Rock',
@@ -79,6 +80,7 @@ final id3v1generes = const <String>[
   'Musical',
   'Rock & Roll',
   'Hard Rock',
+  //winamp extension
   'Folk',
   'Folk-Rock',
   'National Folk',

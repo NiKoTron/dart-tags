@@ -14,7 +14,7 @@ class ID3V2Writer extends Writer {
     tag.tags.forEach((k, v) => tagsF.addAll(framer(k, v)));
     final s = _frameSizeInBytes(tagsF.length);
 
-    final b = new List<int>()
+    final b = List<int>()
       ..addAll(utf8.encode('ID3'))
       ..add(0x04)
       ..add(0x00)
@@ -47,9 +47,9 @@ class ID3V2Writer extends Writer {
   }
 
   static List<int> _frameSizeInBytes(int value) {
-    assert(value < 10000);
+    assert(value <= 9999);
 
-    final block = new List<int>(4);
+    final block = List<int>(4);
 
     block[0] = ((value & 0xFF000000) >> 21);
     block[1] = ((value & 0x00FF0000) >> 14);
@@ -61,7 +61,7 @@ class ID3V2Writer extends Writer {
 
   @override
   Future<List<int>> removeExistingTag(List<int> bytes) {
-    final c = new Completer<List<int>>.sync();
+    final c = Completer<List<int>>.sync();
 
     Utf8Codec(allowMalformed: true).decode(bytes.sublist(0, 3)) != 'ID3'
         ? c.complete(bytes)
