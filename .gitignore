@@ -67,3 +67,8 @@ fabric.properties
 
 # Editor-based Rest Client
 .idea/httpRequests
+
+#Temporary files
+*.temp
+*.tmp
+*.bak

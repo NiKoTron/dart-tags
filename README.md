@@ -4,22 +4,21 @@
 
 The library for parsing ID3 tags, written in pure Dart.
 
-_This library under active development! With all the consequences._
-
 You can found sample app written with flutter framework [here][flutter_app].
 
 ## License
+
 project under MIT [license][license]
 
 ## Changelogs
 
 [full changelog][changelog]
 
-## 0.0.9
-- added ParsingException class
-- up sdk dependency in pubsec.yaml to <=3.0.0
-- wrote some tests
-- added stub mp3s for tests
+## 0.1.0
+
+- added writers (currently v2 writer not fully implemented)
+- fixed custom tags (TXXX / WXXX) reading
+- wrote some rough tests for writers
 
 ## Instalation
 
@@ -27,12 +26,13 @@ add dependency in pubsec.yaml
 
 ```yaml
 dependencies:
-  dart_tags: ^0.0.9
+  dart_tags: ^0.1.0
 ```
 
 ## Usage
 
 A simple usage example:
+
 ```dart
 import 'dart:io';
 
@@ -47,9 +47,44 @@ main(List<String> args) {
 }
 ```
 
+### _Experimental_
+
+And since 0.1.0 you can write some tags into the byte array:
+
+```dart
+import 'dart:io';
+
+import 'package:dart_tags/dart_tags.dart';
+
+main(List<String> args) {
+  TagProcessor tp = new TagProcessor();
+
+  final f = new File(args[0]);
+
+  final tag = Tag()
+    ..tags = {
+      'title': 'foo',
+      'artist': 'bar',
+      'album': 'baz',
+      'year': '2010',
+      'comment': 'lol it is a comment',
+      'track': '6',
+      'genre': 'Dream'
+    }
+    ..type = 'ID3'
+    ..version = '2.4';
+  
+  List<int> newByteArrayWithTags = tp.putTagsToByteArray(f.readAsBytes(), [tag]);
+}
+```
+
 ## Features and bugs
 
-Please file feature requests and bugs at the [issue tracker][tracker].
+Please feel free for feature requests and bugs at the [issue tracker][tracker].
+
+---
+
+[![id3v2 logo](http://id3.org/images/id3v2.gif)](http://id3.org/Home)
 
 [tracker]: https://github.com/NiKoTron/dart-tags/issues
 [changelog]: CHANGELOG.md
