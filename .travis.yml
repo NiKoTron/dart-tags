@@ -6,14 +6,24 @@ dart:
 stages:
   - analyze_and_format
   - testing
+  - prepub
 
 jobs:
   include:
     - stage: analyze_and_format
-      script: ./tools/travis/turn_my_swag_on.sh
+      script: ./tool/travis/swag.sh
 
     - stage: testing
       script: pub run test
+    
+    - stage: prepub
+      script: pub publish --dry-run
+
+deploy:
+    provider: script
+    script: ./tool/travis/pub.sh
+    on:
+      branch: master
 
 branches:
   only: [master, /feature\..*/]
