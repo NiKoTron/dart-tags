@@ -7,23 +7,31 @@ stages:
   - analyze_and_format
   - testing
   - prepub
+  - deploy
 
 jobs:
   include:
     - stage: analyze_and_format
+      name: "Check with dartanalyzer and dartfmt"
       script: ./tool/travis/swag.sh
 
     - stage: testing
+      name: "Unit tests"
       script: pub run test
     
     - stage: prepub
+      name: "Prepublish checks"
       script: pub publish --dry-run
-
-deploy:
-    provider: script
-    script: ./tool/travis/pub.sh
-    on:
-      branch: master
+      
+    - stage: deploy
+      name: "Deploy on pub.dartlang.org"
+      if: branch = master
+      script: skip
+      deploy:
+        provider: script
+        script: ./tool/travis/pub.sh
+        on:
+          branch: master
 
 branches:
   only: [master, /feature\..*/]
