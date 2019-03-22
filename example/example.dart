@@ -4,7 +4,7 @@ import 'package:dart_tags/dart_tags.dart';
 
 void main(List<String> args) {
   if (args.isNotEmpty) {
-    args.forEach((s) => _proceedArg(s));
+    args.forEach(_proceedArg);
   } else {
     print('args please!');
   }
@@ -14,7 +14,7 @@ void _proceedArg(String path) {
   final fileType = FileStat.statSync(path).type;
   switch (fileType) {
     case FileSystemEntityType.directory:
-      new Directory(path)
+      Directory(path)
           .list(recursive: true, followLinks: false)
           .listen((FileSystemEntity entity) {
         if (entity.statSync().type == FileSystemEntityType.file &&
@@ -36,11 +36,11 @@ void _proceedArg(String path) {
   }
 }
 
-void printFileInfo(String fileName) async {
-  final file = new File(fileName);
-  new TagProcessor().getTagsFromByteArray(file.readAsBytes()).then((l) {
+void printFileInfo(String fileName) {
+  final file = File(fileName);
+  TagProcessor().getTagsFromByteArray(file.readAsBytes()).then((l) {
     print('FILE: $fileName');
-    l.forEach((f) => print(f));
+    l.forEach(print);
     print('\n');
   });
 }

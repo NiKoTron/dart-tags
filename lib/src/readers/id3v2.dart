@@ -36,8 +36,7 @@ class ID3V2Reader extends Reader {
     final sBytes = await bytes;
     final tags = <String, dynamic>{};
 
-    if (new Utf8Codec(allowMalformed: true).decode(sBytes.sublist(0, 3)) !=
-        'ID3') {
+    if (Utf8Codec(allowMalformed: true).decode(sBytes.sublist(0, 3)) != 'ID3') {
       return tags;
     }
 
@@ -127,9 +126,9 @@ class ID3V2Reader extends Reader {
       case _latin1:
         return latin1;
       case _utf8:
-        return new Utf8Codec(allowMalformed: true);
+        return Utf8Codec(allowMalformed: true);
       default:
-        return new UTF16();
+        return UTF16();
     }
   }
 
@@ -147,7 +146,7 @@ class ID3V2Reader extends Reader {
     final iterator = sublist.iterator;
     var buff = <int>[];
 
-    final attachedPicture = new AttachedPicture();
+    final attachedPicture = AttachedPicture();
 
     var cont = 0;
 
@@ -176,10 +175,10 @@ class ID3V2Reader extends Reader {
 
 class UTF16 extends Encoding {
   @override
-  Converter<List<int>, String> get decoder => new _UTF16Decoder();
+  Converter<List<int>, String> get decoder => _UTF16Decoder();
 
   @override
-  Converter<String, List<int>> get encoder => new _UTF16Enoder();
+  Converter<String, List<int>> get encoder => _UTF16Enoder();
 
   @override
   String get name => 'utf16';
@@ -188,7 +187,7 @@ class UTF16 extends Encoding {
 class _UTF16Decoder extends Converter<List<int>, String> {
   @override
   String convert(List<int> input) {
-    return new String.fromCharCodes(input);
+    return String.fromCharCodes(input);
   }
 }
 

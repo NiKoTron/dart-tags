@@ -68,7 +68,7 @@ class TagProcessor {
   Future<List<Tag>> getTagsFromByteData(ByteData bytes,
       [List<TagType> types]) async {
     if (bytes == null) {
-      throw new ParsingException(ParsingException.byteDataNull);
+      throw ParsingException(ParsingException.byteDataNull);
     }
 
     final tags = List<Tag>();

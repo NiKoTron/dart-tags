@@ -9,7 +9,7 @@ abstract class Reader {
   Reader(this._type, this._version);
 
   Future<Tag> read(Future<List<int>> bytes) async {
-    final tag = new Tag()
+    final tag = Tag()
       ..tags = await parseValues(bytes)
       ..type = type
       ..version = version;

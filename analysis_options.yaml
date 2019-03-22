@@ -1,5 +1,11 @@
+# Lint rules that uses google internaly also in pu i guess. https://github.com/dart-lang/pedantic/#enabled-lints
+include: package:pedantic/analysis_options.yaml
+
 analyzer:
-  strong-mode: true
+  strong-mode:
+    implicit-casts: true
+    implicit-dynamic: true
+
 #   exclude:
 #     - path/to/excluded/files/**
 
@@ -9,6 +15,7 @@ linter:
     - package_names
 
     - avoid_empty_else
+    - avoid_return_types_on_setters
     - cancel_subscriptions
     - hash_and_equals
     - iterable_contains_unrelated_type
@@ -22,6 +29,9 @@ linter:
     - unnecessary_statements
     - unnecessary_null_in_if_null_operators
     - unnecessary_null_aware_assignments
+    - unnecessary_new
+    - unnecessary_lambdas
+    - unnecessary_const
 
     - void_checks
 
