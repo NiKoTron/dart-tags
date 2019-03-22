@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dart_tags/src/model/attached_picture.dart';
 import 'package:dart_tags/src/model/consts.dart' as consts;
 import 'package:dart_tags/src/model/tag.dart';
 import 'package:dart_tags/src/writers/writer.dart';
@@ -30,11 +31,17 @@ class ID3V2Writer extends Writer {
   List<int> framer(String key, value) {
     final frame = List<int>();
     if (value is String) {
-      final kByte = utf8.encode(
+      final frameHeader =
           consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(key)
               ? consts.frameHeaderShortcutsID3V2_3_Rev[key]
-              : key);
-      final vBytes = utf8.encode(value);
+              : consts.framesHeaders.containsKey(key) ? key : 'TXXX';
+
+      final kByte = utf8.encode(frameHeader);
+
+      final vBytes = frameHeader == 'TXXX'
+          ? utf8.encode('$key${utf8.decode([0x00])}$value')
+          : utf8.encode(value);
+
       final fSize = _frameSizeInBytes(vBytes.length + 1);
 
       frame
@@ -42,6 +49,25 @@ class ID3V2Writer extends Writer {
         ..addAll(fSize)
         ..addAll([0x00, 0x00, 0x03])
         ..addAll(vBytes);
+    } else if (value is AttachedPicture) {
+      assert(key == 'APIC');
+      final kByte = utf8.encode(key);
+
+      final mimeEncoded = utf8.encode(value.mime);
+      final descEncoded = utf8.encode(value.description);
+
+      final fSize = _frameSizeInBytes(
+          mimeEncoded.length + descEncoded.length + value.imageData.length + 4);
+
+      frame
+        ..addAll(kByte)
+        ..addAll(fSize)
+        ..addAll([0x00, 0x00, 0x03])
+        ..addAll(mimeEncoded)
+        ..addAll([0x00, value.imageTypeCode])
+        ..addAll(descEncoded)
+        ..add(0x00)
+        ..addAll(value.imageData);
     }
     return frame;
   }
