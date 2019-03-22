@@ -55,3 +55,9 @@
 - added writers (currently v2 writer not fully implemented)
 - fixed custom tags (TXXX / WXXX) reading
 - wrote some rough tests for writers
+
+## 0.1.1
+
+- added writer for custom tags (TXXX)
+- added writer for attached picture (APIC tagged frame)
+- update tests for TXXX and APIC writers

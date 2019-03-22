@@ -2,7 +2,7 @@
 
 [![pub package](https://img.shields.io/pub/v/dart_tags.svg)](https://pub.dartlang.org/packages/dart_tags) [![Build Status](https://travis-ci.org/NiKoTron/dart-tags.svg?branch=master)](https://travis-ci.org/NiKoTron/dart-tags)
 
-The library for parsing ID3 tags, written in pure Dart.
+The library for parsing [ID3][id3org] tags, written in pure Dart.
 
 You can found sample app written with flutter framework [here][flutter_app].
 
@@ -14,11 +14,11 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-## 0.1.0
+## 0.1.1
 
-- added writers (currently v2 writer not fully implemented)
-- fixed custom tags (TXXX / WXXX) reading
-- wrote some rough tests for writers
+- added writer for custom tags (TXXX)
+- added writer for attached picture (APIC tagged frame)
+- update tests for TXXX and APIC writers
 
 ## Instalation
 
@@ -82,10 +82,7 @@ main(List<String> args) {
 
 Please feel free for feature requests and bugs at the [issue tracker][tracker].
 
----
-
-[![id3v2 logo](https://pbs.twimg.com/profile_images/2267715562/9r0qrslx58wm75ejusvn_400x400.png)](http://id3.org/Home)
-
+[id3org]: http://id3.org/Home
 [tracker]: https://github.com/NiKoTron/dart-tags/issues
 [changelog]: CHANGELOG.md
 [license]: LICENSE
