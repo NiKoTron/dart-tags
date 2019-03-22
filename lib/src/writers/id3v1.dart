@@ -10,7 +10,7 @@ class ID3V1Writer extends Writer {
 
   @override
   Future<List<int>> prepareTag(Tag tag) {
-    final b = new List<int>()
+    final b = List<int>()
       ..addAll(latin1.encode('TAG'))
       ..addAll(
           _filledArray(tag.tags.containsKey('title') ? tag.tags['title'] : ''))
@@ -40,7 +40,7 @@ class ID3V1Writer extends Writer {
 
   @override
   Future<List<int>> removeExistingTag(List<int> bytes) {
-    final c = new Completer<List<int>>.sync();
+    final c = Completer<List<int>>.sync();
 
     bytes.length < 128 ||
             latin1.decode(

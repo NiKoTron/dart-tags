@@ -84,7 +84,7 @@ Please feel free for feature requests and bugs at the [issue tracker][tracker].
 
 ---
 
-[![id3v2 logo](http://id3.org/images/id3v2.gif)](http://id3.org/Home)
+[![id3v2 logo](https://pbs.twimg.com/profile_images/2267715562/9r0qrslx58wm75ejusvn_400x400.png)](http://id3.org/Home)
 
 [tracker]: https://github.com/NiKoTron/dart-tags/issues
 [changelog]: CHANGELOG.md

@@ -33,7 +33,7 @@ class AttachedPicture {
   String get imageData64 => base64.encode(imageData);
 
   /// Write image data from BASE64 string
-  void set imageData64(String imageDataString) =>
+  set imageData64(String imageDataString) =>
       imageData = base64.decode(imageDataString);
 
   /// The description for artwork ussualy filename

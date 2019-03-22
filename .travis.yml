@@ -6,17 +6,37 @@ dart:
 stages:
   - analyze_and_format
   - testing
+  - prepub
+  - deploy
 
 jobs:
   include:
     - stage: analyze_and_format
-      script: ./tool/travis/turn_my_swag_on.sh
+      name: "Check with dartanalyzer and dartfmt"
+      script: ./tool/travis/swag.sh
 
     - stage: testing
+      name: "Unit tests"
       script: pub run test
+    
+    - stage: prepub
+      name: "Prepublish checks"
+      script: pub publish --dry-run
+      
+    - stage: deploy
+      name: "Deploy on pub.dartlang.org"
+      if: branch = master
+      if: tag =~ /^v\d+.\d+.\d+/
+      script: skip
+      deploy:
+        provider: script
+        script: ./tool/travis/pub.sh
+        on:
+          tags: true
+          branch: master
 
 branches:
-  only: [master, /feature\..*/]
+  only: [master, develop]
 
 # Incremental pub cache and builds.
 cache:
