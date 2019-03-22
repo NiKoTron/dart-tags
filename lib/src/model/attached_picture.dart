@@ -56,4 +56,32 @@ class AttachedPicture {
   String toString() {
     return '{mime:$mime, description:$description, bitmap: ${imageData64}}';
   }
+
+  @override
+  int get hashCode => super.hashCode;
+
+  @override
+  bool operator ==(other) {
+    if (imageTypeCode != other.imageTypeCode) {
+      return false;
+    }
+    if (mime != other.mime) {
+      return false;
+    }
+    if (description != other.description) {
+      return false;
+    }
+    if (imageData == null && other.imageData == null) {
+      return true;
+    }
+    if (imageData.length != other.imageData.length) {
+      return false;
+    }
+    for (var i = 0; i < imageData.length; i++) {
+      if (imageData[i] != other.imageData[i]) {
+        return false;
+      }
+    }
+    return true;
+  }
 }

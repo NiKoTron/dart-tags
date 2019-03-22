@@ -2,7 +2,10 @@
 include: package:pedantic/analysis_options.yaml
 
 analyzer:
-#  strong-mode: true (deprecated)
+  strong-mode:
+    implicit-casts: true
+    implicit-dynamic: true
+
 #   exclude:
 #     - path/to/excluded/files/**
 

@@ -27,7 +27,30 @@ void main() {
           'year': '2010',
           'comment': 'lol it is a comment',
           'track': '6',
-          'genre': 'Dream'
+          'genre': 'Dream',
+          'custom': 'Just a tag',
+          'APIC': AttachedPicture()
+            ..imageData = [
+              0x00,
+              0x01,
+              0x02,
+              0x03,
+              0x00,
+              0x01,
+              0x02,
+              0x03,
+              0x00,
+              0x01,
+              0x02,
+              0x03,
+              0x00,
+              0x01,
+              0x02,
+              0x03
+            ]
+            ..imageTypeCode = 0x03
+            ..mime = 'image/jpeg'
+            ..description = 'foo.jpg'
         }
         ..type = 'ID3'
         ..version = '2.4';
@@ -88,7 +111,8 @@ void main() {
           'year': '2010',
           'comment': 'lol it is a comment',
           'track': '6',
-          'genre': 'Dream'
+          'genre': 'Dream',
+          'Custom': 'Just tag'
         }
         ..type = 'ID3'
         ..version = '2.4';
@@ -134,12 +158,12 @@ void main() {
     test('Test on Failure', () async {
       expect(
           () async => await TagProcessor().getTagsFromByteArray(null),
-          throwsA(predicate((e) =>
+          throwsA(predicate<Exception>((e) =>
               e is ParsingException &&
               e.cause == ParsingException.byteArrayNull)));
       expect(
           () async => await TagProcessor().getTagsFromByteData(null),
-          throwsA(predicate((e) =>
+          throwsA(predicate<Exception>((e) =>
               e is ParsingException &&
               e.cause == ParsingException.byteDataNull)));
     });
