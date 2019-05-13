@@ -73,7 +73,7 @@ class ID3V2Writer extends Writer {
   }
 
   static List<int> _frameSizeInBytes(int value) {
-    assert(value <= 9999);
+    assert(value <= 16777216); //according to http://id3.org/ID3v2Easy
 
     final block = List<int>(4);
 

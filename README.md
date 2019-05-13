@@ -14,6 +14,10 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
+## 0.1.2 (HotFix)
+
+- rise limmit of tag according to the [issue #3](https://github.com/NiKoTron/dart-tags/issues/3)
+
 ## 0.1.1
 
 - added writer for custom tags (TXXX)
