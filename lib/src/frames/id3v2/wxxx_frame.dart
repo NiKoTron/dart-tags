@@ -4,13 +4,13 @@ import 'id3v2_frame.dart';
 
 class WXXXFrame with ID3V2Frame<String> {
   @override
-  List<int> encode(String value) {
+  List<int> encode(String value, [String key]) {
     final vBytes = [
-      ...utf8.encode('$_tag${utf8.decode([0x00])}'),
+      ...utf8.encode('$key${utf8.decode([0x00])}'),
       ...latin1.encode(value)
     ];
     return [
-      ...utf8.encode(_tag),
+      ...utf8.encode(frameTag),
       ...frameSizeInBytes(vBytes.length + 1),
       ...separatorBytes,
       ...vBytes
@@ -22,17 +22,15 @@ class WXXXFrame with ID3V2Frame<String> {
     return enc.decode(data);
   }
 
-  String _tag = 'WXXX';
-
   @override
-  String tagFrame() => _tag;
+  String get frameTag => 'WXXX';
 
   @override
   MapEntry<String, String> decode(List<int> data) {
     final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
     final tag = encoding.decode(data.sublist(0, 4));
 
-    assert(tag == tagFrame());
+    assert(tag == frameTag);
 
     final len = sizeOf(data.sublist(4, 8));
 
@@ -41,10 +39,7 @@ class WXXXFrame with ID3V2Frame<String> {
 
     final splitIndex = body.indexOf(0);
 
-    _tag =
-        splitIndex == 0 ? 'TXXX' : encoding.decode(data.sublist(0, splitIndex));
-
     return MapEntry<String, String>(
-        tagFrame(), decodeBody(data.sublist(splitIndex + 1), latin1));
+        frameTag, decodeBody(data.sublist(splitIndex + 1), latin1));
   }
 }

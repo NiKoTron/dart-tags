@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dart_tags/src/convert/utf16.dart';
 import 'package:dart_tags/src/frames/frame.dart';
-import 'package:dart_tags/src/frames/id3v2/apic_frame.dart';
-import 'package:dart_tags/src/model/consts.dart' as consts;
-import 'package:dart_tags/src/model/attached_picture.dart';
 import 'package:dart_tags/src/readers/reader.dart';
 
 class ID3V2Reader extends Reader {
@@ -64,13 +60,10 @@ class ID3V2Reader extends Reader {
     var end = true;
 
     while (end) {
-      final encoding = _getEncoding(sBytes[offset + _headerLength]);
-      final tag = encoding.decode(sBytes.sublist(offset, offset + 4));
-
       final len = _sizeOf(sBytes.sublist(offset + 4, offset + 8));
-
       final m =
           ff.getFrame(sBytes.sublist(offset)).decode(sBytes.sublist(offset));
+
       tags[m.key] = m.value;
 
       offset = offset + _headerLength + len;
@@ -78,13 +71,6 @@ class ID3V2Reader extends Reader {
     }
 
     return tags;
-  }
-
-  List<int> _clearFrameData(List<int> bytes) {
-    if (bytes.length > 3 && bytes[0] == 0xFF && bytes[1] == 0xFE) {
-      bytes = bytes.sublist(2);
-    }
-    return bytes.where((i) => i != 0).toList();
   }
 
   int _sizeOf(List<int> block) {
@@ -96,56 +82,5 @@ class ID3V2Reader extends Reader {
     len += block[3];
 
     return len;
-  }
-
-  Encoding _getEncoding(int type) {
-    switch (type) {
-      case _latin1:
-        return latin1;
-      case _utf8:
-        return Utf8Codec(allowMalformed: true);
-      default:
-        return UTF16();
-    }
-  }
-
-  String _getTag(String tag) {
-    return consts.frameHeaderShortcutsID3V2_3.containsKey(tag)
-        ? consts.frameHeaderShortcutsID3V2_3[tag]
-        : tag;
-  }
-
-  bool _isValidTag(String tag) {
-    return consts.framesHeaders.containsKey(tag);
-  }
-
-  AttachedPicture _parsePicture(List<int> sublist, Encoding enc) {
-    final iterator = sublist.iterator;
-    var buff = <int>[];
-
-    final attachedPicture = AttachedPicture();
-
-    var cont = 0;
-
-    while (iterator.moveNext() && cont < 4) {
-      final crnt = iterator.current;
-      if (crnt == 0x00 && cont < 3) {
-        if (cont == 1 && buff.isNotEmpty) {
-          attachedPicture.imageTypeCode = buff[0];
-          cont++;
-          attachedPicture.description = enc.decode(buff.sublist(1));
-        } else {
-          attachedPicture.mime = enc.decode(buff);
-        }
-        buff = [];
-        cont++;
-        continue;
-      }
-      buff.add(crnt);
-    }
-
-    attachedPicture.imageData = buff;
-
-    return attachedPicture;
   }
 }

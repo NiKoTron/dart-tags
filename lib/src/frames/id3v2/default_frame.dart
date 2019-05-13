@@ -1,10 +1,9 @@
 import 'dart:convert';
 
 import 'package:dart_tags/src/frames/id3v2/id3v2_frame.dart';
-import 'package:dart_tags/src/model/consts.dart' as consts;
 
 class DefaultFrame with ID3V2Frame<String> {
-  String _tag;
+  final String _tag;
 
   DefaultFrame(this._tag);
 
@@ -14,15 +13,13 @@ class DefaultFrame with ID3V2Frame<String> {
   }
 
   @override
-  List<int> encode(String value) {
-    final frameHeader = consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(_tag)
-        ? consts.frameHeaderShortcutsID3V2_3_Rev[_tag]
-        : _tag;
+  List<int> encode(String value, [String key]) {
+    final tag = getTagByPseudonym(frameTag);
 
     final vBytes = utf8.encode(value);
 
     return [
-      ...utf8.encode(frameHeader),
+      ...utf8.encode(tag),
       ...frameSizeInBytes(vBytes.length + 1),
       ...separatorBytes,
       ...vBytes
@@ -30,7 +27,5 @@ class DefaultFrame with ID3V2Frame<String> {
   }
 
   @override
-  String tagFrame() {
-    return _tag;
-  }
+  String get frameTag => _tag;
 }

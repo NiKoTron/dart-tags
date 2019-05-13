@@ -1,10 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:dart_tags/src/model/attached_picture.dart';
-import 'package:dart_tags/src/model/consts.dart' as consts;
 import 'package:dart_tags/src/model/tag.dart';
 import 'package:dart_tags/src/writers/writer.dart';
+import 'package:dart_tags/src/frames/frame.dart';
 
 class ID3V2Writer extends Writer {
   ID3V2Writer() : super('ID3', '2.4');
@@ -12,7 +11,10 @@ class ID3V2Writer extends Writer {
   @override
   Future<List<int>> prepareTag(Tag tag) {
     final tagsF = List<int>();
-    tag.tags.forEach((k, v) => tagsF.addAll(_framer(k, v)));
+
+    final ff = FrameFactory('ID3', '2.4.0');
+
+    tag.tags.forEach((k, v) => tagsF.addAll(ff.getFrame(k)?.encode(v, k)));
 
     final c = Completer<List<int>>.sync()
       ..complete([
@@ -25,49 +27,9 @@ class ID3V2Writer extends Writer {
     return c.future;
   }
 
-  List<int> _framer(String key, value) {
-    final separatorBytes = [0x00, 0x00, 0x03];
-    if (value is String) {
-      final frameHeader =
-          consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(key)
-              ? consts.frameHeaderShortcutsID3V2_3_Rev[key]
-              : consts.framesHeaders.containsKey(key) ? key : 'TXXX';
-
-      final vBytes = frameHeader == 'TXXX'
-          ? utf8.encode('$key${utf8.decode([0x00])}$value')
-          : utf8.encode(value);
-
-      return [
-        ...utf8.encode(frameHeader),
-        ...frameSizeInBytes(vBytes.length + 1),
-        ...separatorBytes,
-        ...vBytes
-      ];
-    } else if (value is AttachedPicture) {
-      assert(key == 'APIC');
-
-      final mimeEncoded = utf8.encode(value.mime);
-      final descEncoded = utf8.encode(value.description);
-
-      return [
-        ...utf8.encode(key),
-        ...frameSizeInBytes(mimeEncoded.length +
-            descEncoded.length +
-            value.imageData.length +
-            4),
-        ...separatorBytes,
-        ...mimeEncoded,
-        0x00,
-        value.imageTypeCode,
-        ...descEncoded,
-        0x00,
-        ...value.imageData
-      ];
-    }
-    return [];
-  }
-
   static List<int> frameSizeInBytes(int value) {
+    assert(value <= 16777216);
+
     return [
       ((value & 0xFF000000) >> 21),
       ((value & 0x00FF0000) >> 14),

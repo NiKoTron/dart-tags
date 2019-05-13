@@ -5,8 +5,10 @@ import 'package:dart_tags/src/frames/id3v2/wxxx_frame.dart';
 import 'id3v2/default_frame.dart';
 import 'id3v2/id3v2_frame.dart';
 
+import 'package:dart_tags/src/model/consts.dart' as consts;
+
 abstract class Frame<T> {
-  List<int> encode(T value);
+  List<int> encode(T value, [String key]);
   MapEntry<String, T> decode(List<int> data);
 }
 
@@ -42,6 +44,12 @@ class FramesID3V24 {
     return _frames[tag] ?? DefaultFrame(tag);
   }
 
+  String getTagByPseudonym(String tag) {
+    return consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(tag)
+        ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]
+        : consts.framesHeaders.containsKey(tag) ? tag : 'TXXX';
+  }
+
   Frame<T> getFrame<T>(data) {
     assert(data is List<int> || data is String);
 
@@ -50,7 +58,7 @@ class FramesID3V24 {
       final tag = encoding.decode(data.sublist(0, 4));
       return _getFrame(tag);
     } else if (data is String) {
-      return _getFrame(data);
+      return _getFrame(getTagByPseudonym(data));
     }
     return null;
   }

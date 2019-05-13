@@ -39,7 +39,7 @@ void main() {
           'track': '6',
           'genre': 'Dream',
           'custom': 'Just a tag',
-          'APIC': AttachedPicture()
+          'picture': AttachedPicture()
             ..imageData = [
               0x00,
               0x01,

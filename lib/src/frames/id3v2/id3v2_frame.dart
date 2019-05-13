@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dart_tags/src/convert/utf16.dart';
 import 'package:dart_tags/src/frames/frame.dart';
+import 'package:dart_tags/src/model/consts.dart' as consts;
 
 abstract class ID3V2Frame<T> implements Frame<T> {
   // [ISO-8859-1]. Terminated with $00.
@@ -24,23 +25,37 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   final separatorBytes = [0x00, 0x00, 0x03];
 
   @override
-  List<int> encode(T value);
+  List<int> encode(T value, [String key]);
+
+  String getTagPseudonym(String tag) {
+    return consts.frameHeaderShortcutsID3V2_3.containsKey(tag)
+        ? consts.frameHeaderShortcutsID3V2_3[tag]
+        : tag;
+  }
+
+  String getTagByPseudonym(String tag) {
+    return consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(tag)
+        ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]
+        : tag;
+  }
 
   @override
   MapEntry<String, T> decode(List<int> data) {
     final encoding = getEncoding(data[headerLength]);
+
     final tag = encoding.decode(data.sublist(0, 4));
 
-    assert(tag == tagFrame());
+    assert(tag == frameTag);
 
     final len = sizeOf(data.sublist(4, 8));
 
     final body = data.sublist(headerLength + 1, headerLength + len);
 
-    return MapEntry<String, T>(tagFrame(), decodeBody(body, encoding));
+    return MapEntry<String, T>(
+        getTagPseudonym(tag), decodeBody(body, encoding));
   }
 
-  String tagFrame();
+  String get frameTag;
 
   static Encoding getEncoding(int type) {
     switch (type) {

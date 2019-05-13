@@ -36,12 +36,12 @@ class ApicFrame with ID3V2Frame<AttachedPicture> {
   }
 
   @override
-  List<int> encode(AttachedPicture tag) {
+  List<int> encode(AttachedPicture tag, [String key]) {
     final mimeEncoded = utf8.encode(tag.mime);
     final descEncoded = utf8.encode(tag.description);
 
     return [
-      ...utf8.encode(tagFrame()),
+      ...utf8.encode(frameTag),
       ...frameSizeInBytes(
           mimeEncoded.length + descEncoded.length + tag.imageData.length + 4),
       ...separatorBytes,
@@ -54,7 +54,5 @@ class ApicFrame with ID3V2Frame<AttachedPicture> {
   }
 
   @override
-  String tagFrame() {
-    return 'APIC';
-  }
+  String get frameTag => 'APIC';
 }
