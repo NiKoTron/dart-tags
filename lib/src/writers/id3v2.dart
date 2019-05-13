@@ -12,77 +12,68 @@ class ID3V2Writer extends Writer {
   @override
   Future<List<int>> prepareTag(Tag tag) {
     final tagsF = List<int>();
-    tag.tags.forEach((k, v) => tagsF.addAll(framer(k, v)));
-    final s = _frameSizeInBytes(tagsF.length);
+    tag.tags.forEach((k, v) => tagsF.addAll(_framer(k, v)));
 
-    final b = List<int>()
-      ..addAll(utf8.encode('ID3'))
-      ..add(0x04)
-      ..add(0x00)
-      ..add(0x00)
-      ..addAll(s)
-      ..addAll(tagsF);
-
-    final c = Completer<List<int>>.sync()..complete(b);
+    final c = Completer<List<int>>.sync()
+      ..complete([
+        ...utf8.encode('ID3'),
+        ...[0x04, 0x00, 0x00],
+        ...frameSizeInBytes(tagsF.length),
+        ...tagsF
+      ]);
 
     return c.future;
   }
 
-  List<int> framer(String key, value) {
-    final frame = List<int>();
+  List<int> _framer(String key, value) {
+    final separatorBytes = [0x00, 0x00, 0x03];
     if (value is String) {
       final frameHeader =
           consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(key)
               ? consts.frameHeaderShortcutsID3V2_3_Rev[key]
               : consts.framesHeaders.containsKey(key) ? key : 'TXXX';
 
-      final kByte = utf8.encode(frameHeader);
-
       final vBytes = frameHeader == 'TXXX'
           ? utf8.encode('$key${utf8.decode([0x00])}$value')
           : utf8.encode(value);
 
-      final fSize = _frameSizeInBytes(vBytes.length + 1);
-
-      frame
-        ..addAll(kByte)
-        ..addAll(fSize)
-        ..addAll([0x00, 0x00, 0x03])
-        ..addAll(vBytes);
+      return [
+        ...utf8.encode(frameHeader),
+        ...frameSizeInBytes(vBytes.length + 1),
+        ...separatorBytes,
+        ...vBytes
+      ];
     } else if (value is AttachedPicture) {
       assert(key == 'APIC');
-      final kByte = utf8.encode(key);
 
       final mimeEncoded = utf8.encode(value.mime);
       final descEncoded = utf8.encode(value.description);
 
-      final fSize = _frameSizeInBytes(
-          mimeEncoded.length + descEncoded.length + value.imageData.length + 4);
-
-      frame
-        ..addAll(kByte)
-        ..addAll(fSize)
-        ..addAll([0x00, 0x00, 0x03])
-        ..addAll(mimeEncoded)
-        ..addAll([0x00, value.imageTypeCode])
-        ..addAll(descEncoded)
-        ..add(0x00)
-        ..addAll(value.imageData);
+      return [
+        ...utf8.encode(key),
+        ...frameSizeInBytes(mimeEncoded.length +
+            descEncoded.length +
+            value.imageData.length +
+            4),
+        ...separatorBytes,
+        ...mimeEncoded,
+        0x00,
+        value.imageTypeCode,
+        ...descEncoded,
+        0x00,
+        ...value.imageData
+      ];
     }
-    return frame;
+    return [];
   }
 
-  static List<int> _frameSizeInBytes(int value) {
-    assert(value <= 9999);
-
-    final block = List<int>(4);
-
-    block[0] = ((value & 0xFF000000) >> 21);
-    block[1] = ((value & 0x00FF0000) >> 14);
-    block[2] = ((value & 0x0000FF00) >> 7);
-    block[3] = ((value & 0x000000FF) >> 0);
-
-    return block;
+  static List<int> frameSizeInBytes(int value) {
+    return [
+      ((value & 0xFF000000) >> 21),
+      ((value & 0x00FF0000) >> 14),
+      ((value & 0x0000FF00) >> 7),
+      ((value & 0x000000FF) >> 0)
+    ];
   }
 
   @override
@@ -109,6 +100,6 @@ class ID3V2Writer extends Writer {
 
   @override
   List<int> combine(List<int> source, List<int> tags) {
-    return List<int>.from(tags)..addAll(source);
+    return [...tags, ...source];
   }
 }

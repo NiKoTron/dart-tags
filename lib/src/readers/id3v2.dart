@@ -1,6 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dart_tags/src/convert/utf16.dart';
+import 'package:dart_tags/src/frames/frame.dart';
+import 'package:dart_tags/src/frames/id3v2/apic_frame.dart';
 import 'package:dart_tags/src/model/consts.dart' as consts;
 import 'package:dart_tags/src/model/attached_picture.dart';
 import 'package:dart_tags/src/readers/reader.dart';
@@ -43,6 +46,8 @@ class ID3V2Reader extends Reader {
     version_o2 = sBytes[3];
     version_o3 = sBytes[4];
 
+    final ff = FrameFactory('ID3', '2.4.0');
+
     final flags = sBytes[5];
 
     // ignore: unused_local_variable
@@ -64,37 +69,9 @@ class ID3V2Reader extends Reader {
 
       final len = _sizeOf(sBytes.sublist(offset + 4, offset + 8));
 
-      if (len > 0 && _isValidTag(tag)) {
-        switch (tag) {
-          case 'APIC':
-            tags[tag] = _parsePicture(
-                sBytes.sublist(
-                    offset + _headerLength + 1, offset + _headerLength + len),
-                encoding);
-            break;
-          case 'TXXX':
-            final frame = sBytes.sublist(
-                offset + _headerLength + 1, offset + _headerLength + len);
-            final splitIndex = frame.indexOf(0);
-            tags[splitIndex == 0
-                    ? tag
-                    : encoding.decode(frame.sublist(0, splitIndex))] =
-                encoding.decode(frame.sublist(splitIndex + 1));
-            break;
-          case 'WXXX':
-            final frame = sBytes.sublist(
-                offset + _headerLength + 1, offset + _headerLength + len);
-            final splitIndex = frame.indexOf(0);
-            tags[splitIndex == 0
-                    ? tag
-                    : encoding.decode(frame.sublist(0, splitIndex))] =
-                latin1.decode(frame.sublist(splitIndex + 1));
-            break;
-          default:
-            tags[_getTag(tag)] = encoding.decode(_clearFrameData(sBytes.sublist(
-                offset + _headerLength + 1, offset + _headerLength + len)));
-        }
-      }
+      final m =
+          ff.getFrame(sBytes.sublist(offset)).decode(sBytes.sublist(offset));
+      tags[m.key] = m.value;
 
       offset = offset + _headerLength + len;
       end = offset < size;
@@ -170,30 +147,5 @@ class ID3V2Reader extends Reader {
     attachedPicture.imageData = buff;
 
     return attachedPicture;
-  }
-}
-
-class UTF16 extends Encoding {
-  @override
-  Converter<List<int>, String> get decoder => _UTF16Decoder();
-
-  @override
-  Converter<String, List<int>> get encoder => _UTF16Enoder();
-
-  @override
-  String get name => 'utf16';
-}
-
-class _UTF16Decoder extends Converter<List<int>, String> {
-  @override
-  String convert(List<int> input) {
-    return String.fromCharCodes(input);
-  }
-}
-
-class _UTF16Enoder extends Converter<String, List<int>> {
-  @override
-  List<int> convert(String input) {
-    return input.runes.toList();
   }
 }

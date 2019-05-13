@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
+import 'package:dart_tags/src/frames/id3v2/id3v2_frame.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/writers/id3v1.dart';
@@ -15,6 +16,15 @@ void main() {
   setUp(() {
     file1 = File('test/test_assets/id3v1.mp3');
     file2 = File('test/test_assets/id3v24.mp3');
+  });
+
+  group('Sandbox tests', () {
+    test('sandbox', () {
+      // final lupa = ID3V2Frame.frameSizeInBytes(200);
+      // print(lupa);
+      // final pupa = ID3V2Frame.sizeOf(lupa);
+      // print(pupa);
+    });
   });
 
   group('Writer Tests', () {
