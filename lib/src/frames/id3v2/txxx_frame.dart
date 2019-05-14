@@ -2,6 +2,25 @@ import 'dart:convert';
 
 import 'id3v2_frame.dart';
 
+/* http://id3.org/id3v2.4.0-frames
+4.2.   Text information frames
+
+   The text information frames are often the most important frames,
+   containing information like artist, album and more. There may only be
+   one text information frame of its kind in an tag. All text
+   information frames supports multiple strings, stored as a null
+   separated list, where null is reperesented by the termination code
+   for the charater encoding. All text frame identifiers begin with "T".
+   Only text frame identifiers begin with "T", with the exception of the
+   "TXXX" frame. All the text information frames have the following
+   format:
+
+     <Header for 'Text information frame', ID: "T000" - "TZZZ",
+     excluding "TXXX" described in 4.2.6.>
+     Text encoding                $xx
+     Information                  <text string(s) according to encoding>
+
+*/
 class TXXXFrame with ID3V2Frame<String> {
   @override
   List<int> encode(String value, [String key]) {
@@ -26,6 +45,10 @@ class TXXXFrame with ID3V2Frame<String> {
   MapEntry<String, String> decode(List<int> data) {
     final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
     final tag = encoding.decode(data.sublist(0, 4));
+
+    if (!isTagValid(tag)) {
+      return null;
+    }
 
     assert(tag == frameTag);
 

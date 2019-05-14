@@ -2,6 +2,21 @@ import 'dart:convert';
 
 import 'id3v2_frame.dart';
 
+/* http://id3.org/id3v2.4.0-frames
+4.3.2.   User defined URL link frame
+
+   This frame is intended for URL [URL] links concerning the audio file
+   in a similar way to the other "W"-frames. The frame body consists
+   of a description of the string, represented as a terminated string,
+   followed by the actual URL. The URL is always encoded with ISO-8859-1
+   [ISO-8859-1]. There may be more than one "WXXX" frame in each tag,
+   but only one with the same description.
+
+     <Header for 'User defined URL link frame', ID: "WXXX">
+     Text encoding     $xx
+     Description       <text string according to encoding> $00 (00)
+     URL               <text string>
+*/
 class WXXXFrame with ID3V2Frame<String> {
   @override
   List<int> encode(String value, [String key]) {
@@ -29,6 +44,10 @@ class WXXXFrame with ID3V2Frame<String> {
   MapEntry<String, String> decode(List<int> data) {
     final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
     final tag = encoding.decode(data.sublist(0, 4));
+
+    if (!isTagValid(tag)) {
+      return null;
+    }
 
     assert(tag == frameTag);
 

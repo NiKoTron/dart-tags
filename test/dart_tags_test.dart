@@ -2,6 +2,7 @@
 import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
+import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/id3v2_frame.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
@@ -12,18 +13,57 @@ import 'package:test/test.dart';
 void main() {
   File file1;
   File file2;
+  File picture;
 
   setUp(() {
     file1 = File('test/test_assets/id3v1.mp3');
     file2 = File('test/test_assets/id3v24.mp3');
+    picture = File('test/test_assets/mink-mingle-109837-unsplash.jpg');
   });
 
-  group('Sandbox tests', () {
-    test('sandbox', () {
-      // final lupa = ID3V2Frame.frameSizeInBytes(200);
-      // print(lupa);
-      // final pupa = ID3V2Frame.sizeOf(lupa);
-      // print(pupa);
+  group('V2 Frame Tests', () {
+    test('COMM encode', () {
+      final frame = COMMFrame();
+    });
+    test('COMM decode', () {
+      final frame = COMMFrame();
+      //COMM.......engdessu.commentador
+      final data = [
+        0x43,
+        0x4F,
+        0x4D,
+        0x4D,
+        0x00,
+        0x00,
+        0x00,
+        0x15,
+        0x00,
+        0x00,
+        0x03,
+        0x65,
+        0x6E,
+        0x67,
+        0x64,
+        0x65,
+        0x73,
+        0x73,
+        0x75,
+        0x00,
+        0x63,
+        0x6F,
+        0x6D,
+        0x6D,
+        0x65,
+        0x6E,
+        0x74,
+        0x61,
+        0x64,
+        0x6F,
+        0x72
+      ];
+
+      final foo = frame.decode(data);
+      print(foo);
     });
   });
 
@@ -40,24 +80,7 @@ void main() {
           'genre': 'Dream',
           'custom': 'Just a tag',
           'picture': AttachedPicture()
-            ..imageData = [
-              0x00,
-              0x01,
-              0x02,
-              0x03,
-              0x00,
-              0x01,
-              0x02,
-              0x03,
-              0x00,
-              0x01,
-              0x02,
-              0x03,
-              0x00,
-              0x01,
-              0x02,
-              0x03
-            ]
+            ..imageData = picture.readAsBytesSync()
             ..imageTypeCode = 0x03
             ..mime = 'image/jpeg'
             ..description = 'foo.jpg'
@@ -67,7 +90,11 @@ void main() {
 
       final writer = ID3V2Writer();
 
-      final blocks = writer.write(await file1.readAsBytes(), tag);
+      final blocks = writer.write(await file2.readAsBytes(), tag);
+
+      final result = File('test/result.mp3');
+
+      result.writeAsBytesSync(await blocks, mode: FileMode.write);
 
       final r = ID3V2Reader();
       final f = await r.read(blocks);

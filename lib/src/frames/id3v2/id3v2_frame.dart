@@ -4,6 +4,33 @@ import 'package:dart_tags/src/convert/utf16.dart';
 import 'package:dart_tags/src/frames/frame.dart';
 import 'package:dart_tags/src/model/consts.dart' as consts;
 
+class ID3V2FrameHeader {
+  String tag;
+  Encoding encoding;
+  int length;
+
+  // todo: implement futher
+  int flags;
+
+  ID3V2FrameHeader(this.tag, this.encoding, this.length, [this.flags]);
+
+  factory ID3V2FrameHeader fromBytes(List<int> bytes){
+    final encoding = getEncoding(bytes[10]);
+    return ID3V2FrameHeader
+  }
+}
+
+Encoding getEncoding(int type) {
+    switch (type) {
+      case _latin1:
+        return latin1;
+      case _utf8:
+        return Utf8Codec(allowMalformed: true);
+      default:
+        return UTF16();
+    }
+  }
+
 abstract class ID3V2Frame<T> implements Frame<T> {
   // [ISO-8859-1]. Terminated with $00.
   static const _latin1 = 0x00;
@@ -43,13 +70,16 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   MapEntry<String, T> decode(List<int> data) {
     final encoding = getEncoding(data[headerLength]);
 
-    final tag = encoding.decode(data.sublist(0, 4));
+    if (!isTagValid(tag)) {
+      return null;
+    }
 
     assert(tag == frameTag);
 
-    final len = sizeOf(data.sublist(4, 8));
+    final header = ID3V2FrameHeader(encoding.decode(data.sublist(0, 4)),
+        encoding, sizeOf(data.sublist(4, 8)));
 
-    final body = data.sublist(headerLength + 1, headerLength + len);
+    final body = data.sublist(headerLength + 1, headerLength + _len);
 
     return MapEntry<String, T>(
         getTagPseudonym(tag), decodeBody(body, encoding));
@@ -57,16 +87,8 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   String get frameTag;
 
-  static Encoding getEncoding(int type) {
-    switch (type) {
-      case _latin1:
-        return latin1;
-      case _utf8:
-        return Utf8Codec(allowMalformed: true);
-      default:
-        return UTF16();
-    }
-  }
+  bool isTagValid(String tag) =>
+      tag.isNotEmpty && consts.framesHeaders.containsKey(tag);
 
   int sizeOf(List<int> block) {
     assert(block.length == 4);
