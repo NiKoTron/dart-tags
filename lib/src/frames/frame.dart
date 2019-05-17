@@ -1,4 +1,5 @@
 import 'package:dart_tags/src/frames/id3v2/apic_frame.dart';
+import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/txxx_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/wxxx_frame.dart';
 
@@ -37,7 +38,8 @@ class FramesID3V24 {
   final Map<String, Frame> _frames = {
     'APIC': ApicFrame(),
     'TXXX': TXXXFrame(),
-    'WXXX': WXXXFrame()
+    'WXXX': WXXXFrame(),
+    'COMM': COMMFrame()
   };
 
   Frame<T> _getFrame<T>(String tag) {

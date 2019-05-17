@@ -26,40 +26,20 @@ class COMMFrame extends ID3V2Frame<Comment> {
   @override
   Comment decodeBody(List<int> data, Encoding enc) {
     final lang = enc.decode(data.sublist(0, 3));
-    final splitIndex = data.indexOf(0);
+    final splitIndex = data.indexOf(0x00);
     final description = enc.decode(data.sublist(3, splitIndex));
+    final body = enc.decode(data.sublist(splitIndex + 1));
+
+    return Comment(lang, description, body);
   }
 
   @override
   List<int> encode(Comment value, [String key]) {
-    return null;
+    final enc = header?.encoding ?? utf8;
+
+    return [];
   }
 
   @override
   String get frameTag => 'COMM';
-
-  @override
-  MapEntry<String, Comment> decode(List<int> data) {
-    final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
-    final tag = encoding.decode(data.sublist(0, 4));
-
-    if (!isTagValid(tag)) {
-      return null;
-    }
-
-    assert(tag == frameTag);
-
-    final len = sizeOf(data.sublist(4, 8));
-
-    final body = data.sublist(
-        ID3V2Frame.headerLength + 1, ID3V2Frame.headerLength + len);
-
-    final splitIndex = body.indexOf(0);
-
-    final description = encoding.decode(
-        data.sublist(ID3V2Frame.headerLength + 1, ID3V2Frame.headerLength + 4));
-
-    return MapEntry<String, Comment>(
-        frameTag, decodeBody(data.sublist(splitIndex + 1), encoding));
-  }
 }

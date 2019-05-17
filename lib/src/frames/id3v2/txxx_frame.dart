@@ -23,22 +23,6 @@ import 'id3v2_frame.dart';
 */
 class TXXXFrame with ID3V2Frame<String> {
   @override
-  List<int> encode(String value, [String key]) {
-    final body = utf8.encode('$key${utf8.decode([0x00])}$value');
-    return [
-      ...utf8.encode(frameTag),
-      ...frameSizeInBytes(body.length + 1),
-      ...separatorBytes,
-      ...body
-    ];
-  }
-
-  @override
-  String decodeBody(List<int> data, Encoding enc) {
-    return enc.decode(data);
-  }
-
-  @override
   String get frameTag => 'TXXX';
 
   @override
@@ -67,5 +51,21 @@ class TXXXFrame with ID3V2Frame<String> {
             data.sublist(ID3V2Frame.headerLength + 1 + splitIndex + 1,
                 ID3V2Frame.headerLength + len),
             encoding));
+  }
+
+  @override
+  String decodeBody(List<int> data, Encoding enc) {
+    return enc.decode(data);
+  }
+
+  @override
+  List<int> encode(String value, [String key]) {
+    final body = utf8.encode('$key${utf8.decode([0x00])}$value');
+    return [
+      ...utf8.encode(frameTag),
+      ...frameSizeInBytes(body.length + 1),
+      ...separatorBytes,
+      ...body
+    ];
   }
 }

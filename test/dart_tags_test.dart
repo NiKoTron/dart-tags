@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
-import 'package:dart_tags/src/frames/id3v2/id3v2_frame.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/writers/id3v1.dart';
@@ -64,6 +63,10 @@ void main() {
 
       final foo = frame.decode(data);
       print(foo);
+
+      expect(foo.value.comment, equals('commentador'));
+      expect(foo.value.description, equals('dessu'));
+      expect(foo.value.lang, equals('eng'));
     });
   });
 
