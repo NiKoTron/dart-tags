@@ -228,6 +228,17 @@ final framesHeaders = const <String, String>{
   'TSST': 'Set subtitle'
 };
 
+final framesV23_V24 = const <String, String>{
+  'EQUA': 'EQU2',
+  'IPLS': 'TIPL',
+  'RVAD': 'RVA2',
+  'TDAT': 'TDRC',
+  'TIME': 'TDRC',
+  'TORY': 'TDOR',
+  'TRDA': 'TDRC',
+  'TYER': 'TDRC'
+};
+
 final frameHeaderShortcutsID3V2_3 = const <String, String>{
   'TIT2': 'title',
   'TPE1': 'artist',

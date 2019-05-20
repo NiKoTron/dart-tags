@@ -58,7 +58,7 @@ class FramesID3V24 {
     if (data is List<int>) {
       final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
       final tag = encoding.decode(data.sublist(0, 4));
-      return _getFrame(tag);
+      return _getFrame(consts.framesV23_V24[tag] ?? tag);
     } else if (data is String) {
       return _getFrame(getTagByPseudonym(data));
     }
