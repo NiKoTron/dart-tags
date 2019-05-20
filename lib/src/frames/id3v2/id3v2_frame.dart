@@ -26,14 +26,24 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   @override
   MapEntry<String, T> decode(List<int> data) {
     final encoding = getEncoding(data[headerLength]);
+    final tag = encoding.decode(data.sublist(0, 4));
+    if (!consts.framesHeaders.keys.contains(tag)) {
+      print('$tag unknown tag');
+      return null;
+    }
+    final size = sizeOf(data.sublist(4, 8));
+    if (size <= 0) {
+      print('frame size should be greater than zero');
+      return null;
+    }
 
-    _header = ID3V2FrameHeader(encoding.decode(data.sublist(0, 4)), encoding,
-        sizeOf(data.sublist(4, 8)));
+    _header = ID3V2FrameHeader(tag, encoding, size);
 
-    final body = data.sublist(headerLength + 1, headerLength + header.length);
+    print('${data.length}, ${headerLength}, ${_header.length}');
+    final body = data.sublist(headerLength + 1, headerLength + _header?.length);
 
     return MapEntry<String, T>(
-        getTagPseudonym(header.tag), decodeBody(body, encoding));
+        getTagPseudonym(_header.tag), decodeBody(body, encoding));
   }
 
   T decodeBody(List<int> data, Encoding enc);
@@ -90,29 +100,38 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   }
 }
 
-/*
-3.1.   ID3v2 header
+/* http://id3.org/id3v2.4.0-structure
+4.   ID3v2 frame overview
 
-   The first part of the ID3v2 tag is the 10 byte tag header, laid out
-   as follows:
+   All ID3v2 frames consists of one frame header followed by one or more
+   fields containing the actual information. The header is always 10
+   bytes and laid out as follows:
 
-     ID3v2/file identifier      "ID3"
-     ID3v2 version              $04 00
-     ID3v2 flags                %abcd0000
-     ID3v2 size             4 * %0xxxxxxx
+     Frame ID      $xx xx xx xx  (four characters)
+     Size      4 * %0xxxxxxx
+     Flags         $xx xx
 
-   The first three bytes of the tag are always "ID3", to indicate that
-   this is an ID3v2 tag, directly followed by the two version bytes. The
-   first byte of ID3v2 version is its major version, while the second
-   byte is its revision number. In this case this is ID3v2.4.0. All
-   revisions are backwards compatible while major versions are not. If
-   software with ID3v2.4.0 and below support should encounter version
-   five or higher it should simply ignore the whole tag. Version or
-   revision will never be $FF.
+   The frame ID is made out of the characters capital A-Z and 0-9.
+   Identifiers beginning with "X", "Y" and "Z" are for experimental
+   frames and free for everyone to use, without the need to set the
+   experimental bit in the tag header. Bear in mind that someone else
+   might have used the same identifier as you. All other identifiers are
+   either used or reserved for future use.
 
-   The version is followed by the ID3v2 flags field, of which currently
-   four flags are used.
-  */
+   The frame ID is followed by a size descriptor containing the size of
+   the data in the final frame, after encryption, compression and
+   unsynchronisation. The size is excluding the frame header ('total
+   frame size' - 10 bytes) and stored as a 32 bit synchsafe integer.
+
+   In the frame header the size descriptor is followed by two flag
+   bytes. These flags are described in section 4.1.
+
+   There is no fixed order of the frames' appearance in the tag,
+   although it is desired that the frames are arranged in order of
+   significance concerning the recognition of the file. An example of
+   such order: UFID, TIT2, MCDI, TRCK ...
+
+*/
 
 class ID3V2FrameHeader {
   String tag;
@@ -122,5 +141,9 @@ class ID3V2FrameHeader {
   // todo: implement futher
   int flags;
 
-  ID3V2FrameHeader(this.tag, this.encoding, this.length, [this.flags]);
+  ID3V2FrameHeader(this.tag, this.encoding, this.length, [this.flags]) {
+    assert(consts.framesHeaders.keys.contains(this.tag));
+    assert(this.encoding != null);
+    assert(this.length > 0);
+  }
 }

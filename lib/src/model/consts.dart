@@ -205,6 +205,27 @@ final framesHeaders = const <String, String>{
   'WPAY': 'Payment',
   'WPUB': 'Publishers official webpage',
   'WXXX': 'User defined URL link frame',
+
+  //v2.4
+
+  'ASPI': 'Audio seek point index',
+  'EQU2': 'Equalization', //EQUA v2.3
+  'TIPL': 'Involved people list',
+  'RVA2': 'Relative volume adjustment', //RVAD v2.3
+  'SEEK': 'Seek frame',
+  'SIGN': 'Signature frame',
+  'TDRC': 'Date', //TDAT v2.3
+  'TDEN': 'Encoding time',
+  'TDRL': 'Release time',
+  'TDTG': 'Tagging time',
+  'TMCL': 'Musician credits list',
+  'TMOO': 'Mood',
+  'TDOR': 'Original release year', //TORY v2.3
+  'TPRO': 'Produced notice',
+  'TSOA': 'Album sort order',
+  'TSOP': 'Performer sort order',
+  'TSOT': 'Title sort order',
+  'TSST': 'Set subtitle'
 };
 
 final frameHeaderShortcutsID3V2_3 = const <String, String>{

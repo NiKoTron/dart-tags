@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
+import 'package:dart_tags/src/model/comment.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/writers/id3v1.dart';
@@ -22,10 +23,47 @@ void main() {
 
   group('V2 Frame Tests', () {
     test('COMM encode', () {
+      final expected = [
+        0x43,
+        0x4F,
+        0x4D,
+        0x4D,
+        0x00,
+        0x00,
+        0x00,
+        0x15,
+        0x00,
+        0x00,
+        0x03,
+        0x65,
+        0x6E,
+        0x67,
+        0x64,
+        0x65,
+        0x73,
+        0x73,
+        0x75,
+        0x00,
+        0x63,
+        0x6F,
+        0x6D,
+        0x6D,
+        0x65,
+        0x6E,
+        0x74,
+        0x61,
+        0x64,
+        0x6F,
+        0x72
+      ];
+
       final frame = COMMFrame();
+
+      final lst = frame.encode(Comment('eng', 'dessu', 'commentador'));
+
+      expect(lst, equals(expected));
     });
     test('COMM decode', () {
-      final frame = COMMFrame();
       //COMM.......engdessu.commentador
       final data = [
         0x43,
@@ -61,12 +99,11 @@ void main() {
         0x72
       ];
 
-      final foo = frame.decode(data);
-      print(foo);
+      final decodeList = COMMFrame().decode(data);
 
-      expect(foo.value.comment, equals('commentador'));
-      expect(foo.value.description, equals('dessu'));
-      expect(foo.value.lang, equals('eng'));
+      expect(decodeList.value.comment, equals('commentador'));
+      expect(decodeList.value.description, equals('dessu'));
+      expect(decodeList.value.lang, equals('eng'));
     });
   });
 
@@ -78,7 +115,7 @@ void main() {
           'artist': 'bar',
           'album': 'baz',
           'year': '2010',
-          'comment': 'lol it is a comment',
+          'comment': Comment('eng', 'desc_here', 'lol it is a comment'),
           'track': '6',
           'genre': 'Dream',
           'custom': 'Just a tag',
@@ -149,7 +186,7 @@ void main() {
           'artist': 'bar',
           'album': 'baz',
           'year': '2010',
-          'comment': 'lol it is a comment',
+          'comment': Comment('eng', 'desc', 'lol it is a comment'),
           'track': '6',
           'genre': 'Dream',
           'Custom': 'Just tag'

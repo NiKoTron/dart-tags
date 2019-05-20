@@ -37,7 +37,19 @@ class COMMFrame extends ID3V2Frame<Comment> {
   List<int> encode(Comment value, [String key]) {
     final enc = header?.encoding ?? utf8;
 
-    return [];
+    return [
+      ...enc.encode(frameTag),
+      ...frameSizeInBytes(value.lang.length +
+          value.description.length +
+          1 +
+          value.comment.length +
+          1),
+      ...separatorBytes,
+      ...enc.encode(value.lang),
+      ...enc.encode(value.description),
+      0x00,
+      ...enc.encode(value.comment)
+    ];
   }
 
   @override
