@@ -26,7 +26,6 @@ jobs:
     - stage: deploy
       name: "Deploy on pub.dartlang.org"
       if: branch = master
-      if: tag =~ /^v\d+.\d+.\d+/
       script: skip
       deploy:
         provider: script
