@@ -205,6 +205,38 @@ final framesHeaders = const <String, String>{
   'WPAY': 'Payment',
   'WPUB': 'Publishers official webpage',
   'WXXX': 'User defined URL link frame',
+
+  //v2.4
+
+  'ASPI': 'Audio seek point index',
+  'EQU2': 'Equalization', //EQUA v2.3
+  'TIPL': 'Involved people list',
+  'RVA2': 'Relative volume adjustment', //RVAD v2.3
+  'SEEK': 'Seek frame',
+  'SIGN': 'Signature frame',
+  'TDRC': 'Date', //TDAT v2.3
+  'TDEN': 'Encoding time',
+  'TDRL': 'Release time',
+  'TDTG': 'Tagging time',
+  'TMCL': 'Musician credits list',
+  'TMOO': 'Mood',
+  'TDOR': 'Original release year', //TORY v2.3
+  'TPRO': 'Produced notice',
+  'TSOA': 'Album sort order',
+  'TSOP': 'Performer sort order',
+  'TSOT': 'Title sort order',
+  'TSST': 'Set subtitle'
+};
+
+final framesV23_V24 = const <String, String>{
+  'EQUA': 'EQU2',
+  'IPLS': 'TIPL',
+  'RVAD': 'RVA2',
+  'TDAT': 'TDRC',
+  'TIME': 'TDRC',
+  'TORY': 'TDOR',
+  'TRDA': 'TDRC',
+  'TYER': 'TDRC'
 };
 
 final frameHeaderShortcutsID3V2_3 = const <String, String>{
@@ -308,3 +340,19 @@ final frameHeadersLegacy = const <String, String>{
   'WPB': 'WPB',
   'WXX': 'WXXX',
 };
+
+class EncodingBytes {
+  // [ISO-8859-1]. Terminated with $00.
+  static const latin1 = 0x00;
+
+  // [UTF-16] encoded Unicode [UNICODE] with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00. (use in future)
+  // ignore: unused_field
+  static const utf16 = 0x01;
+
+  // [UTF-16] encoded Unicode [UNICODE] without BOM. Terminated with $00 00. (use in future)
+  // ignore: unused_field
+  static const utf16be = 0x02;
+
+  // [UTF-8] encoded Unicode [UNICODE]. Terminated with $00.
+  static const utf8 = 0x03;
+}

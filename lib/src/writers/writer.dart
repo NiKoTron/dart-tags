@@ -5,7 +5,7 @@ import 'package:dart_tags/src/model/tag.dart';
 /// Writer could just transform only tags in byte array
 abstract class Writer {
   final String _type;
-  String _version;
+  final String _version;
 
   Writer(this._type, this._version);
 

@@ -33,7 +33,7 @@ class ID3V1Reader extends Reader {
 
       final id = sBytes[127];
       tagMap['genre'] =
-          id > consts.id3v1generes.length - 1 ? '' : consts.id3v1generes[id];
+          id > consts.id3v1generes.length - 1 || id < 0 ? '' : consts.id3v1generes[id];
     }
 
     return tagMap;

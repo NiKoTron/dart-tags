@@ -23,7 +23,7 @@ class ID3V1Writer extends Writer {
       ..addAll(_filledArray(
           tag.tags.containsKey('comment') ? tag.tags['comment'] : '', 28))
       ..add(0)
-      ..add(int.parse(tag.tags['track']))
+      ..add(tag.tags.containsKey('track') ? int.parse(tag.tags['track']) : 0)
       ..add(consts.id3v1generes.indexOf(tag.tags['genre']));
 
     final c = Completer<List<int>>.sync()..complete(b);

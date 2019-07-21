@@ -82,8 +82,15 @@ main(List<String> args) {
 
 Please feel free for feature requests and bugs at the [issue tracker][tracker].
 
+## In addition
+
+Thanx for the [Photo][photo] by [Mink Mingle][mink_mingle] on [Unsplash][unsplash] that we using in unit tests.
+
 [id3org]: http://id3.org/Home
 [tracker]: https://github.com/NiKoTron/dart-tags/issues
 [changelog]: CHANGELOG.md
 [license]: LICENSE
 [flutter_app]: https://github.com/NiKoTron/flug-tag
+[photo]: https://unsplash.com/photos/HRyjETL87Gg
+[mink_mingle]: https://unsplash.com/@minkmingle
+[unsplash]: https://unsplash.com
