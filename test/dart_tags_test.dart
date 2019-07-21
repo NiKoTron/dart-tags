@@ -299,7 +299,14 @@ void main() {
         ..createSync(recursive: true)
         ..writeAsBytesSync(pic.imageData);
 
+      final html = '<div><p>${pic.description}}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
+
+      File('$outputDir/${pic.description}.html')
+        ..createSync(recursive: true)
+        ..writeAsStringSync(html);
+
       print('check the $outputDir/${pic.description}.jpg');
+      print('check the $outputDir/${pic.description}.html');
 
       expect(pic, equals(pic1));
     });
