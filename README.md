@@ -14,11 +14,17 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
-## 0.1.1
+## 0.2.0
 
-- added writer for custom tags (TXXX)
-- added writer for attached picture (APIC tagged frame)
-- update tests for TXXX and APIC writers
+- added separate frame processing [Framer API](FRAMER.md)
+- update tests (added test for [issue #4](https://github.com/NiKoTron/dart-tags/issues/4))
+- fixed empty tag exception for id3v1
+- added [CoC](CODE_OF_CONDUCT.md)
+- fixed writing APIC tag [issue #3](https://github.com/NiKoTron/dart-tags/issues/3)
+
+## 0.1.2 (HotFix)
+
+- rise limmit of tag according to the [issue #3](https://github.com/NiKoTron/dart-tags/issues/3)
 
 ## Instalation
 
@@ -26,7 +32,7 @@ add dependency in pubsec.yaml
 
 ```yaml
 dependencies:
-  dart_tags: ^0.1.0
+  dart_tags: ^0.2.0
 ```
 
 ## Usage
@@ -47,36 +53,9 @@ main(List<String> args) {
 }
 ```
 
-### _Experimental_
+## Code of conduct
 
-And since 0.1.0 you can write some tags into the byte array:
-
-```dart
-import 'dart:io';
-
-import 'package:dart_tags/dart_tags.dart';
-
-main(List<String> args) {
-  TagProcessor tp = new TagProcessor();
-
-  final f = new File(args[0]);
-
-  final tag = Tag()
-    ..tags = {
-      'title': 'foo',
-      'artist': 'bar',
-      'album': 'baz',
-      'year': '2010',
-      'comment': 'lol it is a comment',
-      'track': '6',
-      'genre': 'Dream'
-    }
-    ..type = 'ID3'
-    ..version = '2.4';
-  
-  List<int> newByteArrayWithTags = tp.putTagsToByteArray(f.readAsBytes(), [tag]);
-}
-```
+Please refer our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Features and bugs
 
