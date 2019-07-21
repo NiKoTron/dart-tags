@@ -6,6 +6,7 @@ import 'package:dart_tags/src/readers/reader.dart';
 
 class ID3V2Reader extends Reader {
   // [ISO-8859-1]. Terminated with $00.
+  // ignore: unused_field
   static const _latin1 = 0x00;
 
   // [UTF-16] encoded Unicode [UNICODE] with BOM. All strings in the same frame SHALL have the same byteorder. Terminated with $00 00. (use in future)
@@ -17,6 +18,7 @@ class ID3V2Reader extends Reader {
   static const _utf16be = 0x02;
 
   // [UTF-8] encoded Unicode [UNICODE]. Terminated with $00.
+  // ignore: unused_field
   static const _utf8 = 0x03;
 
   int get _headerLength => version_o2 > 2 ? 10 : 6;

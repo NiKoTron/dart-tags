@@ -16,6 +16,7 @@ abstract class Frame<T> {
 class FrameFactory {
   String version;
 
+  // ignore: avoid_annotating_with_dynamic
   Frame Function(dynamic entry) _frameGetter;
 
   Frame defaultFrame;

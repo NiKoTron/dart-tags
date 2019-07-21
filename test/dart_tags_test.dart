@@ -132,9 +132,10 @@ void main() {
 
       final blocks = writer.write(await file2.readAsBytes(), tag);
 
-      final result = File('test/result.mp3');
-
-      result.writeAsBytesSync(await blocks, mode: FileMode.write);
+      File('test_out/result.mp3')
+      ..writeAsBytesSync(await blocks, mode: FileMode.write);
+      
+      print('check the test_out/result.mp3');
 
       final r = ID3V2Reader();
       final f = await r.read(blocks);
@@ -225,6 +226,14 @@ void main() {
     test('Test with file 2.4', () async {
       final foo = await TagProcessor()
           .getTagsFromByteArray(file2.readAsBytes(), [TagType.id3v2]);
+
+      final AttachedPicture pic = foo.first.tags['picture'];
+
+      File('test_out/${pic.description}.jpg')
+      ..writeAsBytesSync(pic.imageData);
+
+      print('check the test_out/result.mp3');
+
 
       expect(foo.length, equals(1));
 

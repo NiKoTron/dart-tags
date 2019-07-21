@@ -4,7 +4,7 @@ import 'package:dart_tags/src/model/tag.dart';
 
 abstract class Reader {
   final String _type;
-  String _version;
+  final String _version;
 
   Reader(this._type, this._version);
 
