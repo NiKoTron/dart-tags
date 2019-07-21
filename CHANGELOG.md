@@ -65,3 +65,11 @@
 ## 0.1.2 (HotFix)
 
 - rise limmit of tag according to the [issue #3](https://github.com/NiKoTron/dart-tags/issues/3)
+
+## 0.2.0
+
+- added separate frame processing [Framer API](FRAMER.md)
+- update tests (added test for [issue #4](https://github.com/NiKoTron/dart-tags/issues/4))
+- fixed empty tag exception for id3v1
+- added [CoC](CODE_OF_CONDUCT.md)
+- fixed writing APIC tag [issue #3](https://github.com/NiKoTron/dart-tags/issues/3)

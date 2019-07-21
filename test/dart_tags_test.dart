@@ -2,6 +2,8 @@
 import 'dart:io';
 
 import 'package:dart_tags/dart_tags.dart';
+import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
+import 'package:dart_tags/src/model/comment.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/writers/id3v1.dart';
@@ -11,10 +13,100 @@ import 'package:test/test.dart';
 void main() {
   File file1;
   File file2;
+  File picture;
+
+  const outputDir = 'test/output';
 
   setUp(() {
     file1 = File('test/test_assets/id3v1.mp3');
     file2 = File('test/test_assets/id3v24.mp3');
+    picture = File('test/test_assets/mink-mingle-109837-unsplash.jpg');
+  });
+
+  group('V2 Frame Tests', () {
+    test('COMM encode', () {
+      final expected = [
+        0x43,
+        0x4F,
+        0x4D,
+        0x4D,
+        0x00,
+        0x00,
+        0x00,
+        0x15,
+        0x00,
+        0x00,
+        0x03,
+        0x65,
+        0x6E,
+        0x67,
+        0x64,
+        0x65,
+        0x73,
+        0x73,
+        0x75,
+        0x00,
+        0x63,
+        0x6F,
+        0x6D,
+        0x6D,
+        0x65,
+        0x6E,
+        0x74,
+        0x61,
+        0x64,
+        0x6F,
+        0x72
+      ];
+
+      final frame = COMMFrame();
+
+      final lst = frame.encode(Comment('eng', 'dessu', 'commentador'));
+
+      expect(lst, equals(expected));
+    });
+    test('COMM decode', () {
+      //COMM.......engdessu.commentador
+      final data = [
+        0x43,
+        0x4F,
+        0x4D,
+        0x4D,
+        0x00,
+        0x00,
+        0x00,
+        0x15,
+        0x00,
+        0x00,
+        0x03,
+        0x65,
+        0x6E,
+        0x67,
+        0x64,
+        0x65,
+        0x73,
+        0x73,
+        0x75,
+        0x00,
+        0x63,
+        0x6F,
+        0x6D,
+        0x6D,
+        0x65,
+        0x6E,
+        0x74,
+        0x61,
+        0x64,
+        0x6F,
+        0x72
+      ];
+
+      final decodeList = COMMFrame().decode(data);
+
+      expect(decodeList.value.comment, equals('commentador'));
+      expect(decodeList.value.description, equals('dessu'));
+      expect(decodeList.value.lang, equals('eng'));
+    });
   });
 
   group('Writer Tests', () {
@@ -25,29 +117,12 @@ void main() {
           'artist': 'bar',
           'album': 'baz',
           'year': '2010',
-          'comment': 'lol it is a comment',
+          'comment': Comment('eng', 'desc_here', 'lol it is a comment'),
           'track': '6',
           'genre': 'Dream',
           'custom': 'Just a tag',
-          'APIC': AttachedPicture()
-            ..imageData = [
-              0x00,
-              0x01,
-              0x02,
-              0x03,
-              0x00,
-              0x01,
-              0x02,
-              0x03,
-              0x00,
-              0x01,
-              0x02,
-              0x03,
-              0x00,
-              0x01,
-              0x02,
-              0x03
-            ]
+          'picture': AttachedPicture()
+            ..imageData = picture.readAsBytesSync()
             ..imageTypeCode = 0x03
             ..mime = 'image/jpeg'
             ..description = 'foo.jpg'
@@ -57,7 +132,7 @@ void main() {
 
       final writer = ID3V2Writer();
 
-      final blocks = writer.write(await file1.readAsBytes(), tag);
+      final blocks = writer.write(await file2.readAsBytes(), tag);
 
       final r = ID3V2Reader();
       final f = await r.read(blocks);
@@ -109,7 +184,7 @@ void main() {
           'artist': 'bar',
           'album': 'baz',
           'year': '2010',
-          'comment': 'lol it is a comment',
+          'comment': Comment('eng', 'desc', 'lol it is a comment'),
           'track': '6',
           'genre': 'Dream',
           'Custom': 'Just tag'
@@ -166,6 +241,67 @@ void main() {
           throwsA(predicate<Exception>((e) =>
               e is ParsingException &&
               e.cause == ParsingException.byteDataNull)));
+    });
+  });
+
+  group('Issues test', () {
+    //https://github.com/NiKoTron/dart-tags/issues/4
+    test(' Artist tag restriction on characters [#4]', () async {
+      final artistName = 'Ilaiyaraaja, K. S. Chithra, S. P. BalasubrahmanyamT';
+
+      final tag2 = Tag()
+        ..tags = {
+          'artist': artistName,
+        }
+        ..type = 'ID3'
+        ..version = '2.4';
+
+      final _av = () async =>
+          [0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00];
+
+      final foo = await TagProcessor().putTagsToByteArray(_av(), [tag2]);
+
+      final _fr = () async => foo;
+
+      final rdr2 = ID3V2Reader();
+      final t2 = await rdr2.read(_fr());
+      expect(t2.tags, equals(tag2.tags));
+    });
+
+    //https://github.com/NiKoTron/dart-tags/issues/3
+    test(' Example for writing APIC tags [#3] ', () async {
+      final pic1 = AttachedPicture()
+        ..imageData = picture.readAsBytesSync()
+        ..imageTypeCode = 0x03
+        ..mime = 'image/jpeg'
+        ..description = 'foo.jpg';
+
+      final tag = Tag()
+        ..tags = {'picture': pic1}
+        ..type = 'ID3'
+        ..version = '2.4';
+
+      final writer = ID3V2Writer();
+
+      final blocks = writer.write(await file2.readAsBytes(), tag);
+
+      File('$outputDir/result.mp3')
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(await blocks, mode: FileMode.write);
+      print('check the $outputDir/result.mp3');
+
+      final r = ID3V2Reader();
+      final f = await r.read(blocks);
+
+      final AttachedPicture pic = f.tags['picture'];
+
+      File('$outputDir/${pic.description}.jpg')
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(pic.imageData);
+
+      print('check the $outputDir/${pic.description}.jpg');
+
+      expect(pic, equals(pic1));
     });
   });
 }
