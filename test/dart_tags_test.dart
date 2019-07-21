@@ -244,10 +244,7 @@ void main() {
     });
   });
 
-
-
-  group('Issues test', (){
-
+  group('Issues test', () {
     //https://github.com/NiKoTron/dart-tags/issues/4
     test(' Artist tag restriction on characters [#4]', () async {
       final artistName = 'Ilaiyaraaja, K. S. Chithra, S. P. BalasubrahmanyamT';
@@ -269,22 +266,18 @@ void main() {
       final rdr2 = ID3V2Reader();
       final t2 = await rdr2.read(_fr());
       expect(t2.tags, equals(tag2.tags));
-
     });
 
     //https://github.com/NiKoTron/dart-tags/issues/3
     test(' Example for writing APIC tags [#3] ', () async {
-        
       final pic1 = AttachedPicture()
-            ..imageData = picture.readAsBytesSync()
-            ..imageTypeCode = 0x03
-            ..mime = 'image/jpeg'
-            ..description = 'foo.jpg';
+        ..imageData = picture.readAsBytesSync()
+        ..imageTypeCode = 0x03
+        ..mime = 'image/jpeg'
+        ..description = 'foo.jpg';
 
       final tag = Tag()
-        ..tags = {
-          'picture': pic1
-        }
+        ..tags = {'picture': pic1}
         ..type = 'ID3'
         ..version = '2.4';
 
@@ -293,8 +286,8 @@ void main() {
       final blocks = writer.write(await file2.readAsBytes(), tag);
 
       File('$outputDir/result.mp3')
-      ..createSync(recursive: true)
-      ..writeAsBytesSync(await blocks, mode: FileMode.write);
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(await blocks, mode: FileMode.write);
       print('check the $outputDir/result.mp3');
 
       final r = ID3V2Reader();
@@ -303,13 +296,12 @@ void main() {
       final AttachedPicture pic = f.tags['picture'];
 
       File('$outputDir/${pic.description}.jpg')
-      ..createSync(recursive: true)
-      ..writeAsBytesSync(pic.imageData);
+        ..createSync(recursive: true)
+        ..writeAsBytesSync(pic.imageData);
 
       print('check the $outputDir/${pic.description}.jpg');
-      
-      expect(pic, equals(pic1));
 
+      expect(pic, equals(pic1));
     });
   });
 }
