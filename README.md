@@ -2,6 +2,7 @@
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/10f86d6f399346239482d19a7072becc)](https://app.codacy.com/app/NiKoTron/dart-tags?utm_source=github.com&utm_medium=referral&utm_content=NiKoTron/dart-tags&utm_campaign=Badge_Grade_Dashboard)
 [![pub package](https://img.shields.io/pub/v/dart_tags.svg)](https://pub.dartlang.org/packages/dart_tags) [![Build Status](https://travis-ci.org/NiKoTron/dart-tags.svg?branch=master)](https://travis-ci.org/NiKoTron/dart-tags)
+[![Awesome Dart](https://img.shields.io/badge/Awesome-Dart-blue.svg?longCache=true)](https://github.com/yissachar/awesome-dart#parsers)
 
 The library for parsing [ID3][id3org] tags, written in pure Dart.
 
