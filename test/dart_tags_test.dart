@@ -299,7 +299,8 @@ void main() {
         ..createSync(recursive: true)
         ..writeAsBytesSync(pic.imageData);
 
-      final html = '<div><p>${pic.description}}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
+      final html =
+          '<div><p>${pic.description}}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
 
       File('$outputDir/${pic.description}.html')
         ..createSync(recursive: true)
