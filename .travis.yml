@@ -6,6 +6,7 @@ dart:
 stages:
   - analyze_and_format
   - testing
+  - coverage
   - prepub
   - deploy
 
@@ -19,14 +20,18 @@ jobs:
       name: "Unit tests"
       script: pub run test
     
+    - stage: coverage
+      name: "Test coverage report"
+      script: ./tool/travis/cov.sh
+
     - stage: prepub
       name: "Prepublish checks"
       script: pub publish --dry-run
       
     - stage: deploy
       name: "Deploy on pub.dartlang.org"
-      if: branch = master
-      script: skip
+      #if: branch = master
+      #script: skip
       deploy:
         provider: script
         script: ./tool/travis/pub.sh
