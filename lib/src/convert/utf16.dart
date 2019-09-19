@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:utf/utf.dart';
+
 class UTF16 extends Encoding {
   @override
   Converter<List<int>, String> get decoder => _UTF16Decoder();
@@ -14,7 +16,7 @@ class UTF16 extends Encoding {
 class _UTF16Decoder extends Converter<List<int>, String> {
   @override
   String convert(List<int> input) {
-    return String.fromCharCodes(input);
+    return decodeUtf16le(input, 0, input.length);
   }
 }
 
