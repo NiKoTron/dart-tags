@@ -267,10 +267,9 @@ void main() {
   });
 
   group('Reader Tests', () {
-    
     test('Test with file unspecified', () async {
-    final foo = await TagProcessor()
-          .getTagsFromByteArray(file2.readAsBytes());
+      final foo =
+          await TagProcessor().getTagsFromByteArray(file2.readAsBytes());
 
       expect(foo.length, equals(2));
 
@@ -280,7 +279,7 @@ void main() {
       expect(foo[1].type, equals('ID3'));
       expect(foo[1].version, equals('2.4.0'));
     });
-    
+
     test('Test with file 1.1', () async {
       final foo = await TagProcessor()
           .getTagsFromByteArray(file1.readAsBytes(), [TagType.id3v1]);
@@ -301,9 +300,9 @@ void main() {
       expect(foo[0].version, equals('2.4.0'));
     });
 
-  test('Test with file 1.1 ByteData', () async {
-      final foo = await TagProcessor()
-          .getTagsFromByteData(ByteData.view(file1.readAsBytesSync().buffer), [TagType.id3v1]);
+    test('Test with file 1.1 ByteData', () async {
+      final foo = await TagProcessor().getTagsFromByteData(
+          ByteData.view(file1.readAsBytesSync().buffer), [TagType.id3v1]);
 
       expect(foo.length, equals(1));
 
@@ -312,8 +311,8 @@ void main() {
     });
 
     test('Test with file 2.4 ByteData', () async {
-      final foo = await TagProcessor()
-          .getTagsFromByteData(ByteData.view(file2.readAsBytesSync().buffer), [TagType.id3v2]);
+      final foo = await TagProcessor().getTagsFromByteData(
+          ByteData.view(file2.readAsBytesSync().buffer), [TagType.id3v2]);
 
       expect(foo.length, equals(1));
 
