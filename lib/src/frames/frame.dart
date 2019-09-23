@@ -8,8 +8,12 @@ import 'package:dart_tags/src/model/consts.dart' as consts;
 
 import 'id3v2/default_frame.dart';
 
+/// Abstract implementation of id3v2 frame
 abstract class Frame<T> {
+  /// Encode [key] tag with [value] to bytearray
   List<int> encode(T value, [String key]);
+
+  /// Decode byte [data] to frame data map
   MapEntry<String, T> decode(List<int> data);
 }
 
