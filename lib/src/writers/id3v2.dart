@@ -27,6 +27,7 @@ class ID3V2Writer extends Writer {
     return c.future;
   }
 
+  /// Returns size of frame in bytes
   static List<int> frameSizeInBytes(int value) {
     assert(value <= 16777216);
 

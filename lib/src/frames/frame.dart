@@ -1,15 +1,19 @@
+import 'dart:convert';
+
 import 'package:dart_tags/src/frames/id3v2/apic_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/txxx_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/wxxx_frame.dart';
-
-import 'id3v2/default_frame.dart';
-import 'id3v2/id3v2_frame.dart';
-
 import 'package:dart_tags/src/model/consts.dart' as consts;
 
+import 'id3v2/default_frame.dart';
+
+/// Abstract implementation of id3v2 frame
 abstract class Frame<T> {
+  /// Encode [key] tag with [value] to bytearray
   List<int> encode(T value, [String key]);
+
+  /// Decode byte [data] to frame data map
   MapEntry<String, T> decode(List<int> data);
 }
 
@@ -57,8 +61,7 @@ class FramesID3V24 {
     assert(data is List<int> || data is String);
 
     if (data is List<int>) {
-      final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
-      final tag = encoding.decode(data.sublist(0, 4));
+      final tag = latin1.decode(data.sublist(0, 4));
       return _getFrame(consts.framesV23_V24[tag] ?? tag);
     } else if (data is String) {
       return _getFrame(getTagByPseudonym(data));

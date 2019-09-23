@@ -47,7 +47,7 @@ class TagProcessor {
   /// Returns the tags from the byte array
   Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
       [List<TagType> types]) async {
-    if (bytes == null) {
+    if (await bytes == null) {
       throw ParsingException(ParsingException.byteArrayNull);
     }
 
@@ -88,7 +88,7 @@ class TagProcessor {
 
   Future<List<int>> putTagsToByteArray(Future<List<int>> bytes,
       [List<Tag> tags]) async {
-    if (bytes == null) {
+    if (await bytes == null) {
       throw ParsingException(ParsingException.byteArrayNull);
     }
     var b = await bytes;

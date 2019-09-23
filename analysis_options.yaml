@@ -67,4 +67,5 @@ linter:
 
     - prefer_single_quotes
     - package_api_docs
+#    - public_member_api_docs
     
