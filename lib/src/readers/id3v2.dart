@@ -62,7 +62,7 @@ class ID3V2Reader extends Reader {
     var end = true;
 
     while (end) {
-      final len = _sizeOf(sBytes.sublist(offset + 4, offset + 8));
+      final len = _frameSizeOf(sBytes.sublist(offset + 4, offset + 8));
       final fr = sBytes.sublist(offset);
 
       final m = ff.getFrame(fr).decode(sBytes.sublist(offset));
@@ -74,6 +74,17 @@ class ID3V2Reader extends Reader {
     }
 
     return tags;
+  }
+
+  int _frameSizeOf(List<int> block) {
+    assert(block.length == 4);
+
+    var len = block[0] << 24;
+    len += block[1] << 16;
+    len += block[2] << 8;
+    len += block[3];
+
+    return len;
   }
 
   int _sizeOf(List<int> block) {
