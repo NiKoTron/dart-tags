@@ -31,12 +31,15 @@ class ID3V2Writer extends Writer {
   static List<int> frameSizeInBytes(int value) {
     assert(value <= 16777216);
 
-    return [
-      ((value & 0xFF000000) >> 21),
-      ((value & 0x00FF0000) >> 14),
-      ((value & 0x0000FF00) >> 7),
-      ((value & 0x000000FF) >> 0)
-    ];
+    final block = List<int>(4);
+    final sevenBitMask = 0x7f;
+
+    block[0] = (value >> 21) & sevenBitMask;
+    block[1] = (value >> 14) & sevenBitMask;
+    block[2] = (value >> 7) & sevenBitMask;
+    block[3] = (value >> 0) & sevenBitMask;
+
+    return block;
   }
 
   @override
