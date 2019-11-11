@@ -14,6 +14,7 @@ import 'package:test/test.dart';
 void main() {
   File file1;
   File file2;
+  File file3;
   File picture;
 
   const outputDir = 'test/output';
@@ -21,6 +22,7 @@ void main() {
   setUp(() {
     file1 = File('test/test_assets/id3v1.mp3');
     file2 = File('test/test_assets/id3v24.mp3');
+    file3 = File('test/test_assets/id3v23.mp3');
     picture = File('test/test_assets/mink-mingle-109837-unsplash.jpg');
   });
 
@@ -288,6 +290,16 @@ void main() {
 
       expect(foo[0].type, equals('ID3'));
       expect(foo[0].version, equals('1.1'));
+    });
+
+    test('Test with file 2.3', () async {
+      final foo = await TagProcessor()
+          .getTagsFromByteArray(file3.readAsBytes(), [TagType.id3v2]);
+
+      expect(foo.length, equals(1));
+
+      expect(foo[0].type, equals('ID3'));
+      expect(foo[0].version, equals('2.3.0'));
     });
 
     test('Test with file 2.4', () async {

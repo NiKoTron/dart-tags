@@ -27,19 +27,19 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   MapEntry<String, T> decode(List<int> data) {
     final tag = latin1.decode(data.sublist(0, 4));
     if (!consts.framesHeaders.keys.contains(tag)) {
-      print('$tag unknown tag');
+      //print('$tag unknown tag');
       return null;
     }
     final size = sizeOf(data.sublist(4, 8));
     if (size <= 0) {
-      print('frame size should be greater than zero');
+      //print('frame size should be greater than zero');
       return null;
     }
 
     final encoding = getEncoding(data[headerLength]);
     _header = ID3V2FrameHeader(tag, encoding, size);
 
-    print('${data.length}, ${headerLength}, ${_header.length}');
+    //print('${data.length}, ${headerLength}, ${_header.length}');
     final body = data.sublist(headerLength + 1, headerLength + _header?.length);
 
     return MapEntry<String, T>(
@@ -53,11 +53,13 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   List<int> frameSizeInBytes(int value) {
     final block = List<int>(4);
+    final eightBitMask = 0xff;
 
-    block[0] = ((value & 0xFF000000) >> 21);
-    block[1] = ((value & 0x00FF0000) >> 14);
-    block[2] = ((value & 0x0000FF00) >> 7);
-    block[3] = ((value & 0x000000FF) >> 0);
+    block[0] = (value >> 24) & eightBitMask;
+    block[1] = (value >> 16) & eightBitMask;
+    block[2] = (value >> 8) & eightBitMask;
+    block[3] = (value >> 0) & eightBitMask;
+
 
     return block;
   }
@@ -80,9 +82,9 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   int sizeOf(List<int> block) {
     assert(block.length == 4);
 
-    var len = block[0] << 21;
-    len += block[1] << 14;
-    len += block[2] << 7;
+    var len = block[0] << 24;
+    len += block[1] << 16;
+    len += block[2] << 8;
     len += block[3];
 
     return len;
