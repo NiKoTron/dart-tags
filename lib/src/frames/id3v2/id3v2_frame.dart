@@ -60,7 +60,6 @@ abstract class ID3V2Frame<T> implements Frame<T> {
     block[2] = (value >> 8) & eightBitMask;
     block[3] = (value >> 0) & eightBitMask;
 
-
     return block;
   }
 
