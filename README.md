@@ -16,18 +16,15 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
+## 0.2.2
+
+- fixed an issue with wrong header calculation thanx [@frankdenouter](https://github.com/frankdenouter) and his [PR](https://github.com/NiKoTron/dart-tags/pull/10)
+- added test assets v23 for reader
+
 ## 0.2.1
 
 - fixed an issue with wrong utf16 decoding thanx [@magodo](https://github.com/magodo) and his [PR](https://github.com/NiKoTron/dart-tags/pull/9)
 - wrote some additional tests
-
-## 0.2.0
-
-- added separate frame processing [Framer API](FRAMER.md)
-- update tests (added test for [issue #4](https://github.com/NiKoTron/dart-tags/issues/4))
-- fixed empty tag exception for id3v1
-- added [CoC](CODE_OF_CONDUCT.md)
-- fixed writing APIC tag [issue #3](https://github.com/NiKoTron/dart-tags/issues/3)
 
 ## Instalation
 
@@ -35,7 +32,7 @@ add dependency in pubsec.yaml
 
 ```yaml
 dependencies:
-  dart_tags: ^0.2.0
+  dart_tags: ^0.2.2
 ```
 
 ## Usage
@@ -65,6 +62,8 @@ Please refer our [code of conduct](CODE_OF_CONDUCT.md).
 Please feel free for feature requests and bugs at the [issue tracker][tracker].
 
 ## In addition
+
+Thanx for contributing [@magodo](https://github.com/magodo), [@frankdenouter](https://github.com/frankdenouter)
 
 Thanx for the [Photo][photo] by [Mink Mingle][mink_mingle] on [Unsplash][unsplash] that we using in unit tests.
 

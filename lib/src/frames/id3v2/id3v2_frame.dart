@@ -27,19 +27,19 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   MapEntry<String, T> decode(List<int> data) {
     final tag = latin1.decode(data.sublist(0, 4));
     if (!consts.framesHeaders.keys.contains(tag)) {
-      print('$tag unknown tag');
+      //print('$tag unknown tag');
       return null;
     }
     final size = sizeOf(data.sublist(4, 8));
     if (size <= 0) {
-      print('frame size should be greater than zero');
+      //print('frame size should be greater than zero');
       return null;
     }
 
     final encoding = getEncoding(data[headerLength]);
     _header = ID3V2FrameHeader(tag, encoding, size);
 
-    print('${data.length}, ${headerLength}, ${_header.length}');
+    //print('${data.length}, ${headerLength}, ${_header.length}');
     final body = data.sublist(headerLength + 1, headerLength + _header?.length);
 
     return MapEntry<String, T>(
