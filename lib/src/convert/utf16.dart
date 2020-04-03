@@ -16,7 +16,7 @@ class UTF16 extends Encoding {
 class _UTF16Decoder extends Converter<List<int>, String> {
   @override
   String convert(List<int> input) {
-    return decodeUtf16le(input, 0, input.length);
+    return decodeUtf16(input);
   }
 }
 
