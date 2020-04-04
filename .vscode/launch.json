@@ -5,6 +5,14 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "type": "bashdb",
+            "request": "launch",
+            "name": "travis scripts",
+            "cwd": "${workspaceFolder}",
+            "program": "${command:SelectScriptName}",
+            "args": []
+        },
+        {
             "name": "Unit Tests",
             "type": "dart",
             "request": "launch",
@@ -19,5 +27,6 @@
                 "$HOME/Music"
             ]
         }
+
     ]
 }

@@ -2,7 +2,8 @@ name: dart_tags
 description: The library for work with music tags like ID3. Written on pure Dart. It can be used in flutter, web, and vm projects.
 version: 0.2.3
 homepage: https://github.com/NiKoTron/dart-tags
-author: NiKoTron <nickolay.simonov@gmail.com>
+# author[s] is deprecated
+# author: NiKoTron <nickolay.simonov@gmail.com>
 
 environment:
   sdk: '>=2.3.0 <3.0.0' 

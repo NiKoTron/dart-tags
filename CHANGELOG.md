@@ -1,6 +1,7 @@
 ## 0.2.3
 
 - Fixed issue [issue #13](https://github.com/NiKoTron/dart-tags/issues/13))
+- Updated pedantic rules up to 1.9.0
 
 ## 0.2.2
 
