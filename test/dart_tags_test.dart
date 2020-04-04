@@ -430,7 +430,8 @@ void main() {
       final expectedArtist = 'Полина Гагарина&Егор Крид';
 
       final file = File('test/test_assets/issue-13.mp3');
-      final tags = await TagProcessor().getTagsFromByteArray(file.readAsBytes(), [TagType.id3v2]);
+      final tags = await TagProcessor()
+          .getTagsFromByteArray(file.readAsBytes(), [TagType.id3v2]);
 
       expect(tags.length, 1);
       expect(tags[0] != null, true);
@@ -440,6 +441,5 @@ void main() {
       expect(tags[0].tags.containsKey('artist'), true);
       expect(tags[0].tags['artist'], expectedArtist);
     });
-
   });
 }
