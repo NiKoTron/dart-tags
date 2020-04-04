@@ -60,7 +60,6 @@ abstract class ID3V2Frame<T> implements Frame<T> {
     block[2] = (value >> 8) & eightBitMask;
     block[3] = (value >> 0) & eightBitMask;
 
-
     return block;
   }
 
@@ -144,8 +143,8 @@ class ID3V2FrameHeader {
   int flags;
 
   ID3V2FrameHeader(this.tag, this.encoding, this.length, [this.flags]) {
-    assert(consts.framesHeaders.keys.contains(this.tag));
-    assert(this.encoding != null);
-    assert(this.length > 0);
+    assert(consts.framesHeaders.keys.contains(tag));
+    assert(encoding != null);
+    assert(length > 0);
   }
 }

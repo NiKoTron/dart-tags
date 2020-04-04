@@ -10,21 +10,20 @@ class ID3V1Writer extends Writer {
 
   @override
   Future<List<int>> prepareTag(Tag tag) {
-    final b = List<int>()
-      ..addAll(latin1.encode('TAG'))
-      ..addAll(
-          _filledArray(tag.tags.containsKey('title') ? tag.tags['title'] : ''))
-      ..addAll(_filledArray(
-          tag.tags.containsKey('artist') ? tag.tags['artist'] : ''))
-      ..addAll(
-          _filledArray(tag.tags.containsKey('album') ? tag.tags['album'] : ''))
-      ..addAll(
-          _filledArray(tag.tags.containsKey('year') ? tag.tags['year'] : '', 4))
-      ..addAll(_filledArray(
-          tag.tags.containsKey('comment') ? tag.tags['comment'] : '', 28))
-      ..add(0)
-      ..add(tag.tags.containsKey('track') ? int.parse(tag.tags['track']) : 0)
-      ..add(consts.id3v1generes.indexOf(tag.tags['genre']));
+    final b = <int>[
+      ...(latin1.encode('TAG')),
+      ...(_filledArray(tag.tags.containsKey('title') ? tag.tags['title'] : '')),
+      ...(_filledArray(
+          tag.tags.containsKey('artist') ? tag.tags['artist'] : '')),
+      ...(_filledArray(tag.tags.containsKey('album') ? tag.tags['album'] : '')),
+      ...(_filledArray(
+          tag.tags.containsKey('year') ? tag.tags['year'] : '', 4)),
+      ...(_filledArray(
+          tag.tags.containsKey('comment') ? tag.tags['comment'] : '', 28)),
+      (0),
+      (tag.tags.containsKey('track') ? int.parse(tag.tags['track']) : 0),
+      (consts.id3v1generes.indexOf(tag.tags['genre']))
+    ];
 
     final c = Completer<List<int>>.sync()..complete(b);
 

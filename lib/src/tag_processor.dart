@@ -71,7 +71,7 @@ class TagProcessor {
       throw ParsingException(ParsingException.byteDataNull);
     }
 
-    final tags = List<Tag>();
+    final tags = <Tag>[];
     final c = Completer<List<int>>.sync()
       ..complete(bytes.buffer.asUint8List().toList());
 

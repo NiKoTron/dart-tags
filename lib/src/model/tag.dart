@@ -20,8 +20,8 @@ class Tag {
     if (tags.length != other.tags.length) {
       return false;
     }
-    return tags.keys.every((key) =>
-        other.tags.containsKey(key) && this.tags[key] == other.tags[key]);
+    return tags.keys.every(
+        (key) => other.tags.containsKey(key) && tags[key] == other.tags[key]);
   }
 
   @override
