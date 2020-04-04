@@ -348,7 +348,7 @@ void main() {
 
   group('Issues test', () {
     //https://github.com/NiKoTron/dart-tags/issues/4
-    test(' Artist tag restriction on characters [#4]', () async {
+    test('Artist tag restriction on characters [#4]', () async {
       final artistName = 'Ilaiyaraaja, K. S. Chithra, S. P. BalasubrahmanyamT';
 
       final tag2 = Tag()
@@ -382,7 +382,7 @@ void main() {
     });
 
     //https://github.com/NiKoTron/dart-tags/issues/3
-    test(' Example for writing APIC tags [#3] ', () async {
+    test('Example for writing APIC tags [#3] ', () async {
       final pic1 = AttachedPicture()
         ..imageData = picture.readAsBytesSync()
         ..imageTypeCode = 0x03
@@ -423,6 +423,23 @@ void main() {
       print('check the $outputDir/${pic.description}.html');
 
       expect(pic, equals(pic1));
+    });
+
+    //https://github.com/NiKoTron/dart-tags/issues/13
+    test('Wrong utf16 decoding', () async {
+      final expectedArtist = 'Полина Гагарина&Егор Крид';
+
+      final file = File('test/test_assets/issue-13.mp3');
+      final tags = await TagProcessor()
+          .getTagsFromByteArray(file.readAsBytes(), [TagType.id3v2]);
+
+      expect(tags.length, 1);
+      expect(tags[0] != null, true);
+      expect(tags[0].type, 'ID3');
+      expect(tags[0].version, '2.3.0');
+      expect(tags[0].tags.isNotEmpty, true);
+      expect(tags[0].tags.containsKey('artist'), true);
+      expect(tags[0].tags['artist'], expectedArtist);
     });
   });
 }

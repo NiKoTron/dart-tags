@@ -10,7 +10,7 @@ class ID3V2Writer extends Writer {
 
   @override
   Future<List<int>> prepareTag(Tag tag) {
-    final tagsF = List<int>();
+    final tagsF = <int>[];
 
     final ff = FrameFactory('ID3', '2.4.0');
 

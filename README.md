@@ -16,15 +16,14 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
+## 0.2.3
+
+- Fixed wrong utf16 decoding. issue [issue #13](https://github.com/NiKoTron/dart-tags/issues/13))
+
 ## 0.2.2
 
 - fixed an issue with wrong header calculation thanx [@frankdenouter](https://github.com/frankdenouter) and his [PR](https://github.com/NiKoTron/dart-tags/pull/10)
 - added test assets v23 for reader
-
-## 0.2.1
-
-- fixed an issue with wrong utf16 decoding thanx [@magodo](https://github.com/magodo) and his [PR](https://github.com/NiKoTron/dart-tags/pull/9)
-- wrote some additional tests
 
 ## Instalation
 
