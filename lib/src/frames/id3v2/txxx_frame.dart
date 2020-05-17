@@ -1,4 +1,7 @@
 import 'dart:convert';
+import 'package:collection/collection.dart' as collection;
+
+import 'package:dart_tags/src/convert/utf16.dart';
 
 import 'id3v2_frame.dart';
 
@@ -28,7 +31,7 @@ class TXXXFrame with ID3V2Frame<String> {
   @override
   MapEntry<String, String> decode(List<int> data) {
     final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
-    final tag = encoding.decode(data.sublist(0, 4));
+    final tag = latin1.decode(data.sublist(0, 4)); //tags encoded in `latin1`
 
     if (!isTagValid(tag)) {
       return null;
@@ -41,14 +44,22 @@ class TXXXFrame with ID3V2Frame<String> {
     final body = data.sublist(
         ID3V2Frame.headerLength + 1, ID3V2Frame.headerLength + len);
 
-    final splitIndex = body.indexOf(0x00);
+    var splitIndex = encoding is UTF16
+        ? _indexOfSplitPattern(body, [0x00, 0x00, ...encoding.bom])
+        : body.indexOf(0x00);
+
+    splitIndex = splitIndex < 0 ? 0 : splitIndex;
 
     return MapEntry<String, String>(
         splitIndex == 0
             ? frameTag
             : encoding.decode(body.sublist(0, splitIndex)),
         decodeBody(
-            data.sublist(ID3V2Frame.headerLength + 1 + splitIndex + 1,
+            data.sublist(
+                ID3V2Frame.headerLength +
+                    1 +
+                    splitIndex +
+                    (encoding is UTF16 ? 2 : 1),
                 ID3V2Frame.headerLength + len),
             encoding));
   }
@@ -67,5 +78,15 @@ class TXXXFrame with ID3V2Frame<String> {
       ...separatorBytes,
       ...body
     ];
+  }
+
+  static int _indexOfSplitPattern(List<int> list, List<int> pattern) {
+    for (var i = 0; i < list.length - pattern.length; i++) {
+      final l = list.sublist(i, i + pattern.length);
+      if (collection.ListEquality().equals(l, pattern)) {
+        return i;
+      }
+    }
+    return -1;
   }
 }

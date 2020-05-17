@@ -14,7 +14,11 @@ class ID3V2Writer extends Writer {
 
     final ff = FrameFactory('ID3', '2.4.0');
 
-    tag.tags.forEach((k, v) => tagsF.addAll(ff.getFrame(k)?.encode(v, k)));
+    tag.tags.forEach((k, v) {
+      if (k != null) {
+        tagsF.addAll(ff.getFrame(k)?.encode(v, k));
+      }
+    });
 
     final c = Completer<List<int>>.sync()
       ..complete([

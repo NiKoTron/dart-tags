@@ -440,6 +440,8 @@ void main() {
       expect(tags[0].tags.isNotEmpty, true);
       expect(tags[0].tags.containsKey('artist'), true);
       expect(tags[0].tags['artist'], expectedArtist);
+      expect(tags[0].tags.containsKey('TYER'), true);
+      expect(tags[0].tags['TYER'], '2010');
     });
   });
 }
