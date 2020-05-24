@@ -4,6 +4,13 @@ import 'package:dart_tags/src/convert/utf16.dart';
 import 'package:dart_tags/src/frames/frame.dart';
 import 'package:dart_tags/src/model/consts.dart' as consts;
 import 'package:dart_tags/src/model/consts.dart';
+import 'package:dart_tags/src/tag_processor.dart';
+
+class ID3V2ParsingException extends ParsingException {
+  static const fram = '';
+
+  ID3V2ParsingException(String cause) : super(cause);
+}
 
 abstract class ID3V2Frame<T> implements Frame<T> {
   // actually 2.2 not supported yet. it should be supported wia mixins
@@ -39,7 +46,12 @@ abstract class ID3V2Frame<T> implements Frame<T> {
     final encoding = getEncoding(data[headerLength]);
     _header = ID3V2FrameHeader(tag, encoding, size);
 
-    //print('${data.length}, ${headerLength}, ${_header.length}');
+    if (data.length < headerLength + _header?.length) {
+      //print('${data.length}, ${headerLength}, ${_header.length}');
+      //out of range;
+      return null;
+    }
+
     final body = data.sublist(headerLength + 1, headerLength + _header?.length);
 
     return MapEntry<String, T>(
@@ -95,8 +107,12 @@ abstract class ID3V2Frame<T> implements Frame<T> {
         return latin1;
       case EncodingBytes.utf8:
         return Utf8Codec(allowMalformed: true);
+      case consts.EncodingBytes.utf16:
+        return UTF16LE();
+      case consts.EncodingBytes.utf16be:
+        return UTF16BE();
       default:
-        return UTF16();
+        throw UnsupportedError('Encoding $type not supported');
     }
   }
 }

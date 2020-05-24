@@ -1,28 +1,78 @@
 import 'dart:convert';
+import 'dart:core';
 
-import 'package:utf/utf.dart';
+import 'package:utf/utf.dart' as utf;
 
-class UTF16 extends Encoding {
+abstract class UTF16 extends Encoding {
+  List<int> get bom;
+
+  static const le = [0xff, 0xfe];
+  static const be = [0xfe, 0xff];
+
   @override
-  Converter<List<int>, String> get decoder => _UTF16Decoder();
+  Converter<List<int>, String> get decoder;
 
   @override
-  Converter<String, List<int>> get encoder => _UTF16Enoder();
+  Converter<String, List<int>> get encoder;
 
   @override
-  String get name => 'utf16';
+  String get name; // => 'utf16';
 }
 
-class _UTF16Decoder extends Converter<List<int>, String> {
+class UTF16LE extends UTF16 {
+  @override
+  List<int> get bom => UTF16.le;
+
+  @override
+  Converter<List<int>, String> get decoder => _UTF16LEDecoder();
+
+  @override
+  Converter<String, List<int>> get encoder => _UTF16LEEnoder();
+
+  @override
+  String get name => 'utf16le';
+}
+
+class _UTF16LEDecoder extends Converter<List<int>, String> {
   @override
   String convert(List<int> input) {
-    return decodeUtf16(input);
+    final decoder = utf.Utf16leBytesToCodeUnitsDecoder(input);
+    return String.fromCharCodes(decoder.decodeRest());
   }
 }
 
-class _UTF16Enoder extends Converter<String, List<int>> {
+class _UTF16LEEnoder extends Converter<String, List<int>> {
   @override
   List<int> convert(String input) {
-    return input.runes.toList();
+    return utf.encodeUtf16le(input, true);
+  }
+}
+
+class UTF16BE extends UTF16 {
+  @override
+  List<int> get bom => UTF16.be;
+
+  @override
+  Converter<List<int>, String> get decoder => _UTF16BEDecoder();
+
+  @override
+  Converter<String, List<int>> get encoder => _UTF16BEEnoder();
+
+  @override
+  String get name => 'utf16be';
+}
+
+class _UTF16BEDecoder extends Converter<List<int>, String> {
+  @override
+  String convert(List<int> input) {
+    final decoder = utf.Utf16beBytesToCodeUnitsDecoder(input);
+    return String.fromCharCodes(decoder.decodeRest());
+  }
+}
+
+class _UTF16BEEnoder extends Converter<String, List<int>> {
+  @override
+  List<int> convert(String input) {
+    return utf.encodeUtf16be(input, true);
   }
 }

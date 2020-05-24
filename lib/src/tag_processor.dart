@@ -12,11 +12,14 @@ import 'package:dart_tags/src/writers/writer.dart';
 enum TagType { unknown, id3v1, id3v2 }
 
 class ParsingException implements Exception {
-  static const byteDataNull = "Byte data can't be null";
-  static const byteArrayNull = "Byte array can't be null";
+  static const byteDataNull = 'Byte data can\'t be null';
+  static const byteArrayNull = 'Byte array can\'t be null';
 
-  String cause;
+  final cause;
   ParsingException(this.cause);
+
+  @override
+  String toString() => '$runtimeType: $cause \n\t ${super.toString()}';
 }
 
 class TagProcessor {

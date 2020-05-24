@@ -63,14 +63,17 @@ class ID3V2Reader extends Reader {
 
     while (end) {
       final len = _frameSizeOf(sBytes.sublist(offset + 4, offset + 8));
+      //print('len: $len offset: $offset size: $size');
       final fr = sBytes.sublist(offset);
 
       final m = ff.getFrame(fr).decode(sBytes.sublist(offset));
 
-      tags[m?.key] = m?.value;
+      if (m?.key != null && m?.value != null) {
+        tags[m.key] = m.value;
+      }
 
       offset = offset + _headerLength + len;
-      end = offset < size;
+      end = offset < size; // && len != 0;
     }
 
     return tags;
