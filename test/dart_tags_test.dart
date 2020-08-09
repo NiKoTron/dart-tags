@@ -3,10 +3,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dart_tags/dart_tags.dart';
+import 'package:collection/collection.dart' as collection;
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
 import 'package:dart_tags/src/model/comment.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
+import 'package:dart_tags/src/utils/image_extractor.dart';
 import 'package:dart_tags/src/writers/id3v1.dart';
 import 'package:dart_tags/src/writers/id3v2.dart';
 import 'package:test/test.dart';
@@ -21,7 +23,7 @@ void main() {
 
   setUp(() {
     file1 = File('test/test_assets/id3v1.mp3');
-    file2 = File('test/test_assets/id3v24.mp3');
+    file2 = File('test/test_assets/id3v24-lyric.mp3');
     file3 = File('test/test_assets/id3v23.mp3');
     picture = File('test/test_assets/mink-mingle-109837-unsplash.jpg');
   });
@@ -123,27 +125,29 @@ void main() {
 
   group('Writer Tests', () {
     test('generate tag block v2.4', () async {
+      final com1 = Comment('eng', 'desc_here', 'lol it is a comment');
+      final com2 = Comment('eng', 'desc_here_2', 'lol it is a comment');
+      final pic = AttachedPicture(
+          'image/jpeg', 0x03, 'foo.jpg', picture.readAsBytesSync());
       final tag = Tag()
         ..tags = {
           'title': 'foo',
           'artist': 'bar',
           'album': 'baz',
           'year': '2010',
-          'comment': Comment('eng', 'desc_here', 'lol it is a comment'),
+          'comment': {
+            com1.key: com1,
+            com2.key: com2,
+          },
           'track': '6',
           'genre': 'Dream',
           'custom': 'Just a tag',
-          'picture': AttachedPicture()
-            ..imageData = picture.readAsBytesSync()
-            ..imageTypeCode = 0x03
-            ..mime = 'image/jpeg'
-            ..description = 'foo.jpg'
+          'picture': {pic.key: pic},
         }
         ..type = 'ID3'
         ..version = '2.4';
 
       final writer = ID3V2Writer();
-
       final blocks = writer.write(await file2.readAsBytes(), tag);
 
       final r = ID3V2Reader();
@@ -190,13 +194,14 @@ void main() {
         ..type = 'ID3'
         ..version = '1.1';
 
+      final com1 = Comment('eng', 'desc', 'lol it is a comment');
       final tag2 = Tag()
         ..tags = {
           'title': 'foo',
           'artist': 'bar',
           'album': 'baz',
           'year': '2010',
-          'comment': Comment('eng', 'desc', 'lol it is a comment'),
+          'comment': {com1.key: com1},
           'track': '6',
           'genre': 'Dream',
           'Custom': 'Just tag'
@@ -346,6 +351,32 @@ void main() {
     });
   });
 
+  group('Image extract', () {
+    test('jpeg extract', () {
+      final bytes = file2.readAsBytesSync();
+
+      final p = JPEGImageExtractor();
+      final img = p.parse(bytes);
+
+      assert(collection.ListEquality<int>()
+          .equals(img.sublist(0, p.soi.length), p.soi));
+      assert(collection.ListEquality<int>()
+          .equals(img.sublist(img.length - p.eoi.length), p.eoi));
+    });
+
+    test('png extract', () {
+      final bytes = file2.readAsBytesSync();
+
+      final p = PNGImageExtractor();
+      final img = p.parse(bytes);
+
+      assert(collection.ListEquality<int>()
+          .equals(img.sublist(0, p.soi.length), p.soi));
+      assert(collection.ListEquality<int>()
+          .equals(img.sublist(img.length - p.eoi.length), p.eoi));
+    });
+  });
+
   group('Issues test', () {
     //https://github.com/NiKoTron/dart-tags/issues/4
     test('Artist tag restriction on characters [#4]', () async {
@@ -383,11 +414,8 @@ void main() {
 
     //https://github.com/NiKoTron/dart-tags/issues/3
     test('Example for writing APIC tags [#3] ', () async {
-      final pic1 = AttachedPicture()
-        ..imageData = picture.readAsBytesSync()
-        ..imageTypeCode = 0x03
-        ..mime = 'image/jpeg'
-        ..description = 'foo.jpg';
+      final pic1 = AttachedPicture(
+          'image/jpeg', 0x03, 'foo.jpg', picture.readAsBytesSync());
 
       final tag = Tag()
         ..tags = {'picture': pic1}
@@ -406,7 +434,8 @@ void main() {
       final r = ID3V2Reader();
       final f = await r.read(blocks);
 
-      final AttachedPicture pic = f.tags['picture'];
+      // ignore: avoid_as
+      final AttachedPicture pic = (f.tags['picture'] as Map).values.first;
 
       File('$outputDir/${pic.description}.jpg')
         ..createSync(recursive: true)

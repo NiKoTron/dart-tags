@@ -1,7 +1,6 @@
 import 'dart:convert';
-import 'package:collection/collection.dart' as collection;
 
-import 'package:dart_tags/src/convert/utf16.dart';
+import '../../convert/utf16.dart';
 
 import 'id3v2_frame.dart';
 
@@ -23,50 +22,43 @@ import 'id3v2_frame.dart';
      Text encoding                $xx
      Information                  <text string(s) according to encoding>
 
+4.2.6.   User defined text information frame
+
+   This frame is intended for one-string text information concerning the
+   audio file in a similar way to the other "T"-frames. The frame body
+   consists of a description of the string, represented as a terminated
+   string, followed by the actual string. There may be more than one
+   "TXXX" frame in each tag, but only one with the same description.
+
+     <Header for 'User defined text information frame', ID: "TXXX">
+     Text encoding     $xx
+     Description       <text string according to encoding> $00 (00)
+     Value             <text string according to encoding>
+
 */
 class TXXXFrame with ID3V2Frame<String> {
   @override
   String get frameTag => 'TXXX';
 
+  String _customTagName;
+
   @override
   MapEntry<String, String> decode(List<int> data) {
-    final encoding = ID3V2Frame.getEncoding(data[ID3V2Frame.headerLength]);
-    final tag = latin1.decode(data.sublist(0, 4)); //tags encoded in `latin1`
-
-    if (!isTagValid(tag)) {
-      return null;
-    }
-
-    assert(tag == frameTag);
-
-    final len = sizeOf(data.sublist(4, 8));
-
-    final body = data.sublist(
-        ID3V2Frame.headerLength + 1, ID3V2Frame.headerLength + len);
-
-    var splitIndex = encoding is UTF16
-        ? _indexOfSplitPattern(body, [0x00, 0x00, ...encoding.bom])
-        : body.indexOf(0x00);
-
-    splitIndex = splitIndex < 0 ? 0 : splitIndex;
-
-    return MapEntry<String, String>(
-        splitIndex == 0
-            ? frameTag
-            : encoding.decode(body.sublist(0, splitIndex)),
-        decodeBody(
-            data.sublist(
-                ID3V2Frame.headerLength +
-                    1 +
-                    splitIndex +
-                    (encoding is UTF16 ? 2 : 1),
-                ID3V2Frame.headerLength + len),
-            encoding));
+    final entry = super.decode(data);
+    return MapEntry<String, String>(_customTagName ?? frameTag, entry.value);
   }
 
   @override
   String decodeBody(List<int> data, Encoding enc) {
-    return enc.decode(data);
+    final splitIndex = enc is UTF16
+        ? indexOfSplitPattern(data, [0x00, 0x00], 0)
+        : data.indexOf(0x00);
+
+    _customTagName = enc.decode(data.sublist(0, splitIndex));
+    final offset = splitIndex + (enc is UTF16 ? 2 : 1);
+
+    final body = enc.decode(data.sublist(offset));
+    return body;
   }
 
   @override
@@ -78,15 +70,5 @@ class TXXXFrame with ID3V2Frame<String> {
       ...separatorBytes,
       ...body
     ];
-  }
-
-  static int _indexOfSplitPattern(List<int> list, List<int> pattern) {
-    for (var i = 0; i < list.length - pattern.length; i++) {
-      final l = list.sublist(i, i + pattern.length);
-      if (collection.ListEquality().equals(l, pattern)) {
-        return i;
-      }
-    }
-    return -1;
   }
 }

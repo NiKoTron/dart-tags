@@ -1,10 +1,13 @@
 import 'dart:convert';
 
-import 'package:dart_tags/src/convert/utf16.dart';
-import 'package:dart_tags/src/frames/frame.dart';
-import 'package:dart_tags/src/model/consts.dart' as consts;
-import 'package:dart_tags/src/model/consts.dart';
-import 'package:dart_tags/src/tag_processor.dart';
+import 'package:collection/collection.dart' as collection;
+
+import '../../convert/hex_encoding.dart';
+import '../../convert/utf16.dart';
+import '../../frames/frame.dart';
+import '../../model/consts.dart' as consts;
+import '../../model/consts.dart';
+import '../../tag_processor.dart';
 
 class ID3V2ParsingException extends ParsingException {
   static const fram = '';
@@ -23,33 +26,23 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   ID3V2FrameHeader _header;
   ID3V2FrameHeader get header => _header;
 
-  List<int> clearFrameData(List<int> bytes) {
-    if (bytes.length > 3 && bytes[0] == 0xFF && bytes[1] == 0xFE) {
-      bytes = bytes.sublist(2);
-    }
-    return bytes.where((i) => i != 0).toList();
-  }
-
   @override
   MapEntry<String, T> decode(List<int> data) {
     final tag = latin1.decode(data.sublist(0, 4));
     if (!consts.framesHeaders.keys.contains(tag)) {
-      //print('$tag unknown tag');
       return null;
     }
     final size = sizeOf(data.sublist(4, 8));
     if (size <= 0) {
-      //print('frame size should be greater than zero');
       return null;
     }
-
     final encoding = getEncoding(data[headerLength]);
-    _header = ID3V2FrameHeader(tag, encoding, size);
+
+    _header = ID3V2FrameHeader(tag, size, encoding: encoding);
 
     if (data.length < headerLength + _header?.length) {
-      //print('${data.length}, ${headerLength}, ${_header.length}');
-      //out of range;
-      return null;
+      _header =
+          ID3V2FrameHeader(tag, data.length - headerLength, encoding: encoding);
     }
 
     final body = data.sublist(headerLength + 1, headerLength + _header?.length);
@@ -63,14 +56,17 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   @override
   List<int> encode(T value, [String key]);
 
+  /// Returns size of frame in bytes
   List<int> frameSizeInBytes(int value) {
-    final block = List<int>(4);
-    final eightBitMask = 0xff;
+    assert(value <= 16777216);
 
-    block[0] = (value >> 24) & eightBitMask;
-    block[1] = (value >> 16) & eightBitMask;
-    block[2] = (value >> 8) & eightBitMask;
-    block[3] = (value >> 0) & eightBitMask;
+    final block = List<int>(4);
+    final sevenBitMask = 0x7f;
+
+    block[0] = (value >> 21) & sevenBitMask;
+    block[1] = (value >> 14) & sevenBitMask;
+    block[2] = (value >> 7) & sevenBitMask;
+    block[3] = (value >> 0) & sevenBitMask;
 
     return block;
   }
@@ -90,12 +86,13 @@ abstract class ID3V2Frame<T> implements Frame<T> {
   bool isTagValid(String tag) =>
       tag.isNotEmpty && consts.framesHeaders.containsKey(tag);
 
+  ///  Frame lenght represents as sync safe 32bit int
   int sizeOf(List<int> block) {
     assert(block.length == 4);
 
-    var len = block[0] << 24;
-    len += block[1] << 16;
-    len += block[2] << 8;
+    var len = block[0] << 21;
+    len += block[1] << 14;
+    len += block[2] << 7;
     len += block[3];
 
     return len;
@@ -112,8 +109,21 @@ abstract class ID3V2Frame<T> implements Frame<T> {
       case consts.EncodingBytes.utf16be:
         return UTF16BE();
       default:
-        throw UnsupportedError('Encoding $type not supported');
+        return HEXEncoding();
     }
+  }
+
+  int indexOfSplitPattern(List<int> list, List<int> pattern,
+      [int initialOffset = 0]) {
+    for (var i = initialOffset ?? 0;
+        i < list.length - pattern.length;
+        i += pattern.length) {
+      final l = list.sublist(i, i + pattern.length);
+      if (collection.ListEquality().equals(l, pattern)) {
+        return i;
+      }
+    }
+    return -1;
   }
 }
 
@@ -152,15 +162,15 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
 class ID3V2FrameHeader {
   String tag;
-  Encoding encoding;
   int length;
+
+  Encoding encoding;
 
   // todo: implement futher
   int flags;
 
-  ID3V2FrameHeader(this.tag, this.encoding, this.length, [this.flags]) {
+  ID3V2FrameHeader(this.tag, this.length, {this.flags, this.encoding}) {
     assert(consts.framesHeaders.keys.contains(tag));
-    assert(encoding != null);
     assert(length > 0);
   }
 }
