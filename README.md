@@ -16,14 +16,22 @@ project under MIT [license][license]
 
 [full changelog][changelog]
 
+## 0.3.0 (BREAKING CHANGES)
+
+- COMM, APIC, USLT, WXXX tags returns as a map
+- WXXX frame returns WURL object
+- various fixes
+- added USLT tag
+- added possibility to pass many COMM, APIC, USLT tags
+- APIC processing was refactored
+- hex encoder
+- unrecognized encoding falls to hex encoder (removed unsupported encoding error)
+- unsupported tags like PRIV will be printed just like raw binary data
+
+
 ## 0.2.3
 
 - Fixed wrong utf16 decoding. issue [issue #13](https://github.com/NiKoTron/dart-tags/issues/13))
-
-## 0.2.2
-
-- fixed an issue with wrong header calculation thanx [@frankdenouter](https://github.com/frankdenouter) and his [PR](https://github.com/NiKoTron/dart-tags/pull/10)
-- added test assets v23 for reader
 
 ## Instalation
 
@@ -31,7 +39,7 @@ add dependency in pubsec.yaml
 
 ```yaml
 dependencies:
-  dart_tags: ^0.2.2
+  dart_tags: ^0.3.0
 ```
 
 ## Usage
@@ -66,7 +74,7 @@ Thanx for contributing [@magodo](https://github.com/magodo), [@frankdenouter](ht
 
 Thanx for the [Photo][photo] by [Mink Mingle][mink_mingle] on [Unsplash][unsplash] that we using in unit tests.
 
-[id3org]: http://id3.org/Home
+[id3org]: https://id3.org/Home
 [tracker]: https://github.com/NiKoTron/dart-tags/issues
 [changelog]: CHANGELOG.md
 [license]: LICENSE

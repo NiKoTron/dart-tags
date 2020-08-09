@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:dart_tags/src/frames/id3v2/id3v2_frame.dart';
+import '../../frames/id3v2/id3v2_frame.dart';
 
 class DefaultFrame with ID3V2Frame<String> {
   final String _tag;

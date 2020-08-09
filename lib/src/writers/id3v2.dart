@@ -16,7 +16,18 @@ class ID3V2Writer extends Writer {
 
     tag.tags.forEach((k, v) {
       if (k != null) {
-        tagsF.addAll(ff.getFrame(k)?.encode(v, k));
+        final frame = ff.getFrame(k);
+        if (v is List) {
+          v.forEach((element) {
+            tagsF.addAll(frame?.encode(element, k));
+          });
+        } else if (v is Map) {
+          v.values.forEach((element) {
+            tagsF.addAll(frame?.encode(element, k));
+          });
+        } else {
+          tagsF.addAll(frame?.encode(v, k));
+        }
       }
     });
 
