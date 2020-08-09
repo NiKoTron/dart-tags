@@ -3,12 +3,13 @@
 [![Coverage Status](https://coveralls.io/repos/github/NiKoTron/dart-tags/badge.svg?branch=master)](https://coveralls.io/github/NiKoTron/dart-tags?branch=master)
 [![pub package](https://img.shields.io/pub/v/dart_tags.svg)](https://pub.dartlang.org/packages/dart_tags) [![Build Status](https://travis-ci.org/NiKoTron/dart-tags.svg?branch=master)](https://travis-ci.org/NiKoTron/dart-tags)
 [![Awesome Dart](https://img.shields.io/badge/Awesome-Dart-blue.svg?longCache=true)](https://github.com/yissachar/awesome-dart#parsers)
+[![MIT](https://img.shields.io/github/license/NiKoTron/dart-tags)][license]
 
 The library for parsing [ID3][id3org] tags, written in pure Dart.
 
 You can found sample app written with flutter framework [here][flutter_app].
 
-## License
+## License 
 
 project under MIT [license][license]
 
