@@ -1,21 +1,21 @@
-import 'key_entity.dart';
+import 'package:dart_tags/src/model/key_entity.dart';
 
-/// Class describes comment entity from ID3 v2.x tags
-class Comment implements KeyEntity<String> {
+/// Class describes unsynchronised lyrics entity from ID3 v2.x tags
+class UnSyncLyric implements KeyEntity<String> {
   /// 3 character of language code e.g. "eng"
   final String lang;
 
-  /// Description for comment
+  /// Description for lyrics
   final String description;
 
-  /// Comment body
-  final String comment;
+  /// Lyrics body
+  final String lyrics;
 
-  Comment(this.lang, this.description, this.comment);
+  UnSyncLyric(this.lang, this.description, this.lyrics);
 
   @override
   String toString() {
-    return '{language:$lang, description:$description, body: $comment';
+    return '{language:$lang, description:$description, body: $lyrics';
   }
 
   @override
@@ -29,7 +29,7 @@ class Comment implements KeyEntity<String> {
     if (description != other.description) {
       return false;
     }
-    if (comment != other.comment) {
+    if (lyrics != other.lyrics) {
       return false;
     }
     return true;

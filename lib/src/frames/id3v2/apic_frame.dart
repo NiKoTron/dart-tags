@@ -1,7 +1,10 @@
 import 'dart:convert';
 
-import 'package:dart_tags/src/frames/id3v2/id3v2_frame.dart';
-import 'package:dart_tags/src/model/attached_picture.dart';
+import 'package:dart_tags/src/convert/utf16.dart';
+import 'package:dart_tags/src/utils/image_extractor.dart';
+
+import '../../frames/id3v2/id3v2_frame.dart';
+import '../../model/attached_picture.dart';
 
 /* http://id3.org/id3v2.4.0-frames
 4.14.   Attached picture
@@ -53,43 +56,39 @@ import 'package:dart_tags/src/model/attached_picture.dart';
 */
 
 class ApicFrame with ID3V2Frame<AttachedPicture> {
+  final _imageExtractors = {
+    'image/jpg': () => JPEGImageExtractor(),
+    'image/jpeg': () => JPEGImageExtractor(),
+    'image/png': () => PNGImageExtractor(),
+  };
+
   @override
   AttachedPicture decodeBody(List<int> data, Encoding enc) {
-    final iterator = data.iterator;
-    var buff = <int>[];
+    final splitIndex1 = data.indexOf(0x00);
 
-    final attachedPicture = AttachedPicture();
+    final mime = latin1.decode(data.sublist(0, splitIndex1));
+    final imageType = data[splitIndex1 + 1];
 
-    var cont = 0;
+    final splitIndex2 = enc is UTF16
+        ? indexOfSplitPattern(
+            data.sublist(splitIndex1 + 1), [0x00, 0x00], splitIndex1)
+        : data.sublist(splitIndex1 + 1).indexOf(0x00) + splitIndex1 + 1;
 
-    while (iterator.moveNext() && cont < 4) {
-      final crnt = iterator.current;
-      if (crnt == 0x00 && cont < 3) {
-        if (cont == 1 && buff.isNotEmpty) {
-          attachedPicture.imageTypeCode = buff[0];
-          cont++;
-          attachedPicture.description = enc.decode(buff.sublist(1));
-        } else {
-          attachedPicture.mime = enc.decode(buff);
-        }
-        buff = [];
-        cont++;
-        continue;
-      }
-      buff.add(crnt);
-    }
+    final description = enc.decode(data.sublist(splitIndex1 + 2, splitIndex2));
 
-    attachedPicture.imageData = buff;
+    final imageData = _imageExtractors.containsKey(mime)
+        ? _imageExtractors[mime]().parse(data.sublist(splitIndex2))
+        : data.sublist(splitIndex2);
 
-    return attachedPicture;
+    return AttachedPicture(mime, imageType, description, imageData);
   }
 
   @override
   List<int> encode(AttachedPicture value, [String key]) {
-    final mimeEncoded = utf8.encode(value.mime);
+    final mimeEncoded = latin1.encode(value.mime);
     final descEncoded = utf8.encode(value.description);
 
-    return [
+    final b = [
       ...utf8.encode(frameTag),
       ...frameSizeInBytes(
           mimeEncoded.length + descEncoded.length + value.imageData.length + 4),
@@ -101,6 +100,7 @@ class ApicFrame with ID3V2Frame<AttachedPicture> {
       0x00,
       ...value.imageData
     ];
+    return b;
   }
 
   @override

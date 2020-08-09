@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:dart_tags/src/frames/id3v2/apic_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/txxx_frame.dart';
+import 'package:dart_tags/src/frames/id3v2/uslt_frame.dart';
 import 'package:dart_tags/src/frames/id3v2/wxxx_frame.dart';
 import 'package:dart_tags/src/model/consts.dart' as consts;
 
@@ -17,7 +18,7 @@ abstract class Frame<T> {
   MapEntry<String, T> decode(List<int> data);
 }
 
-class FrameFactory {
+class FrameFactory<T extends Frame> {
   String version;
 
   // ignore: avoid_annotating_with_dynamic
@@ -36,7 +37,7 @@ class FrameFactory {
     return FrameFactory._internal('0', (v) => null);
   }
 
-  T getFrame<T extends Frame>(entry) => _frameGetter(entry);
+  T getFrame(entry) => _frameGetter(entry);
 }
 
 class FramesID3V24 {
@@ -44,7 +45,8 @@ class FramesID3V24 {
     'APIC': ApicFrame(),
     'TXXX': TXXXFrame(),
     'WXXX': WXXXFrame(),
-    'COMM': COMMFrame()
+    'COMM': COMMFrame(),
+    'USLT': USLTFrame(),
   };
 
   Frame<T> _getFrame<T>(String tag) {

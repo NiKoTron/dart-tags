@@ -1,3 +1,15 @@
+## 0.3.0 (BREAKING CHANGES)
+
+- COMM, APIC, USLT, WXXX tags returns as a map
+- WXXX frame returns WURL object
+- various fixes
+- added USLT tag
+- added possibility to pass many COMM, APIC, USLT tags
+- APIC processing was refactored
+- hex encoder
+- unrecognized encoding falls to hex encoder (removed unsupported encoding error)
+- unsupported tags like PRIV will be printed just like raw binary data
+
 ## 0.2.3
 
 - Fixed issue [issue #13](https://github.com/NiKoTron/dart-tags/issues/13))

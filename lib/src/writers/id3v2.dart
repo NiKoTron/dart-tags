@@ -14,7 +14,22 @@ class ID3V2Writer extends Writer {
 
     final ff = FrameFactory('ID3', '2.4.0');
 
-    tag.tags.forEach((k, v) => tagsF.addAll(ff.getFrame(k)?.encode(v, k)));
+    tag.tags.forEach((k, v) {
+      if (k != null) {
+        final frame = ff.getFrame(k);
+        if (v is List) {
+          v.forEach((element) {
+            tagsF.addAll(frame?.encode(element, k));
+          });
+        } else if (v is Map) {
+          v.values.forEach((element) {
+            tagsF.addAll(frame?.encode(element, k));
+          });
+        } else {
+          tagsF.addAll(frame?.encode(v, k));
+        }
+      }
+    });
 
     final c = Completer<List<int>>.sync()
       ..complete([
