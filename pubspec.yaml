@@ -7,8 +7,9 @@ environment:
   sdk: '>=2.3.0 <3.0.0' 
 
 dependencies:
-  utf:
-    git: https://github.com/dart-archive/utf.git
+  utf: ^0.9.0+5
+  collection: ^1.14.13
+  convert: ^2.1.1
 
 dev_dependencies:
   pedantic: ^1.9.2
