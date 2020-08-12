@@ -1,3 +1,7 @@
+## 0.3.0+1
+
+- hotfix! missed exports for new tags was added
+
 ## 0.3.0 (BREAKING CHANGES)
 
 - COMM, APIC, USLT, WXXX tags returns as a map
