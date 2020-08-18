@@ -442,7 +442,7 @@ void main() {
         ..writeAsBytesSync(pic.imageData);
 
       final html =
-          '<div><p>${pic.description}}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
+          '<div><p>${pic.description}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
 
       File('$outputDir/${pic.description}.html')
         ..createSync(recursive: true)
@@ -451,6 +451,28 @@ void main() {
       print('check the $outputDir/${pic.description}.jpg');
       print('check the $outputDir/${pic.description}.html');
 
+      expect(pic, equals(pic1));
+    });
+
+    //https://github.com/NiKoTron/dart-tags/issues/19
+    test('Wrong APIC tags decoding on on Other picture type.', () async {
+      final pic1 = AttachedPicture(
+          'image/jpeg', 0x00, 'foo.jpg', picture.readAsBytesSync());
+
+      final tag = Tag()
+        ..tags = {'picture': pic1}
+        ..type = 'ID3'
+        ..version = '2.4';
+
+      final writer = ID3V2Writer();
+
+      final blocks = writer.write(await file2.readAsBytes(), tag);
+
+      final r = ID3V2Reader();
+      final f = await r.read(blocks);
+
+      // ignore: avoid_as
+      final AttachedPicture pic = (f.tags['picture'] as Map)['Other'];
       expect(pic, equals(pic1));
     });
 
