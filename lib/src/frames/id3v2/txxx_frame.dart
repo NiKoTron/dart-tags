@@ -36,7 +36,9 @@ import 'id3v2_frame.dart';
      Value             <text string according to encoding>
 
 */
-class TXXXFrame with ID3V2Frame<String> {
+class TXXXFrame extends ID3V2Frame<String> {
+  TXXXFrame({int version = 4}) : super(version);
+
   @override
   String get frameTag => 'TXXX';
 

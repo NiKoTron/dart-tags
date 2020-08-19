@@ -20,7 +20,9 @@ import 'id3v2_frame.dart';
      Description       <text string according to encoding> $00 (00)
      URL               <text string>
 */
-class WXXXFrame with ID3V2Frame<WURL> {
+class WXXXFrame extends ID3V2Frame<WURL> {
+  WXXXFrame({int version = 4}) : super(version);
+
   @override
   WURL decodeBody(List<int> data, Encoding enc) {
     final splitIndex = enc is UTF16
