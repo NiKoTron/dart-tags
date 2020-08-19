@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import '../../frames/id3v2/id3v2_frame.dart';
 
-class DefaultFrame with ID3V2Frame<String> {
+class DefaultFrame extends ID3V2Frame<String> {
   final String _tag;
 
-  DefaultFrame(this._tag);
+  DefaultFrame(this._tag, {int version = 4}) : super(version);
 
   @override
   String decodeBody(List<int> data, Encoding enc) {

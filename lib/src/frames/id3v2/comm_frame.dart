@@ -23,6 +23,8 @@ import 'id3v2_frame.dart';
 */
 
 class COMMFrame extends ID3V2Frame<Comment> {
+  COMMFrame({int version = 4}) : super(version);
+
   @override
   Comment decodeBody(List<int> data, Encoding enc) {
     final lang = latin1.decode(data.sublist(0, 3));

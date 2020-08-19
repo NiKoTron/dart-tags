@@ -55,12 +55,14 @@ import '../../model/attached_picture.dart';
                   $14  Publisher/Studio logotype
 */
 
-class ApicFrame with ID3V2Frame<AttachedPicture> {
+class ApicFrame extends ID3V2Frame<AttachedPicture> {
   final _imageExtractors = {
     'image/jpg': () => JPEGImageExtractor(),
     'image/jpeg': () => JPEGImageExtractor(),
     'image/png': () => PNGImageExtractor(),
   };
+
+  ApicFrame({int version = 4}) : super(version);
 
   @override
   AttachedPicture decodeBody(List<int> data, Encoding enc) {
