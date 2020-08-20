@@ -17,6 +17,13 @@ project under MIT [license](LICENSE)
 
 [full changelog](CHANGELOG.md)
 
+## 0.3.1
+
+* implemented separate getting size of frame for id3 v2.3 and v2.4
+* added test case and asset
+* fixed typos, thanx to [@algoshipda](https://github.com/algoshipda) and his [PR](https://github.com/NiKoTron/dart-tags/pull/17)
+* fixed APIC picture type error, thanx to [@algoshipda](https://github.com/algoshipda) and his [PR](https://github.com/NiKoTron/dart-tags/pull/20)
+
 ## 0.3.0+1
 
 * hotfix! missed exports for new tags was added
@@ -39,7 +46,7 @@ add dependency in pubsec.yaml
 
 ``` yaml
 dependencies:
-  dart_tags: ^0.3.0
+  dart_tags: ^0.3.1
 ```
 
 ## Usage
