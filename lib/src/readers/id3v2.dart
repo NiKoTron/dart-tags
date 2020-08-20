@@ -45,7 +45,7 @@ class ID3V2Reader extends Reader {
     version_o2 = bytes[3];
     version_o3 = bytes[4];
 
-    final ff = FrameFactory<ID3V2Frame>('ID3', '2.4.0');
+    final ff = FrameFactory<ID3V2Frame>('ID3', '2.$version_o2.$version_o3');
 
     final flags = bytes[5];
 
@@ -56,7 +56,9 @@ class ID3V2Reader extends Reader {
     // ignore: unused_local_variable
     final experimental = flags & 0x20 != 0;
 
-    final size = _sizeOf(bytes.sublist(6, 10));
+    final size = version_o2 >= 4
+        ? _sizeOfSyncSafe(bytes.sublist(6, 10))
+        : _sizeOf(bytes.sublist(6, 10));
 
     var offset = 10;
 
@@ -87,8 +89,20 @@ class ID3V2Reader extends Reader {
     return tags;
   }
 
-  // Sync safe 32bit int
+  // Regular 32bit int
   int _sizeOf(List<int> block) {
+    assert(block.length == 4);
+
+    var len = block[0] << 24;
+    len += block[1] << 16;
+    len += block[2] << 8;
+    len += block[3];
+
+    return len;
+  }
+
+  // Sync safe 32bit int
+  int _sizeOfSyncSafe(List<int> block) {
     assert(block.length == 4);
 
     var len = block[0] << 21;

@@ -17,6 +17,7 @@ void main() {
   File file1;
   File file2;
   File file3;
+  File filev23USLT;
   File picture;
 
   const outputDir = 'test/output';
@@ -25,6 +26,7 @@ void main() {
     file1 = File('test/test_assets/id3v1.mp3');
     file2 = File('test/test_assets/id3v24-lyric.mp3');
     file3 = File('test/test_assets/id3v23.mp3');
+    filev23USLT = File('test/test_assets/id3v23-uslt.mp3');
     picture = File('test/test_assets/mink-mingle-109837-unsplash.jpg');
   });
 
@@ -442,7 +444,7 @@ void main() {
         ..writeAsBytesSync(pic.imageData);
 
       final html =
-          '<div><p>${pic.description}}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
+          '<div><p>${pic.description}</p><img src="data:${pic.mime};base64, ${pic.imageData64}" alt="Red dot" /></div>';
 
       File('$outputDir/${pic.description}.html')
         ..createSync(recursive: true)
@@ -451,6 +453,28 @@ void main() {
       print('check the $outputDir/${pic.description}.jpg');
       print('check the $outputDir/${pic.description}.html');
 
+      expect(pic, equals(pic1));
+    });
+
+    //https://github.com/NiKoTron/dart-tags/issues/19
+    test('Wrong APIC tags decoding on on Other picture type.', () async {
+      final pic1 = AttachedPicture(
+          'image/jpeg', 0x00, 'foo.jpg', picture.readAsBytesSync());
+
+      final tag = Tag()
+        ..tags = {'picture': pic1}
+        ..type = 'ID3'
+        ..version = '2.4';
+
+      final writer = ID3V2Writer();
+
+      final blocks = writer.write(await file2.readAsBytes(), tag);
+
+      final r = ID3V2Reader();
+      final f = await r.read(blocks);
+
+      // ignore: avoid_as
+      final AttachedPicture pic = (f.tags['picture'] as Map)['Other'];
       expect(pic, equals(pic1));
     });
 
@@ -471,6 +495,43 @@ void main() {
       expect(tags[0].tags['artist'], expectedArtist);
       expect(tags[0].tags.containsKey('TYER'), true);
       expect(tags[0].tags['TYER'], '2010');
+    });
+
+    //https://github.com/NiKoTron/dart-tags/issues/18
+    test('32 bit integer frame size for id3 v2.3', () async {
+      final foo = await TagProcessor()
+          .getTagsFromByteArray(filev23USLT.readAsBytes(), [TagType.id3v2]);
+
+      expect(foo.length, equals(1));
+
+      expect(foo[0].type, equals('ID3'));
+      expect(foo[0].version, equals('2.3.0'));
+
+      //this bug exposed better on picture tags.
+
+      expect(foo[0].tags.containsKey('picture'), true);
+      expect(foo[0].tags['picture'], isA<Map>());
+      expect(foo[0].tags['picture'].length, equals(2));
+
+      expect(
+          // ignore: avoid_as
+          ((foo[0].tags['picture'] as Map).values.toList()[0]
+                  // ignore: avoid_as
+                  as AttachedPicture)
+              .imageData
+              .length,
+          equals(189818)); //898929
+
+      expect(
+          // ignore: avoid_as
+          ((foo[0].tags['picture'] as Map).values.toList()[1]
+                  // ignore: avoid_as
+                  as AttachedPicture)
+              .imageData
+              .length,
+          equals(898929)); //898929
+
+      expect(foo[0].tags.containsKey('lyrics'), true);
     });
   });
 }

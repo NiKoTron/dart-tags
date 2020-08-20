@@ -23,8 +23,12 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   String get frameTag;
 
+  final int _version;
+
   ID3V2FrameHeader _header;
   ID3V2FrameHeader get header => _header;
+
+  ID3V2Frame(this._version);
 
   @override
   MapEntry<String, T> decode(List<int> data) {
@@ -32,7 +36,9 @@ abstract class ID3V2Frame<T> implements Frame<T> {
     if (!consts.framesHeaders.keys.contains(tag)) {
       return null;
     }
-    final size = sizeOf(data.sublist(4, 8));
+    final size = _version >= 4
+        ? sizeOfSyncSafe(data.sublist(4, 8))
+        : sizeOf(data.sublist(4, 8));
     if (size <= 0) {
       return null;
     }
@@ -88,6 +94,18 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   ///  Frame lenght represents as sync safe 32bit int
   int sizeOf(List<int> block) {
+    assert(block.length == 4);
+
+    var len = block[0] << 24;
+    len += block[1] << 16;
+    len += block[2] << 8;
+    len += block[3];
+
+    return len;
+  }
+
+  ///  Frame lenght represents as sync safe 32bit int
+  int sizeOfSyncSafe(List<int> block) {
     assert(block.length == 4);
 
     var len = block[0] << 21;

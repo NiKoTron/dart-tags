@@ -55,32 +55,38 @@ import '../../model/attached_picture.dart';
                   $14  Publisher/Studio logotype
 */
 
-class ApicFrame with ID3V2Frame<AttachedPicture> {
+class ApicFrame extends ID3V2Frame<AttachedPicture> {
   final _imageExtractors = {
     'image/jpg': () => JPEGImageExtractor(),
     'image/jpeg': () => JPEGImageExtractor(),
     'image/png': () => PNGImageExtractor(),
   };
 
+  ApicFrame({int version = 4}) : super(version);
+
   @override
   AttachedPicture decodeBody(List<int> data, Encoding enc) {
-    final splitIndex1 = data.indexOf(0x00);
+    final endOfMimeType = data.indexOf(0x00);
 
-    final mime = latin1.decode(data.sublist(0, splitIndex1));
-    final imageType = data[splitIndex1 + 1];
+    final mime = latin1.decode(data.sublist(0, endOfMimeType));
+    final imageType = data[endOfMimeType + 1];
 
-    final splitIndex2 = enc is UTF16
-        ? indexOfSplitPattern(
-            data.sublist(splitIndex1 + 1), [0x00, 0x00], splitIndex1)
-        : data.sublist(splitIndex1 + 1).indexOf(0x00) + splitIndex1 + 1;
+    final startOfDescription = endOfMimeType + 2;
+    final endOfDescription = indexOfSplitPattern(
+        data, enc is UTF16 ? [0x00, 0x00] : [0x00], startOfDescription);
 
-    final description = enc.decode(data.sublist(splitIndex1 + 2, splitIndex2));
+    final description =
+        enc.decode(data.sublist(startOfDescription, endOfDescription));
 
-    final imageData = _imageExtractors.containsKey(mime)
-        ? _imageExtractors[mime]().parse(data.sublist(splitIndex2))
-        : data.sublist(splitIndex2);
+    final startOfImageData = endOfDescription + (enc is UTF16 ? 2 : 1);
 
-    return AttachedPicture(mime, imageType, description, imageData);
+    final imageData = data.sublist(startOfImageData);
+
+    final extractedImageData = _imageExtractors.containsKey(mime)
+        ? _imageExtractors[mime]().parse(imageData)
+        : imageData;
+
+    return AttachedPicture(mime, imageType, description, extractedImageData);
   }
 
   @override

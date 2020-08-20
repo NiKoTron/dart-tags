@@ -28,9 +28,12 @@ class FrameFactory<T extends Frame> {
 
   FrameFactory._internal(this.version, this._frameGetter, [this.defaultFrame]);
 
-  factory FrameFactory(String tagType, tagVersion) {
+  factory FrameFactory(String tagType, String tagVersion) {
     if (tagType == 'ID3') {
-      if (tagVersion == '2.4.0') {
+      if (tagVersion.startsWith('2.3.')) {
+        return FrameFactory._internal(tagVersion, FramesID3V23().getFrame);
+      }
+      if (tagVersion.startsWith('2.4.')) {
         return FrameFactory._internal(tagVersion, FramesID3V24().getFrame);
       }
     }
@@ -40,14 +43,30 @@ class FrameFactory<T extends Frame> {
   T getFrame(entry) => _frameGetter(entry);
 }
 
+class FramesID3V23 extends FramesID3V24 {
+  @override
+  Map<String, Frame> get _frames => {
+        'APIC': ApicFrame(version: 3),
+        'TXXX': TXXXFrame(version: 3),
+        'WXXX': WXXXFrame(version: 3),
+        'COMM': COMMFrame(version: 3),
+        'USLT': USLTFrame(version: 3),
+      };
+
+  @override
+  Frame<T> _getFrame<T>(String tag) {
+    return _frames[tag] ?? DefaultFrame(tag, version: 3);
+  }
+}
+
 class FramesID3V24 {
-  final Map<String, Frame> _frames = {
-    'APIC': ApicFrame(),
-    'TXXX': TXXXFrame(),
-    'WXXX': WXXXFrame(),
-    'COMM': COMMFrame(),
-    'USLT': USLTFrame(),
-  };
+  Map<String, Frame> get _frames => {
+        'APIC': ApicFrame(),
+        'TXXX': TXXXFrame(),
+        'WXXX': WXXXFrame(),
+        'COMM': COMMFrame(),
+        'USLT': USLTFrame(),
+      };
 
   Frame<T> _getFrame<T>(String tag) {
     return _frames[tag] ?? DefaultFrame(tag);

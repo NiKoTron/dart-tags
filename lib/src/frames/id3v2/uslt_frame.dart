@@ -24,7 +24,9 @@ import 'id3v2_frame.dart';
      Content descriptor   <text string according to encoding> $00 (00)
      Lyrics/text          <full text string according to encoding>
 */
-class USLTFrame with ID3V2Frame<UnSyncLyric> {
+class USLTFrame extends ID3V2Frame<UnSyncLyric> {
+  USLTFrame({int version = 4}) : super(version);
+
   @override
   UnSyncLyric decodeBody(List<int> data, Encoding enc) {
     final lang = latin1.decode(data.sublist(0, 3));
