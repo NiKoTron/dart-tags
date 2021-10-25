@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:utf/utf.dart' as utf;
+import 'package:utf_convert/utf_convert.dart' as utf;
 
 abstract class UTF16 extends Encoding {
   List<int> get bom;
