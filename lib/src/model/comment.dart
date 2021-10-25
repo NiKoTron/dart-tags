@@ -23,6 +23,9 @@ class Comment implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
+    if (!(other is Comment)) {
+      return false;
+    }
     if (lang != other.lang) {
       return false;
     }

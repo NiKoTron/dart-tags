@@ -48,7 +48,6 @@ linter:
     - always_put_required_named_parameters_first
     - always_require_non_null_named_parameters
     - annotate_overrides
-    - avoid_as
     - avoid_annotating_with_dynamic
     - avoid_classes_with_only_static_members
     - avoid_bool_literals_in_conditional_expressions

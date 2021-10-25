@@ -33,9 +33,9 @@ class TagProcessor {
     TagType.id3v2: ID3V2Writer(),
   };
 
-  static TagType getTagType(String type, String version) {
+  static TagType getTagType(String type, String? version) {
     if (type.toLowerCase() == 'id3') {
-      switch (version.substring(0, 1)) {
+      switch (version!.substring(0, 1)) {
         case '1':
           return TagType.id3v1;
         case '2':
@@ -48,8 +48,8 @@ class TagProcessor {
   }
 
   /// Returns the tags from the byte array
-  Future<List<Tag>> getTagsFromByteArray(Future<List<int>> bytes,
-      [List<TagType> types]) async {
+  Future<List<Tag>> getTagsFromByteArray(Future<List<int>>? bytes,
+      [List<TagType>? types]) async {
     if (await bytes == null) {
       throw ParsingException(ParsingException.byteArrayNull);
     }
@@ -61,15 +61,15 @@ class TagProcessor {
     }
 
     for (var t in types) {
-      tags.add(await _readers[t].read(bytes));
+      tags.add(await _readers[t]!.read(bytes!.then((value) => value)));
     }
 
     return tags;
   }
 
   /// Returns the tags from the ByteData
-  Future<List<Tag>> getTagsFromByteData(ByteData bytes,
-      [List<TagType> types]) async {
+  Future<List<Tag>> getTagsFromByteData(ByteData? bytes,
+      [List<TagType>? types]) async {
     if (bytes == null) {
       throw ParsingException(ParsingException.byteDataNull);
     }
@@ -83,18 +83,18 @@ class TagProcessor {
     }
 
     for (var t in types) {
-      tags.add(await _readers[t].read(c.future));
+      tags.add(await _readers[t]!.read(c.future));
     }
 
     return tags;
   }
 
-  Future<List<int>> putTagsToByteArray(Future<List<int>> bytes,
-      [List<Tag> tags]) async {
+  Future<List<int>> putTagsToByteArray(Future<List<int>?> bytes,
+      [List<Tag>? tags]) async {
     if (await bytes == null) {
       throw ParsingException(ParsingException.byteArrayNull);
     }
-    var b = await bytes;
+    var b = (await bytes)!;
 
     if (tags == null || tags.isEmpty) {
       for (var w in _writers.values) {
@@ -105,7 +105,7 @@ class TagProcessor {
     }
 
     for (var t in tags) {
-      final w = _writers[getTagType(t.type, t.version)];
+      final w = _writers[getTagType(t.type!, t.version)]!;
       b = await w.write(b, t);
     }
 

@@ -12,19 +12,19 @@ import 'id3v2/default_frame.dart';
 /// Abstract implementation of id3v2 frame
 abstract class Frame<T> {
   /// Encode [key] tag with [value] to bytearray
-  List<int> encode(T value, [String key]);
+  List<int> encode(T value, [String? key]);
 
   /// Decode byte [data] to frame data map
-  MapEntry<String, T> decode(List<int> data);
+  MapEntry<String, T>? decode(List<int> data);
 }
 
-class FrameFactory<T extends Frame> {
+class FrameFactory<T extends Frame?> {
   String version;
 
   // ignore: avoid_annotating_with_dynamic
-  Frame Function(dynamic entry) _frameGetter;
+  Frame? Function(dynamic entry) _frameGetter;
 
-  Frame defaultFrame;
+  Frame? defaultFrame;
 
   FrameFactory._internal(this.version, this._frameGetter, [this.defaultFrame]);
 
@@ -40,7 +40,7 @@ class FrameFactory<T extends Frame> {
     return FrameFactory._internal('0', (v) => null);
   }
 
-  T getFrame(entry) => _frameGetter(entry);
+  Frame? getFrame(entry) => _frameGetter(entry);
 }
 
 class FramesID3V23 extends FramesID3V24 {
@@ -55,7 +55,7 @@ class FramesID3V23 extends FramesID3V24 {
 
   @override
   Frame<T> _getFrame<T>(String tag) {
-    return _frames[tag] ?? DefaultFrame(tag, version: 3);
+    return _frames[tag] as Frame<T>? ?? DefaultFrame(tag, version: 3) as Frame<T>;
   }
 }
 
@@ -69,16 +69,16 @@ class FramesID3V24 {
       };
 
   Frame<T> _getFrame<T>(String tag) {
-    return _frames[tag] ?? DefaultFrame(tag);
+    return _frames[tag] as Frame<T>? ?? DefaultFrame(tag) as Frame<T>;
   }
 
   String getTagByPseudonym(String tag) {
     return consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(tag)
-        ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]
+        ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]!
         : consts.framesHeaders.containsKey(tag) ? tag : 'TXXX';
   }
 
-  Frame<T> getFrame<T>(data) {
+  Frame<T>? getFrame<T>(data) {
     assert(data is List<int> || data is String);
 
     if (data is List<int>) {
