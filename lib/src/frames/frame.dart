@@ -55,7 +55,8 @@ class FramesID3V23 extends FramesID3V24 {
 
   @override
   Frame<T> _getFrame<T>(String tag) {
-    return _frames[tag] as Frame<T>? ?? DefaultFrame(tag, version: 3) as Frame<T>;
+    return _frames[tag] as Frame<T>? ??
+        DefaultFrame(tag, version: 3) as Frame<T>;
   }
 }
 
@@ -75,7 +76,9 @@ class FramesID3V24 {
   String getTagByPseudonym(String tag) {
     return consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(tag)
         ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]!
-        : consts.framesHeaders.containsKey(tag) ? tag : 'TXXX';
+        : consts.framesHeaders.containsKey(tag)
+            ? tag
+            : 'TXXX';
   }
 
   Frame<T>? getFrame<T>(data) {

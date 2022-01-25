@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'dart:convert';
 
 import 'key_entity.dart';
@@ -68,7 +70,7 @@ class AttachedPicture implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
-    if (!(other is AttachedPicture)) {
+    if (other is! AttachedPicture) {
       return false;
     }
     if (imageTypeCode != other.imageTypeCode) {

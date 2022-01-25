@@ -17,6 +17,11 @@ project under MIT [license](LICENSE)
 
 [full changelog](CHANGELOG.md)
 
+## 0.4.0 (Null Safety)
+
+* thanx for migrating to null safety to [@timekone](https://github.com/timekone) and this [PR](https://github.com/NiKoTron/dart-tags/pull/35)
+* updated some dependencies
+
 ## 0.3.1
 
 * implemented separate getting size of frame for id3 v2.3 and v2.4
@@ -24,21 +29,6 @@ project under MIT [license](LICENSE)
 * fixed typos, thanx to [@algoshipda](https://github.com/algoshipda) and his [PR](https://github.com/NiKoTron/dart-tags/pull/17)
 * fixed APIC picture type error, thanx to [@algoshipda](https://github.com/algoshipda) and his [PR](https://github.com/NiKoTron/dart-tags/pull/20)
 
-## 0.3.0+1
-
-* hotfix! missed exports for new tags was added
-
-## 0.3.0 (BREAKING CHANGES)
-
-* COMM, APIC, USLT, WXXX tags returns as a map
-* WXXX frame returns WURL object
-* various fixes
-* added USLT tag
-* added possibility to pass many COMM, APIC, USLT tags
-* APIC processing was refactored
-* hex encoder
-* unrecognized encoding falls to hex encoder (removed unsupported encoding error)
-* unsupported tags like PRIV will be printed just like raw binary data
 
 ## Instalation
 
@@ -46,7 +36,7 @@ add dependency in pubsec.yaml
 
 ``` yaml
 dependencies:
-  dart_tags: ^0.3.1
+  dart_tags: ^0.4.0
 ```
 
 ## Usage
@@ -59,9 +49,9 @@ import 'dart:io';
 import 'package:dart_tags/dart_tags.dart';
 
 main(List<String> args) {
-  TagProcessor tp = new TagProcessor();
+  final tp = new TagProcessor();
 
-  File f = new File(args[0]);
+  final f = new File(args[0]);
 
   tp.getTagsFromByteArray(f.readAsBytes()).then((l) => l.forEach((f) => print(f)));
 }

@@ -1,5 +1,7 @@
 /// Generes constants from id3v1.1 specification
-final List<String> id3v1generes = const <String>[
+// ignore_for_file: constant_identifier_names
+
+const List<String> id3v1generes = <String>[
   'Blues',
   'Classic Rock',
   'Country',
@@ -130,7 +132,7 @@ final List<String> id3v1generes = const <String>[
 ];
 
 // v2.3+ frames
-final framesHeaders = const <String, String>{
+const framesHeaders = <String, String>{
   'AENC': 'Audio encryption',
   'APIC': 'Attached picture',
   'COMM': 'Comments',
@@ -228,7 +230,7 @@ final framesHeaders = const <String, String>{
   'TSST': 'Set subtitle'
 };
 
-final framesV23_V24 = const <String, String>{
+const framesV23_V24 = <String, String>{
   'EQUA': 'EQU2',
   'IPLS': 'TIPL',
   'RVAD': 'RVA2',
@@ -239,7 +241,7 @@ final framesV23_V24 = const <String, String>{
   'TYER': 'TDRC'
 };
 
-final frameHeaderShortcutsID3V2_3 = const <String, String>{
+const frameHeaderShortcutsID3V2_3 = <String, String>{
   'TIT2': 'title',
   'TPE1': 'artist',
   'TALB': 'album',
@@ -251,7 +253,7 @@ final frameHeaderShortcutsID3V2_3 = const <String, String>{
   'USLT': 'lyrics',
 };
 
-final frameHeaderShortcutsID3V2_3_Rev = const <String, String>{
+const frameHeaderShortcutsID3V2_3_Rev = <String, String>{
   'title': 'TIT2',
   'artist': 'TPE1',
   'album': 'TALB',
@@ -265,7 +267,7 @@ final frameHeaderShortcutsID3V2_3_Rev = const <String, String>{
 
 // todo support v2.2
 // ignore: unused_field
-final frameHeaderShortcutsID3V2_2 = const <String, String>{
+const frameHeaderShortcutsID3V2_2 = <String, String>{
   'TT2': 'title',
   'TP1': 'artist',
   'TAL': 'album',
@@ -279,7 +281,7 @@ final frameHeaderShortcutsID3V2_2 = const <String, String>{
 
 // todo support v2.2
 // ignore: unused_field
-final frameHeadersLegacy = const <String, String>{
+const frameHeadersLegacy = <String, String>{
   'BUF': 'RBUF',
   'COM': 'COMM',
   'CRA': 'AENC',

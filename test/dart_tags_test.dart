@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:dart_tags/dart_tags.dart';
 import 'package:collection/collection.dart' as collection;
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
-import 'package:dart_tags/src/model/comment.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/utils/image_extractor.dart';
@@ -227,7 +226,7 @@ void main() {
           ]),
           [tag1, tag2]);
 
-      final _fr = () async => foo;
+      Future<List<int>> _fr() async => foo;
 
       final rdr1 = ID3V1Reader();
       final t1 = await rdr1.read(_fr());
@@ -407,7 +406,7 @@ void main() {
           ]),
           [tag2]);
 
-      final _fr = () async => foo;
+      Future<List<int>> _fr() async => foo;
 
       final rdr2 = ID3V2Reader();
       final t2 = await rdr2.read(_fr());

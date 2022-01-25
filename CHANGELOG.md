@@ -1,3 +1,8 @@
+## 0.4.0 (Null Safety)
+
+* thanx for migrating to null safety to [@timekone](https://github.com/timekone) and this [PR](https://github.com/NiKoTron/dart-tags/pull/35)
+* updated some dependencies
+
 ## 0.3.1
 
 * implemented separate getting size of frame for id3 v2.3 and v2.4

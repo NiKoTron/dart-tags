@@ -15,7 +15,7 @@ class ParsingException implements Exception {
   static const byteDataNull = 'Byte data can\'t be null';
   static const byteArrayNull = 'Byte array can\'t be null';
 
-  final cause;
+  final dynamic cause;
   ParsingException(this.cause);
 
   @override
