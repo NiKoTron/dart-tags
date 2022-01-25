@@ -43,7 +43,7 @@ class USLTFrame extends ID3V2Frame<UnSyncLyric> {
   }
 
   @override
-  List<int> encode(UnSyncLyric value, [String key]) {
+  List<int> encode(UnSyncLyric value, [String? key]) {
     final enc = header?.encoding ?? utf8;
 
     return [

@@ -13,7 +13,7 @@ class DefaultFrame extends ID3V2Frame<String> {
   }
 
   @override
-  List<int> encode(String value, [String key]) {
+  List<int> encode(String value, [String? key]) {
     final tag = getTagByPseudonym(frameTag);
 
     final vBytes = utf8.encode(value);

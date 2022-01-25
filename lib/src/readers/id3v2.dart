@@ -67,23 +67,23 @@ class ID3V2Reader extends Reader {
     while (contin) {
       final fr = bytes.sublist(offset);
 
-      final frame = ff.getFrame(fr);
+      final frame = ff.getFrame(fr)! as ID3V2Frame;
       final m = frame.decode(fr);
 
       if (m?.key != null && m?.value != null) {
         if (m?.value is KeyEntity) {
-          if (tags[m.key] == null) {
+          if (tags[m!.key] == null) {
             tags[m.key] = {m.value.key: m.value};
           } else {
             tags[m.key][m.value.key] = m.value;
           }
         } else {
-          tags[m.key] = m.value;
+          tags[m!.key] = m.value;
         }
       }
 
-      offset = offset + _headerLength + (frame?.header?.length ?? 0);
-      contin = offset < size && (frame?.header?.length ?? 0) != 0;
+      offset = offset + _headerLength + (frame.header?.length ?? 0);
+      contin = offset < size && (frame.header?.length ?? 0) != 0;
     }
 
     return tags;

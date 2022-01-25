@@ -25,13 +25,13 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   final int _version;
 
-  ID3V2FrameHeader _header;
-  ID3V2FrameHeader get header => _header;
+  ID3V2FrameHeader? _header;
+  ID3V2FrameHeader? get header => _header;
 
   ID3V2Frame(this._version);
 
   @override
-  MapEntry<String, T> decode(List<int> data) {
+  MapEntry<String, T>? decode(List<int> data) {
     final tag = latin1.decode(data.sublist(0, 4));
     if (!consts.framesHeaders.keys.contains(tag)) {
       return null;
@@ -46,27 +46,27 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
     _header = ID3V2FrameHeader(tag, size, encoding: encoding);
 
-    if (data.length < headerLength + _header?.length) {
+    if (data.length < headerLength + _header!.length) {
       _header =
           ID3V2FrameHeader(tag, data.length - headerLength, encoding: encoding);
     }
 
-    final body = data.sublist(headerLength + 1, headerLength + _header?.length);
+    final body = data.sublist(headerLength + 1, headerLength + _header!.length);
 
     return MapEntry<String, T>(
-        getTagPseudonym(_header.tag), decodeBody(body, encoding));
+        getTagPseudonym(_header!.tag), decodeBody(body, encoding));
   }
 
   T decodeBody(List<int> data, Encoding enc);
 
   @override
-  List<int> encode(T value, [String key]);
+  List<int> encode(T value, [String? key]);
 
   /// Returns size of frame in bytes
   List<int> frameSizeInBytes(int value) {
     assert(value <= 16777216);
 
-    final block = List<int>(4);
+    final block = List<int>.filled(4, 0);
     final sevenBitMask = 0x7f;
 
     block[0] = (value >> 21) & sevenBitMask;
@@ -79,13 +79,13 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   String getTagByPseudonym(String tag) {
     return consts.frameHeaderShortcutsID3V2_3_Rev.containsKey(tag)
-        ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]
+        ? consts.frameHeaderShortcutsID3V2_3_Rev[tag]!
         : tag;
   }
 
   String getTagPseudonym(String tag) {
     return consts.frameHeaderShortcutsID3V2_3.containsKey(tag)
-        ? consts.frameHeaderShortcutsID3V2_3[tag]
+        ? consts.frameHeaderShortcutsID3V2_3[tag]!
         : tag;
   }
 
@@ -133,7 +133,7 @@ abstract class ID3V2Frame<T> implements Frame<T> {
 
   int indexOfSplitPattern(List<int> list, List<int> pattern,
       [int initialOffset = 0]) {
-    for (var i = initialOffset ?? 0;
+    for (var i = initialOffset;
         i < list.length - pattern.length;
         i += pattern.length) {
       final l = list.sublist(i, i + pattern.length);
@@ -182,10 +182,10 @@ class ID3V2FrameHeader {
   String tag;
   int length;
 
-  Encoding encoding;
+  Encoding? encoding;
 
   // todo: implement futher
-  int flags;
+  int? flags;
 
   ID3V2FrameHeader(this.tag, this.length, {this.flags, this.encoding}) {
     assert(consts.framesHeaders.keys.contains(tag));

@@ -50,7 +50,7 @@ class AttachedPicture implements KeyEntity<String> {
   /// Returns [String] representation of image type.
   ///
   /// eg. 'Band/Orchestra' or 'Cover (front)' etc...
-  String get imageType => _picturesType[imageTypeCode ?? 0x00];
+  String get imageType => _picturesType[imageTypeCode];
 
   AttachedPicture(
       this.mime, this.imageTypeCode, this.description, this.imageData);
@@ -68,6 +68,9 @@ class AttachedPicture implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
+    if (!(other is AttachedPicture)) {
+      return false;
+    }
     if (imageTypeCode != other.imageTypeCode) {
       return false;
     }
@@ -76,9 +79,6 @@ class AttachedPicture implements KeyEntity<String> {
     }
     if (description != other.description) {
       return false;
-    }
-    if (imageData == null && other.imageData == null) {
-      return true;
     }
     if (imageData.length != other.imageData.length) {
       return false;

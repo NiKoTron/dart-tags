@@ -42,7 +42,7 @@ class COMMFrame extends ID3V2Frame<Comment> {
   }
 
   @override
-  List<int> encode(Comment value, [String key]) {
+  List<int> encode(Comment value, [String? key]) {
     final enc = header?.encoding ?? utf8;
 
     return [

@@ -83,14 +83,14 @@ class ApicFrame extends ID3V2Frame<AttachedPicture> {
     final imageData = data.sublist(startOfImageData);
 
     final extractedImageData = _imageExtractors.containsKey(mime)
-        ? _imageExtractors[mime]().parse(imageData)
+        ? _imageExtractors[mime]!().parse(imageData)
         : imageData;
 
     return AttachedPicture(mime, imageType, description, extractedImageData);
   }
 
   @override
-  List<int> encode(AttachedPicture value, [String key]) {
+  List<int> encode(AttachedPicture value, [String? key]) {
     final mimeEncoded = latin1.encode(value.mime);
     final descEncoded = utf8.encode(value.description);
 

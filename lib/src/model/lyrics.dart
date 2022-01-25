@@ -23,6 +23,9 @@ class UnSyncLyric implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
+    if (!(other is UnSyncLyric)) {
+      return false;
+    }
     if (lang != other.lang) {
       return false;
     }

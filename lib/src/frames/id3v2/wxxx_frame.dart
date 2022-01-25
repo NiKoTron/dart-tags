@@ -41,7 +41,7 @@ class WXXXFrame extends ID3V2Frame<WURL> {
   String get frameTag => 'WXXX';
 
   @override
-  List<int> encode(WURL value, [String key]) {
+  List<int> encode(WURL value, [String? key]) {
     final vBytes = [
       ...utf8.encode('${value.description}${utf8.decode([0x00])}'),
       ...latin1.encode(value.url)

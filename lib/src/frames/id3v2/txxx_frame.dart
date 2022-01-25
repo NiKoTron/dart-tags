@@ -42,11 +42,11 @@ class TXXXFrame extends ID3V2Frame<String> {
   @override
   String get frameTag => 'TXXX';
 
-  String _customTagName;
+  String? _customTagName;
 
   @override
   MapEntry<String, String> decode(List<int> data) {
-    final entry = super.decode(data);
+    final entry = super.decode(data)!;
     return MapEntry<String, String>(_customTagName ?? frameTag, entry.value);
   }
 
@@ -64,7 +64,7 @@ class TXXXFrame extends ID3V2Frame<String> {
   }
 
   @override
-  List<int> encode(String value, [String key]) {
+  List<int> encode(String value, [String? key]) {
     final body = utf8.encode('$key${utf8.decode([0x00])}$value');
     return [
       ...utf8.encode(frameTag),
