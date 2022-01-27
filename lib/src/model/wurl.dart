@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'key_entity.dart';
 
 /// Class describes url from WXXX tag
@@ -20,7 +22,7 @@ class WURL implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
-    if (!(other is WURL)) {
+    if (other is! WURL) {
       return false;
     }
     if (description != other.description) {

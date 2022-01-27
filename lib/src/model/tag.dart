@@ -1,4 +1,6 @@
 /// Class describes tag
+// ignore_for_file: unnecessary_overrides
+
 class Tag {
   /// Type of tag. At this time supports 'id3'
   String? type;
@@ -11,7 +13,7 @@ class Tag {
 
   @override
   bool operator ==(other) {
-    if (!(other is Tag)) {
+    if (other is! Tag) {
       return false;
     }
     if (type != other.type) {
