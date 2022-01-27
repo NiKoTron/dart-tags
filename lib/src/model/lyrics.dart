@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'package:dart_tags/src/model/key_entity.dart';
 
 /// Class describes unsynchronised lyrics entity from ID3 v2.x tags
@@ -23,6 +25,9 @@ class UnSyncLyric implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
+    if (other is! UnSyncLyric) {
+      return false;
+    }
     if (lang != other.lang) {
       return false;
     }

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:dart_tags/src/frames/frame.dart';
 import 'package:dart_tags/src/model/tag.dart';
 import 'package:dart_tags/src/writers/writer.dart';
-import 'package:dart_tags/src/frames/frame.dart';
 
 class ID3V2Writer extends Writer {
   ID3V2Writer() : super('ID3', '2.4');
@@ -15,19 +15,17 @@ class ID3V2Writer extends Writer {
     final ff = FrameFactory('ID3', '2.4.0');
 
     tag.tags.forEach((k, v) {
-      if (k != null) {
-        final frame = ff.getFrame(k);
-        if (v is List) {
-          v.forEach((element) {
-            tagsF.addAll(frame?.encode(element, k));
-          });
-        } else if (v is Map) {
-          v.values.forEach((element) {
-            tagsF.addAll(frame?.encode(element, k));
-          });
-        } else {
-          tagsF.addAll(frame?.encode(v, k));
+      final frame = ff.getFrame(k)!;
+      if (v is List) {
+        for (var element in v) {
+          tagsF.addAll(frame.encode(element, k));
         }
+      } else if (v is Map) {
+        for (var element in v.values) {
+          tagsF.addAll(frame.encode(element, k));
+        }
+      } else {
+        tagsF.addAll(frame.encode(v, k));
       }
     });
 
@@ -46,7 +44,7 @@ class ID3V2Writer extends Writer {
   static List<int> frameSizeInBytes(int value) {
     assert(value <= 16777216);
 
-    final block = List<int>(4);
+    final block = List<int>.filled(4, 0);
     final sevenBitMask = 0x7f;
 
     block[0] = (value >> 21) & sevenBitMask;

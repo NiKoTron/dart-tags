@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_overrides
+
 import 'key_entity.dart';
 
 /// Class describes comment entity from ID3 v2.x tags
@@ -23,6 +25,9 @@ class Comment implements KeyEntity<String> {
 
   @override
   bool operator ==(other) {
+    if (other is! Comment) {
+      return false;
+    }
     if (lang != other.lang) {
       return false;
     }

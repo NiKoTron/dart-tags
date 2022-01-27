@@ -1,16 +1,21 @@
 /// Class describes tag
+// ignore_for_file: unnecessary_overrides
+
 class Tag {
   /// Type of tag. At this time supports 'id3'
-  String type;
+  String? type;
 
   /// Version of tag. eg. '2.4.0' or '1.1'
-  String version;
+  String? version;
 
   /// The map of tags. Values are dynamic because it can be not only String.
-  Map<String, dynamic> tags;
+  late Map<String, dynamic> tags;
 
   @override
   bool operator ==(other) {
+    if (other is! Tag) {
+      return false;
+    }
     if (type != other.type) {
       return false;
     }

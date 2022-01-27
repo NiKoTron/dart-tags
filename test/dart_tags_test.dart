@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:dart_tags/dart_tags.dart';
 import 'package:collection/collection.dart' as collection;
 import 'package:dart_tags/src/frames/id3v2/comm_frame.dart';
-import 'package:dart_tags/src/model/comment.dart';
 import 'package:dart_tags/src/readers/id3v1.dart';
 import 'package:dart_tags/src/readers/id3v2.dart';
 import 'package:dart_tags/src/utils/image_extractor.dart';
@@ -14,11 +13,11 @@ import 'package:dart_tags/src/writers/id3v2.dart';
 import 'package:test/test.dart';
 
 void main() {
-  File file1;
-  File file2;
-  File file3;
-  File filev23USLT;
-  File picture;
+  late File file1;
+  late File file2;
+  late File file3;
+  late File filev23USLT;
+  late File picture;
 
   const outputDir = 'test/output';
 
@@ -117,7 +116,7 @@ void main() {
         0x72
       ];
 
-      final decodeList = COMMFrame().decode(data);
+      final decodeList = COMMFrame().decode(data)!;
 
       expect(decodeList.value.comment, equals('commentador'));
       expect(decodeList.value.description, equals('dessu'));
@@ -227,7 +226,7 @@ void main() {
           ]),
           [tag1, tag2]);
 
-      final _fr = () async => foo;
+      Future<List<int>> _fr() async => foo;
 
       final rdr1 = ID3V1Reader();
       final t1 = await rdr1.read(_fr());
@@ -407,7 +406,7 @@ void main() {
           ]),
           [tag2]);
 
-      final _fr = () async => foo;
+      Future<List<int>> _fr() async => foo;
 
       final rdr2 = ID3V2Reader();
       final t2 = await rdr2.read(_fr());
@@ -474,7 +473,7 @@ void main() {
       final f = await r.read(blocks);
 
       // ignore: avoid_as
-      final AttachedPicture pic = (f.tags['picture'] as Map)['Other'];
+      final AttachedPicture? pic = (f.tags['picture'] as Map)['Other'];
       expect(pic, equals(pic1));
     });
 
@@ -487,7 +486,6 @@ void main() {
           .getTagsFromByteArray(file.readAsBytes(), [TagType.id3v2]);
 
       expect(tags.length, 1);
-      expect(tags[0] != null, true);
       expect(tags[0].type, 'ID3');
       expect(tags[0].version, '2.3.0');
       expect(tags[0].tags.isNotEmpty, true);

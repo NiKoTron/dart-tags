@@ -1,5 +1,4 @@
-# Lint rules that uses google internaly also in pu i guess. https://github.com/dart-lang/pedantic/#enabled-lints
-include: package:pedantic/analysis_options.yaml
+include: package:lints/recommended.yaml
 
 analyzer:
   strong-mode:
@@ -48,7 +47,6 @@ linter:
     - always_put_required_named_parameters_first
     - always_require_non_null_named_parameters
     - annotate_overrides
-    - avoid_as
     - avoid_annotating_with_dynamic
     - avoid_classes_with_only_static_members
     - avoid_bool_literals_in_conditional_expressions
@@ -68,4 +66,3 @@ linter:
     - prefer_single_quotes
     - package_api_docs
 #    - public_member_api_docs
-    

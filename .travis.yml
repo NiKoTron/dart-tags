@@ -40,7 +40,9 @@ jobs:
           branch: master
 
 branches:
-  only: [master, develop]
+  only: 
+    - master
+    - /^v\d+\.\d+\.\d+.*$/
 
 # Incremental pub cache and builds.
 cache:
