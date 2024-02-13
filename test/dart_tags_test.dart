@@ -18,6 +18,7 @@ void main() {
   late File file3;
   late File filev23USLT;
   late File picture;
+  late File picture2;
 
   const outputDir = 'test/output';
 
@@ -27,6 +28,7 @@ void main() {
     file3 = File('test/test_assets/id3v23.mp3');
     filev23USLT = File('test/test_assets/id3v23-uslt.mp3');
     picture = File('test/test_assets/mink-mingle-109837-unsplash.jpg');
+    picture2 = File('test/test_assets/picture2.jpg');
   });
 
   group('Parsing exception Tests', () {
@@ -530,6 +532,13 @@ void main() {
           equals(898929)); //898929
 
       expect(foo[0].tags.containsKey('lyrics'), true);
+    });
+
+    test('Wrong end of image data', () async {
+      final bytes = await picture2.readAsBytes();
+      final p = JPEGImageExtractor();
+      final img = p.parse(bytes);
+      expect(img.length, 20125);
     });
   });
 }
