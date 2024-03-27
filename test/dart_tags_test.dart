@@ -228,14 +228,14 @@ void main() {
           ]),
           [tag1, tag2]);
 
-      Future<List<int>> _fr() async => foo;
+      Future<List<int>> fr() async => foo;
 
       final rdr1 = ID3V1Reader();
-      final t1 = await rdr1.read(_fr());
+      final t1 = await rdr1.read(fr());
       expect(t1.tags, equals(tag1.tags));
 
       final rdr2 = ID3V2Reader();
-      final t2 = await rdr2.read(_fr());
+      final t2 = await rdr2.read(fr());
       expect(t2.tags, equals(tag2.tags));
     });
 
@@ -408,10 +408,10 @@ void main() {
           ]),
           [tag2]);
 
-      Future<List<int>> _fr() async => foo;
+      Future<List<int>> fr() async => foo;
 
       final rdr2 = ID3V2Reader();
-      final t2 = await rdr2.read(_fr());
+      final t2 = await rdr2.read(fr());
       expect(t2.tags, equals(tag2.tags));
     });
 

@@ -1,6 +1,6 @@
-/// Class describes tag
 // ignore_for_file: unnecessary_overrides
 
+/// Class describes tag
 class Tag {
   /// Type of tag. At this time supports 'id3'
   String? type;
