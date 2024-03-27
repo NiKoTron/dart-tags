@@ -1,3 +1,8 @@
+## 0.4.1
+
+* thanx to [@antitim](https://github.com/antitim) for find and reslove issue with a broken images in the tags in this [PR]
+* dependencies update
+
 ## 0.4.0 (Null Safety)
 
 * thanx for migrating to null safety to [@timekone](https://github.com/timekone) and this [PR](https://github.com/NiKoTron/dart-tags/pull/35)

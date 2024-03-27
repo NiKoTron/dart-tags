@@ -9,53 +9,43 @@ abstract class SoiEoiExtractor implements ImageExtractor {
   List<int> get soi;
   List<int> get eoi;
 
-  @override
-  List<int> parse(List<int> byteData) {
-    final iter = byteData.iterator;
-
-    var reachEOI = false;
-    var reachSOI = false;
-
-    final buff = <int>[];
-
-    while (iter.moveNext() && !reachEOI) {
-      if (reachSOI) {
-        final b = iter.current;
-        buff.add(b);
-        if (b == eoi[0]) {
-          final eoiterator = eoi.iterator..moveNext();
-          var fail = false;
-          while (eoiterator.moveNext() && !fail) {
-            iter.moveNext();
-            buff.add(iter.current);
-            if (eoiterator.current != iter.current) {
-              fail = true;
-            }
-          }
-          if (!fail) {
-            reachEOI = true;
-            break;
-          }
-        }
+  bool isBytesInData(List<int> data, List<int> bytes, int offset) {
+    for (var index = 0; index < bytes.length; index++) {
+      if ((offset + index) > (data.length - 1)) {
+        return false;
       }
 
-      if (!reachSOI && iter.current == soi[0]) {
-        final soiterator = soi.iterator..moveNext();
-        var fail = false;
-        while (soiterator.moveNext() && !fail) {
-          iter.moveNext();
-          if (soiterator.current != iter.current) {
-            fail = true;
-          }
-        }
-        if (!fail) {
-          reachSOI = true;
-          buff.addAll(soi);
+      if (data[offset + index] != bytes[index]) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  @override
+  List<int> parse(List<int> byteData) {
+    var soiIndex = 0;
+    var eoiIndex = 0;
+
+    for (var index = 0; index < byteData.length; index++) {
+      if (byteData[index] == soi[0]) {
+        if (isBytesInData(byteData, soi, index)) {
+          soiIndex = index;
+          break;
         }
       }
     }
 
-    return buff;
+    for (var index = byteData.length - 1; index >= 0; index--) {
+      if (byteData[index] == eoi[0]) {
+        if (isBytesInData(byteData, eoi, index)) {
+          eoiIndex = index + eoi.length;
+          break;
+        }
+      }
+    }
+
+    return byteData.sublist(soiIndex, eoiIndex);
   }
 }
 

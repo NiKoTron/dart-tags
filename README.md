@@ -17,6 +17,11 @@ project under MIT [license](LICENSE)
 
 [full changelog](CHANGELOG.md)
 
+## 0.4.1
+
+* thanx to [@antitim](https://github.com/antitim) for find and reslove issue with a broken images in the tags in this [PR]
+* dependencies update
+
 ## 0.4.0 (Null Safety)
 
 * thanx for migrating to null safety to [@timekone](https://github.com/timekone) and this [PR](https://github.com/NiKoTron/dart-tags/pull/35)
@@ -28,7 +33,6 @@ project under MIT [license](LICENSE)
 * added test case and asset
 * fixed typos, thanx to [@algoshipda](https://github.com/algoshipda) and his [PR](https://github.com/NiKoTron/dart-tags/pull/17)
 * fixed APIC picture type error, thanx to [@algoshipda](https://github.com/algoshipda) and his [PR](https://github.com/NiKoTron/dart-tags/pull/20)
-
 
 ## Instalation
 
@@ -67,6 +71,6 @@ Please feel free for feature requests and bugs at the [issue tracker](https://gi
 
 ## In addition
 
-Thanx for contributing [@magodo](https://github.com/magodo), [@frankdenouter](https://github.com/frankdenouter)
+Thanx for contributing [@magodo](https://github.com/magodo), [@frankdenouter](https://github.com/frankdenouter) [@algoshipda](https://github.com/algoshipda) [@timekone](https://github.com/timekone)
 
 Thanx for the [Photo](https://unsplash.com/photos/HRyjETL87Gg) by [Mink Mingle](https://unsplash.com/@minkmingle) on [Unsplash](https://unsplash.com) that we using in unit tests.

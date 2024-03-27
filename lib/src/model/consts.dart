@@ -1,6 +1,6 @@
-/// Generes constants from id3v1.1 specification
 // ignore_for_file: constant_identifier_names
 
+/// Generes constants from id3v1.1 specification
 const List<String> id3v1generes = <String>[
   'Blues',
   'Classic Rock',
